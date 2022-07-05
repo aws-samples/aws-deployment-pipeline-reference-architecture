@@ -1,0 +1,29 @@
+site_name: Deployment Pipeline Reference Architecture
+repo_name: "aws-quickstart/dpra"
+repo_url: "https://github.com/aws-quickstart/dpra"
+docs_dir: "docs"
+theme:
+  name: material
+  features:
+    - tabs
+nav:
+  - Overview: 'index.md'
+  - Application Pipeline: 'application-pipeline.md'
+markdown_extensions:
+  - def_list
+  - pymdownx.highlight
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid_custom
+  - pymdownx.tabbed
+  - pymdownx.inlinehilite
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - toc:
+      permalink: true
+plugins:
+  - search
+  - mermaid2:
+      version: 9.1.3
