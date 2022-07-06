@@ -3,7 +3,7 @@
 First, install required dependencies:
 
 ```bash
-pip3 install requirements.txt
+pip install requirements.txt
 ```
 
 Start server with:
