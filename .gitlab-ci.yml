@@ -13,7 +13,7 @@ sast:
 include:
 - template: Security/SAST.gitlab-ci.yml
 
-image: python:3.8-buster
+image: python:3.8-bullseye
 
 before_script:
   - pip install -r requirements.txt
