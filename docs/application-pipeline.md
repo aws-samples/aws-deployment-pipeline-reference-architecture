@@ -3,16 +3,88 @@
 Applications and Services are the most common use case for a deployment pipeline. In this pipeline type, it will get application source code files, tests, static analysis, database deployment, configuration, and other code to perform build, test, deploy, and release processes. The pipeline launches an environment from the compute image artifacts generated in the compute image pipeline. Acceptance and other automated tests are run on the environment(s) as part of the deployment pipeline.
 
 ```mermaid
-flowchart TD
-    subgraph Build Stage
+%%{init: {"theme": "forest", "logLevel": 1 }}%%
+
+flowchart
+  ide[fa:fa-person IDE]
+
+  subgraph pipeline
+    direction LR
+    subgraph source [Source Stage]
         direction LR
-        A --> B
+        app_src(Application Source)
+        test_src(Test Source)
+        db_src(Database Source)
+        static_assets(Static Assets)
+        libs(Dependency Libraries)
+        config(Configuration)
     end
-    subgraph Test (Beta) Stage
+    ide -->|push| source
+
+    subgraph build_service [Build Service]
         direction LR
-        C --> D 
+        build_code(Build Code)
+        code_quality(Code Quality)
+        appsec(AppSec)
+        unit_tests(Unit Tests)
+        secrets_detection(Secrets Detection)
+        code_review(Code Review)
     end
-    Build --> Test
+    style build_service fill:#eef,color:#000,stroke-width:2px,color:#333,stroke-dasharray: 5 5
+    ide -->|run| build_service
+
+    subgraph build [Build Stage]
+        call_build_service[[Build Service]] 
+        package_artifacts(Package Artifacts)
+        sca(SCA)
+    end
+    source --> build
+    call_build_service -.-> |run| build_service
+    package_artifacts -.-> |store| bin_repo[(Binary Repo)]
+
+    beta_db[(2% Database)]
+    image_repo[(Image Repo)]
+    subgraph beta ["Test (Beta) Stage"]
+        direction LR
+        launch_beta[Launch Env] 
+        db_deploy_beta[DB Deploy]
+        software_deploy_beta[Deploy Software]
+        acpt_test_beta[Acceptance Tests]
+        e2e_test_beta[E2E Tests]
+    end
+    db_deploy_beta -.-> beta_db
+    launch_beta -.-> |get| image_repo
+
+    build --> beta
+
+    prod_like_env[Prod-Like Environment]
+    subgraph gamma ["Test (Gamma) Stage"]
+        direction LR
+        launch_gamma[Launch Env] 
+        db_deploy_gamma[DB Deploy]
+        software_deploy_gamma[Deploy Software]
+        app_monitor_gamma[Application Monitoring & Logging]
+        int_test_gamma[Integration Tests]
+        cap_test_gamma[Capacity Tests]
+        metrics_gamma[Metrics Monitoring]
+        chaos_gamma[Chaos/Resiliency Tests]
+        canary_gamma[Canary Tests]
+        sbom_gamma[SBOM]
+    end
+    gamma -.-> prod_like_env
+
+    beta --> gamma
+
+    subgraph prod ["Prod Stage"]
+        direction LR
+        approval[Approval]
+        blue_green_deployment[Blue/Green Deployment]
+        synth_tests[Synthetic Tests]
+    end
+    prod -.-> prod_like_env
+
+    gamma --> prod
+  end
 ```
 
 ## Source

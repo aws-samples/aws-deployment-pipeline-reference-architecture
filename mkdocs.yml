@@ -27,3 +27,8 @@ plugins:
   - search
   - mermaid2:
       version: 9.1.3
+      arguments:
+          theme: 'dark'
+          securityLevel: 'loose'
+extra_css:
+  - https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css
