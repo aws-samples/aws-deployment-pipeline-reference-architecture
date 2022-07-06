@@ -3,6 +3,7 @@ repo_name: "devops/dpra"
 repo_url: "https://gitlab.aws.dev/devops/dpra"
 edit_uri: "-/edit/main/docs/"
 docs_dir: "docs"
+copyright: Copyright © Amazon Web Services, Inc. and/or its affiliates. All rights reserved.
 theme:
   name: material
   logo: assets/logo.png
@@ -31,6 +32,11 @@ nav:
   - Application Pipeline: 'application-pipeline.md'
   - Machine Learning Pipeline: 'machine-learning-pipeline.md'
   - Dynamic Configuration Deployment Pipeline: 'dynamic-configuration-deployment-pipeline.md'
+
+extra:
+  social:
+    - icon: material/download
+      link: /pdf/document.pdf
 markdown_extensions:
   - def_list
   - pymdownx.highlight
@@ -51,7 +57,10 @@ markdown_extensions:
   - mkdocs_graphviz
 plugins:
   - search
-  #- with-pdf
+  - with-pdf:
+      author: AWS Professional Services
+      copyright: Copyright © Amazon Web Services, Inc. and/or its affiliates. All rights reserved.
+      cover_subtitle: "July 2022"
   - mermaid2:
       version: 9.1.3
 

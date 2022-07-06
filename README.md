@@ -7,7 +7,8 @@ This repository contains the source for the [DPRA site](https://devops.pages.aws
 First, install required dependencies:
 
 ```bash
-pip install requirements.txt
+brew install graphviz
+pip install -r requirements.txt
 ```
 
 Start server with:
