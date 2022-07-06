@@ -5,8 +5,25 @@ edit_uri: "-/edit/main/docs/"
 docs_dir: "docs"
 theme:
   name: material
+  logo: assets/logo.png
+  favicon: assets/logo.png
   features:
-    - tabs
+    - toc.integrate
+  palette:
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
 nav:
   - Overview: 'index.md'
   - Account Fleet Management Pipeline: 'account-fleet-management-pipeline.md'
@@ -21,15 +38,25 @@ markdown_extensions:
       custom_fences:
         - name: mermaid
           class: mermaid
+        #  format: !!python/name:pymdownx.superfences.fence_code_format
           format: !!python/name:mermaid2.fence_mermaid_custom
+
+
   - pymdownx.tabbed
   - pymdownx.inlinehilite
   - pymdownx.tasklist:
       custom_checkbox: true
   - toc:
       permalink: true
+  - mkdocs_graphviz
 plugins:
   - search
+  #- with-pdf
   - mermaid2:
       version: 9.1.3
-  - with-pdf
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/gh/rod2ik/cdn@main/mkdocs/javascripts/mkdocs-graphviz.js
+
+extra_css:
+  - stylesheets/extra.css

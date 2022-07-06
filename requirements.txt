@@ -1,4 +1,5 @@
 mkdocs
 mkdocs-material
 mkdocs-mermaid2-plugin
+mkdocs-graphviz
 mkdocs-with-pdf

@@ -2,6 +2,112 @@
 
 Applications and Services are the most common use case for a deployment pipeline. In this pipeline type, it will get application source code files, tests, static analysis, database deployment, configuration, and other code to perform build, test, deploy, and release processes. The pipeline launches an environment from the compute image artifacts generated in the compute image pipeline. Acceptance and other automated tests are run on the environment(s) as part of the deployment pipeline.
 
+```graphviz dot pipeline.png
+digraph G {
+    rankdir=LR
+    compound=true
+
+    fontname="Helvetica,Arial,sans-serif"
+    node [fontname="Helvetica,Arial,sans-serif"]
+    edge [fontname="Helvetica,Arial,sans-serif"]
+
+    subgraph cluster_build_service {
+        label=<<b>Build Service</b>>
+        node [shape=box style=filled fontcolor="white" width=2]
+
+        rankdir="LR"
+        build_code[label="Build Code"]
+        code_quality[label="Code Quality"]
+        appsec[label="AppSec"]
+        unit_tests[label="Unit Tests"]
+        secrets_detection[label="Secrets Detection"]
+        code_review[label="Code Review"]
+
+        edge [style=invis]
+        build_code -> code_quality -> appsec
+        unit_tests -> secrets_detection -> code_review
+    }
+    subgraph cluster_pipeline {
+        label=<<b>Pipeline</b>>
+        penwidth=4
+        color="gold"
+        node [shape=box style=filled color="forestgreen" fontcolor="white" width=2]
+        edge [color="forestgreen"]
+
+        subgraph cluster_source {
+            label=<<b>Source</b>>
+            graph[style=dashed penwidth=2 color="forestgreen"]
+
+            app_src[label="Application Source"]
+            test_src[label="Test Source"]
+            db_src[label="Database Source"]
+            static_assets[label="Static Assets"]
+            libs[label="Dependency Libraries"]
+            config[label="Configuration"]
+        }
+        subgraph cluster_build {
+            label=<<b>Build Stage</b>>
+            graph[style=dashed penwidth=2 color="forestgreen"]
+            node [shape=box style=filled fontcolor="white" width=2]
+
+            call_build_service[label="Build Service"] 
+            package_artifacts[label="Package Artifacts"]
+            sca[label="SCA"]
+        }
+
+        subgraph cluster_beta {
+            label=<<b>Test (Beta) Stage</b>>
+            graph[style=dashed penwidth=2 color="forestgreen"]
+            node [shape=box style=filled fontcolor="white" width=2]
+
+            launch_beta[label="Launch Env"] 
+            db_deploy_beta[label="DB Deploy"]
+            software_deploy_beta[label="Deploy Software"]
+            acpt_test_beta[label="Acceptance Tests"]
+            e2e_test_beta[label="E2E Tests"]
+        }
+
+        subgraph cluster_gamma {
+            label=<<b>Test (Gamma) Stage</b>>
+            graph[style=dashed penwidth=2 color="forestgreen"]
+            node [shape=box style=filled fontcolor="white" width=3]
+
+            launch_gamma[label="Launch Env"] 
+            db_deploy_gamma[label="DB Deploy"]
+            software_deploy_gamma[label="Deploy Software"]
+            app_monitor_gamma[label="Application Monitoring & Logging"]
+            int_test_gamma[label="Integration Tests"]
+            cap_test_gamma[label="Capacity Tests"]
+            metrics_gamma[label="Metrics Monitoring"]
+            chaos_gamma[label="Chaos/Resiliency Tests"]
+            canary_gamma[label="Canary Tests"]
+            sbom_gamma[label="SBOM"]
+        }
+
+        subgraph cluster_prod {
+            label=<<b>Prod Stage</b>>
+            graph[style=dashed penwidth=2 color="forestgreen"]
+            node [shape=box style=filled fontcolor="white" width=3]
+
+            approval[label="Approval"]
+            blue_green_deployment[label="Blue/Green Deployment"]
+            synth_tests[label="Synthetic Tests"]
+        }
+
+        app_src -> call_build_service [ltail=cluster_source,lhead=cluster_build,penwidth=3,weight=10]
+        call_build_service -> launch_beta [ltail=cluster_build,lhead=cluster_beta,penwidth=3,weight=10]
+        launch_beta -> launch_gamma [ltail=cluster_beta,lhead=cluster_gamma,penwidth=3,weight=10]
+        launch_gamma -> approval [ltail=cluster_gamma,lhead=cluster_prod,penwidth=3,weight=10]
+    }
+
+    call_build_service -> code_quality [lhead=cluster_build_service]
+    build_code -> approval [lhead=cluster_pipeline,ltail=cluster_build_service,style=invis]
+    ide[shape=box label="IDE" labelloc="t" image="docs/assets/person-icon.png"]
+    ide -> build_code [lhead=cluster_build_service,weight=10]
+    ide -> app_src [lhead=cluster_source]
+}
+```
+
 ```mermaid
 
 flowchart
@@ -29,7 +135,7 @@ flowchart
         secrets_detection(Secrets Detection)
         code_review(Code Review)
     end
-    style build_service fill:#eef,color:#000,stroke-width:2px,color:#333,stroke-dasharray: 5 5
+    style build_service stroke-width:2px,stroke-dasharray: 5 5
     ide -->|run| build_service
 
     subgraph build [Build Stage]
