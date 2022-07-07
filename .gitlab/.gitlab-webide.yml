@@ -1,0 +1,14 @@
+terminal:
+  image: python:3.9-bullseye
+  services:
+    - name: registry.gitlab.com/gitlab-org/webide-file-sync:latest
+      alias: webide-file-sync
+      entrypoint: ["/bin/sh"]
+      command: ["-c", "sleep 5 && ./webide-file-sync -project-dir $CI_PROJECT_DIR"]
+      ports:
+        # The `webide-file-sync` executable defaults to port 3000.
+        - number: 3000
+  before_script:
+    - apt-get update && apt-get install -y graphviz
+    - pip install -r requirements.txt
+  script: sleep 60
