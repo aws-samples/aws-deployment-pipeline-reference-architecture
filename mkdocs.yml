@@ -32,11 +32,8 @@ nav:
   - Application Pipeline: 'application-pipeline.md'
   - Machine Learning Pipeline: 'machine-learning-pipeline.md'
   - Dynamic Configuration Deployment Pipeline: 'dynamic-configuration-deployment-pipeline.md'
+  - Download: 'pdf/document.pdf'
 
-extra:
-  social:
-    - icon: material/download
-      link: /pdf/document.pdf
 markdown_extensions:
   - def_list
   - pymdownx.highlight
