@@ -31,7 +31,9 @@
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"ms-azuretools.vscode-docker",
-		"ms-python.python"
+		"ms-python.python",
+		"bierner.markdown-mermaid",
+		"geeklearningio.graphviz-markdown-preview"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
