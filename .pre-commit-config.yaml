@@ -1,0 +1,7 @@
+repos:
+-   repo: local
+    hooks:
+    - id: mkbuild
+      name: Build mkdocs site
+      entry: bash -c 'mkdocs build -sq'
+      language: system

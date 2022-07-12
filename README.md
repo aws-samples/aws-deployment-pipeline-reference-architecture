@@ -12,6 +12,12 @@ brew install graphviz
 pip install -r requirements.txt
 ```
 
+Setup [pre-commit](https://pre-commit.com) hooks:
+
+```bash
+pre-commit install
+```
+
 Start server with:
 
 ```bash
