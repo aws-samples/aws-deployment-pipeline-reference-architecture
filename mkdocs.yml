@@ -27,9 +27,9 @@ theme:
         name: Switch to light mode
 nav:
   - Overview: 'index.md'
-  - Account Fleet Management Pipeline: 'account-fleet-management-pipeline.md'
-  - Compute Image Pipeline: 'compute-image-pipeline.md'
   - Application Pipeline: 'application-pipeline.md'
+  - Compute Image Pipeline: 'compute-image-pipeline.md'
+  - Account Fleet Management Pipeline: 'account-fleet-management-pipeline.md'
   - Machine Learning Pipeline: 'machine-learning-pipeline.md'
   - Dynamic Configuration Deployment Pipeline: 'dynamic-configuration-deployment-pipeline.md'
   - Download: 'pdf/document.pdf'
@@ -47,10 +47,14 @@ markdown_extensions:
 
   - pymdownx.tabbed
   - pymdownx.inlinehilite
+  - pymdownx.extra
   - pymdownx.tasklist:
       custom_checkbox: true
   - toc:
       permalink: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
   - mkdocs_graphviz
 plugins:
   - search
