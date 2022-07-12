@@ -17,28 +17,30 @@
   IN THE SOFTWARE.
 -->
 
-<!-- Repository information -->
-<a
-  href="{{ config.repo_url }}"
-  title="{{ lang.t('source.link.title') }}"
-  data-md-component="source"
->
-  <div class="md-source__icon md-icon">
-    {% set icon = config.theme.icon.repo or "fontawesome/brands/git-alt" %}
-    {% include ".icons/" ~ icon ~ ".svg" %}
+<!-- Copyright and theme information -->
+<div class="md-copyright">
+    {% if config.copyright %}
+      <div class="md-copyright__highlight">
+        {{ config.copyright }}
+      </div>
+    {% endif %}
+    {% if not config.extra.generator == false %}
+      Made with
+      <a
+        href="https://squidfunk.github.io/mkdocs-material/"
+        target="_blank" rel="noopener"
+      >
+        Material for MkDocs
+      </a>
+    {% endif %}
+    <div>
+        Pipe icons created by
+        <a 
+            href="https://www.flaticon.com/free-icons/pipe" 
+            title="pipe icons"
+            target="_blank" rel="noopener"
+        >
+            Freepik - Flaticon
+        </a>
+    </div>
   </div>
-  <div class="md-source__repository">
-    {{ config.repo_name }}
-  </div>
-</a>
-
-<a
-  href="{{base_url}}/pdf/document.pdf"
-  title="Download PDF"
-  data-md-component="source"
->
-  <div class="md-source__icon md-icon">
-    {% set icon = "fontawesome/solid/file-pdf" %}
-    {% include ".icons/" ~ icon ~ ".svg" %}
-  </div>
-</a>
