@@ -6,6 +6,7 @@ docs_dir: "docs"
 copyright: Copyright © Amazon Web Services, Inc. and/or its affiliates. All rights reserved.
 theme:
   name: material
+  custom_dir: overrides
   logo: assets/logo.png
   favicon: assets/logo.png
   features:
@@ -32,7 +33,6 @@ nav:
   - Account Fleet Management Pipeline: 'account-fleet-management-pipeline.md'
   - Machine Learning Pipeline: 'machine-learning-pipeline.md'
   - Dynamic Configuration Deployment Pipeline: 'dynamic-configuration-deployment-pipeline.md'
-  - Download: 'pdf/document.pdf'
 
 markdown_extensions:
   - def_list
