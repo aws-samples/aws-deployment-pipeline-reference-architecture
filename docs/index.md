@@ -41,7 +41,7 @@ The DPRA covers the following deployment pipelines in detail:
         <p>
             Build and publish machine or container images.
         </p>
-        <a href="container-image-pipeline">Learn more ></a>
+        <a href="compute-image-pipeline">Learn more ></a>
     </div>
     <div align="center" class="card">
         <h3>Account Fleet Management</h3>
