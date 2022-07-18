@@ -1,28 +1,26 @@
 # Overview
 
-A deployment pipeline is the key architectural construct for performing [Continuous Delivery](https://aws.amazon.com/devops/continuous-integration/) and Continuous Deployment. It consists of a series of stages - source, build, test, and production (prod). Each stage consists of a collection of actions that automate tasks in the software delivery lifecycle. There are different types of deployment pipelines for different use cases.  
+A deployment pipeline is the key architectural construct for performing [Continuous Integration, Delivery, and Deployment](https://aws.amazon.com/devops/continuous-integration/). Pipelines consist of a series of stages - source, build, test, ..., pre-production-deploy, production-deploy. Each stage consists of a collection of actions that automate tasks in the software delivery lifecycle. There are different types of deployment pipelines for different use cases.
 
-The Deployment Pipeline Reference Architecture (DPRA) for AWS workloads describes the stages and actions for different types of deployment pipelines that typically exist in modern enterprise systems. The DPRA also describes the practices teams can employ to increase the speed, stability, security, and quality of software systems through the use of deployment pipelines.
+The Deployment Pipeline Reference Architecture (DPRA) for AWS workloads describes the stages and actions for different types of deployment pipelines that typically exist in modern enterprise systems. The DPRA also describes the practices teams can employ to increase the speed, stability, and security of software systems through the use of deployment pipelines. For a higher-level perspective, see Clare Liguori’s article in the Amazon Builder’s Library titled [Automating safe, hands-off deployments](https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments).
 
-For a higher-level perspective, see Clare Liguori’s article in the Amazon Builder’s Library titled [Automating safe, hands-off deployments](https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments).
-
-Customers and 3rd party vendors can use the DPRA to create implementations - reference or otherwise - using their own set of services and tools. We have included a reference implementations that uses AWS and third-party tools. When an AWS service/tool is available, we list it; when there are no AWS services/tools, we list third-party tools. There are many third-party tools that can run on AWS so the ones we chose should only be seen as examples for illustrative purposes. Choose the best tool that meets the needs of your enterprise. 
+Customers and third-party vendors can use the DPRA to create implementations - reference or otherwise - using their own set of services and tools. We have included reference implementations that use AWS and third-party tools. When an AWS service/tool is available, we list it; when there are no AWS services/tools, we list third-party tools. There are many third-party tools that can run on AWS so the ones we chose should only be seen as examples for illustrative purposes. Choose the best tool that meets the needs of your enterprise.
 
 Well-architected deployment pipelines possess the following attributes:
 
-* **Defined as Code** - Everything necessary to deploy and run an appliction should be defined as code - code for pipelines, accounts, networking, infrastructure, applications/services, configuration, data, security, compliance, governance, auditing, and documentation – any aspect inside and outside software systems.
+* **Defined as Code** - Everything necessary to build, test, deploy, and run an application should be defined as code - code for pipelines, accounts, networking, infrastructure, applications/services, configuration, data, security, compliance, governance, auditing, and documentation – any aspect inside and outside software systems.
 
-* **AWS Native** - Use fully-managed services to reduce complexity and undifferentiated infrastructure work.
+* **AWS Native** - Use fully-managed services to reduce complexity, increase scalability, and remove undifferentiated work whenever possible.
 
-* **Consistent** - The source code should only be built and packaged once. The packaged artifact should then be staged for deployment to all environments. Source code should never change or be rebuilt after the initial build. 
+* **Consistent** - The source code should only be built and packaged once. The packaged artifact should then be staged in a registry with appropriate metadata and ready for deployment to any environment. Source code should never change or be rebuilt after the initial build.
 
-* **Small Batch** - The pipeline should be constructed in such a way as to encourage the delivery of software early and often. Likewise, the pipeline should discourage the use of long-lived branches and encourage trunk-based development.
+* **Small Batches** - The pipeline should be constructed in such a way as to encourage the delivery of software early and often. Likewise, the pipeline should discourage the use of long-lived branches and encourage trunk-based development.
 
-* **Orchestrates** - As part of a deployment pipeline, every code change runs a fully-automated build, test, deploy, and release processes across all environments with required approvals. After success, each stage automatically transitions to the next stage of the pipeline. It stops on failures. A single pipeline should orchestrate the deployment to all environments rather than creating pipelines for each environment.
+* **Orchestrates** - As part of a deployment pipeline, every merged code change has a fully-automated build, test, publish, deploy, and release process run across all environments. Each stage automatically transitions to the next stage of the pipeline upon success, or stops on failure. In some circumstances human approvals are necessary, these approvals most often show up when automation is unable to assess the risk or specific context for approval. If used, human approvals should be reduced to a button-click interface that triggers an automated pipeline process to continue. A single pipeline should orchestrate the deployment to all environments rather than creating pipelines for each environment.
 
 * **Fast Feedback** - Automatically notify engineers of build, test, quality, and security errors from deployment pipelines through the most effective means such as chat or email.
 
-* **Always Deployable** - When a deployment pipeline error occurs, it becomes the top priority to commit the fix back to the source code repository’s mainline in less than 30 minutes so that it is always in a healthy state.
+* **Always Deployable** - When an error occurs in the mainline of a deployment pipeline, the top priority is to fix the build and ensure deployment obtains and remains in a healthy state before introducing any further changes.
 
 * **Measured** - Provide real-time metrics for code quality, speed (deployment frequency and deployment lead time), security (security control automation %, mean time to resolve security errors, and reliability (change failures and time to restore service). View metrics through a real-time dashboard. When instrumentation is not yet possible, create a [Likert](https://en.wikipedia.org/wiki/Likert_scale)-based questionnaire to determine these metrics across teams.
 
@@ -62,7 +60,7 @@ The DPRA covers the following deployment pipelines in detail:
     <div align="center" class="card">
         <h3>Dynamic Configuration</h3>
         <p>
-            Push application configuration changes. 
+            Push application configuration changes.
         </p>
         <a href="dynamic-configuration-deployment-pipeline">Learn more ></a>
     </div>
