@@ -4,3 +4,4 @@ mkdocs-mermaid2-plugin
 mkdocs-graphviz
 mkdocs-with-pdf
 pre-commit
+Markdown==3.3.7
