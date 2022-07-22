@@ -1,49 +1,85 @@
 .cardwrapper {
-    display: flex;
-    padding: 20px 20px 0px 20px;
+  display: flex;
+  padding: 20px 20px 0px 20px;
 }
 
-.cardwrapper>div {
-    flex-grow: 1;
-    padding: 20px 20px 0px 20px;
-    height: auto;
-    overflow: hidden;
-    transition: ease-in-out 200ms;
-    box-shadow: 0px 10px 10px rgba(30, 30, 30, 0.08);
-    background-color: #ffffff;
-    border-collapse: collapse;
-    cursor: default;
+.cardwrapper > div {
+  flex-grow: 1;
+  padding: 20px 20px 0px 20px;
+  height: auto;
+  overflow: hidden;
+  transition: ease-in-out 200ms;
+  box-shadow: 0px 10px 10px rgba(30, 30, 30, 0.08);
+  background-color: #ffffff;
+  border-collapse: collapse;
+  cursor: default;
 }
 
-.cardwrapper>div:first-of-type {
-    margin-right: 10px
+.cardwrapper > div:first-of-type {
+  margin-right: 10px;
 }
 
-.cardwrapper>div:nth-of-type(2) {
-    margin-right: 10px
+.cardwrapper > div:nth-of-type(2) {
+  margin-right: 10px;
 }
 
-.cardwrapper>div:nth-of-type(3) {}
-
-.cardwrapper>h2 {
-    margin-top: 0;
-    margin-bottom:0;
+.cardwrapper > div:nth-of-type(3) {
 }
 
-.cardwrapper>div:hover {
-    box-shadow: 0px 10px 20px rgba(30, 30, 30, 0.16);
+.cardwrapper > h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.cardwrapper > div:hover {
+  box-shadow: 0px 10px 20px rgba(30, 30, 30, 0.16);
 }
 
 .card {
-    padding-bottom: 0px;
-    width: 33vw;
+  padding-bottom: 0px;
+  width: 33vw;
 }
 
 .card img {
-    opacity: 0.8;
-    transition: ease-in-out 200ms;
+  opacity: 0.8;
+  transition: ease-in-out 200ms;
 }
 
 .card:hover img {
-    opacity: 1.0;
+  opacity: 1;
+}
+
+/* Source of colors: https://brand.amazon.com/aws/visual-guidelines-ob/colors */
+:root {
+  --md-admonition-icon--required: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M381.2 150.3L524.9 171.5C536.8 173.2 546.8 181.6 550.6 193.1C554.4 204.7 551.3 217.3 542.7 225.9L438.5 328.1L463.1 474.7C465.1 486.7 460.2 498.9 450.2 506C440.3 513.1 427.2 514 416.5 508.3L288.1 439.8L159.8 508.3C149 514 135.9 513.1 126 506C116.1 498.9 111.1 486.7 113.2 474.7L137.8 328.1L33.58 225.9C24.97 217.3 21.91 204.7 25.69 193.1C29.46 181.6 39.43 173.2 51.42 171.5L195 150.3L259.4 17.97C264.7 6.954 275.9-.0391 288.1-.0391C300.4-.0391 311.6 6.954 316.9 17.97L381.2 150.3z"/></svg>');
+  --md-admonition-icon--recommended: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M511.1 63.1v287.1c0 35.25-28.75 63.1-64 63.1h-144l-124.9 93.68c-7.875 5.75-19.12 .0497-19.12-9.7v-83.98h-96c-35.25 0-64-28.75-64-63.1V63.1c0-35.25 28.75-63.1 64-63.1h384C483.2 0 511.1 28.75 511.1 63.1z"/></svg>');
+}
+.md-typeset .admonition.required,
+.md-typeset details.required {
+  border-color: rgb(255, 153, 0);
+}
+.md-typeset .required > .admonition-title,
+.md-typeset .required > summary {
+  background-color: rgba(255, 153, 0, 0.1);
+}
+.md-typeset .required > .admonition-title::before,
+.md-typeset .required > summary::before {
+  background-color: rgb(255, 153, 0);
+  -webkit-mask-image: var(--md-admonition-icon--required);
+  mask-image: var(--md-admonition-icon--required);
+}
+
+.md-typeset .admonition.recommended,
+.md-typeset details.recommended {
+  border-color: rgb(212, 218, 218)
+}
+.md-typeset .recommended > .admonition-title,
+.md-typeset .recommended > summary {
+  background-color: rgba(212, 218, 218, 0.3);
+}
+.md-typeset .recommended > .admonition-title::before,
+.md-typeset .recommended > summary::before {
+  background-color: rgb(212, 218, 218);
+  -webkit-mask-image: var(--md-admonition-icon--recommended);
+  mask-image: var(--md-admonition-icon--recommended);
 }

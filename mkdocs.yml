@@ -48,6 +48,8 @@ markdown_extensions:
   - pymdownx.tabbed
   - pymdownx.inlinehilite
   - pymdownx.extra
+  - admonition
+  - pymdownx.details
   - pymdownx.tasklist:
       custom_checkbox: true
   - toc:
