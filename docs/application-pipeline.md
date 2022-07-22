@@ -147,7 +147,7 @@ All the above source code are versioned and securely accessed with role based ac
 
 ## Pre-Commit hooks
 
-???+ required "Secrets Detetion"
+???+ required "Secrets Detection"
     Identify secrets such as usernames, passwords, and access keys in code and other files before they are published to a repository by using pre-commit hooks. When discovering secrets, the code push should fail immediately.
 
 ???+ recommended "IDE Plugins"
