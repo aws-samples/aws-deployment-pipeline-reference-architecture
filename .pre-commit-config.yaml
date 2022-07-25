@@ -3,5 +3,5 @@ repos:
     hooks:
     - id: mkbuild
       name: Build mkdocs site
-      entry: bash -c 'mkdocs build -sq'
+      entry: bash -c 'mkdocs build -v'
       language: system

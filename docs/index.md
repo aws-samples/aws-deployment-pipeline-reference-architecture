@@ -27,43 +27,38 @@ Well-architected deployment pipelines possess the following attributes:
 The DPRA covers the following deployment pipelines in detail:
 
 <div class="cardwrapper">
-    <div align="center" class="card">
+    <a href="application-pipeline" class="card">
         <h3>Application</h3>
         <p>
             Build, test, and deploy an application.
         </p>
-        <a href="application-pipeline">Learn more ></a>
-    </div>
-    <div align="center" class="card">
+    </a>
+    <a href="compute-image-pipeline" class="card disabled">
         <h3>Compute Image</h3>
         <p>
             Build and publish machine or container images.
         </p>
-        <a href="compute-image-pipeline">Learn more ></a>
-    </div>
-    <div align="center" class="card">
+    </a>
+    <a href="account-fleet-management-pipeline" class="card disabled">
         <h3>Account Fleet Management</h3>
         <p>
             Manage a fleet of AWS accounts through a pipeline.
         </p>
-        <a href="account-fleet-management-pipeline">Learn more ></a>
-    </div>
+    </a>
 </div>
 <div class="cardwrapper">
-    <div align="center" class="card">
+    <a href="machine-learning-pipeline" class="card disabled">
         <h3>Machine Learning</h3>
         <p>
             Train, test and deploy machine learning models.
         </p>
-        <a href="machine-learning-pipeline">Learn more ></a>
-    </div>
-    <div align="center" class="card">
+    </a>
+    <a href="dynamic-configuration-deployment-pipeline" class="card disabled">
         <h3>Dynamic Configuration</h3>
         <p>
             Push application configuration changes.
         </p>
-        <a href="dynamic-configuration-deployment-pipeline">Learn more ></a>
-    </div>
+    </a>
 </div>
 
 ## Definitions
