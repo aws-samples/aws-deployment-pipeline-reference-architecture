@@ -1,6 +1,6 @@
 # Application Pipeline
 
-Applications and Services are the most common use case for a deployment pipeline. In this pipeline type, it will get application source code files, tests, static analysis, database deployment, configuration, and other code to perform build, test, deploy, and release processes. The pipeline launches an environment from the compute image artifacts generated in the compute image pipeline. Acceptance and other automated tests are run on the environment(s) as part of the deployment pipeline.
+Applications and Services are the most common use case for a deployment pipeline. In this pipeline type, it will get application source code files, tests, static analysis, database deployment, configuration, and other code to perform build, test, deploy, and release processes. The pipeline launches an environment from the compute image artifacts generated in the compute image pipeline. Integration and other automated tests are run on the environment(s) as part of the deployment pipeline.
 
 ```graphviz dot pipeline.png
 digraph G {
@@ -75,7 +75,7 @@ digraph G {
             launch_beta[label="Launch Env" color="#d4dada"] 
             db_deploy_beta[label="DB Deploy" color="#d4dada"]
             software_deploy_beta[label="Deploy Software" color="#d4dada"]
-            acpt_test_beta[label="Acceptance Tests" color="#d4dada"]
+            int_test_beta[label="Integration Tests" color="#d4dada"]
             e2e_test_beta[label="E2E Tests" color="#d4dada"]
         }
 
@@ -126,7 +126,7 @@ digraph G {
     Code that is compiled, transpiled or interpreted for the purpose of providing a capability.
 
 ???+ required "Test Source Code"
-    Code that verifies the expected functionality of the *Application Source Code*. This includes source code for unit, integration, acceptance, end-to-end, capacity, chaos, and synthetic testing. All *Test Source Code* is **required** to be stored in the same repository as the app to allow tests to be created and updated on the same lifecycle as the *Application Source Code*.
+    Code that verifies the expected functionality of the *Application Source Code*. This includes source code for unit, integration, end-to-end, capacity, chaos, and synthetic testing. All *Test Source Code* is **required** to be stored in the same repository as the app to allow tests to be created and updated on the same lifecycle as the *Application Source Code*.
 
 ???+ required "Infrastructure Source Code"
     Code that defines the infrastructure necessary to run the *Application Source Code*. Examples of infrastructure source code include but are not limited to [AWS Cloud Development Kit](https://aws.amazon.com/cdk/), [AWS CloudFormation](https://aws.amazon.com/cloudformation/) and [HashiCorp Terraform](https://www.terraform.io/). All *Infrastructure Source Code* is **required** to be stored in the same repository as the app to allow infrastructure to be created and updated on the same lifecycle as the *Application Source Code*.
@@ -376,9 +376,9 @@ digraph G {
 }
 ```
 
-???+ recommended "Acceptance Tests"
-    Run automated tests that verify if the application satisifes business requirements. These tests require the application to be running in the beta environment. Acceptance tests may come in the form of behavior-driven tests, automated acceptance tests, or automated tests linked to requirements and/or stories in a tracking system. Examples of tools to define acceptance tests include but are not limited to [Cucumber](https://cucumber.io) and [SoapUI](https://www.soapui.org).
-    ```graphviz dot acpt.png
+???+ recommended "Integration Tests"
+    Run automated tests that verify if the application satisifes business requirements. These tests require the application to be running in the beta environment. Integration tests may come in the form of behavior-driven tests, automated acceptance tests, or automated tests linked to requirements and/or stories in a tracking system. Examples of tools to define integration tests include but are not limited to [Cucumber](https://cucumber.io) and [SoapUI](https://www.soapui.org).
+    ```graphviz dot int.png
 digraph G {
     compound=true
     rankdir=LR
@@ -407,7 +407,7 @@ digraph G {
 
 ???+ recommended "End-to-End (E2E) Tests"
     Run automated end-to-end testing from the users’ perspective in the beta environment. These tests verify the user workflow, including when performed through a UI. These test are the slowest to run and hardest to maintain and therefore it is recommended to only have a few end-to-end tests that cover the most important application workflows. Examples of tools to define end-to-end tests include but are not limited to [Cypress](https://cypress.io) and [Selenium](https://selenium.dev).
-    ```graphviz dot acpt.png
+    ```graphviz dot e2e.png
 digraph G {
     compound=true
     rankdir=LR
