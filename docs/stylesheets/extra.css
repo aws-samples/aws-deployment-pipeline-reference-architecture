@@ -124,3 +124,14 @@
   -webkit-mask-image: var(--dpra-icon--recommended);
   mask-image: var(--dpra-icon--recommended);
 }
+
+@media print {
+  .md-typeset .required > .admonition-title::before,
+  .md-typeset .required > summary::before {
+    display: none;
+  }
+  .md-typeset .recommended > .admonition-title::before,
+  .md-typeset .recommended > summary::before {
+    display: none;
+  }
+}
