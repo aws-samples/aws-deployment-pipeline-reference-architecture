@@ -60,7 +60,7 @@
 }
 
 .card.disabled::after {
-  content: "🛠 under development 🛠 ";
+  content: "🛠 under development 🛠";
 }
 
 .card.disabled:hover {
@@ -68,13 +68,36 @@
 }
 
 /* Source of colors: https://brand.amazon.com/aws/visual-guidelines-ob/colors */
+:root > * {
+  --aws-brand-color-darksquidink: #161E2D;
+  --aws-brand-color-squidink: #232F3E;
+  --aws-brand-color-anchor: #003181;
+  --aws-brand-color-sky: #2074D5;
+  --aws-brand-color-smile: #FF9900;
+  --aws-brand-color-rind: #FBD8BF;
+  --aws-brand-color-stone: #d4dada;
+  --aws-brand-color-paper: #f1f3f3;
+
+  --dpra-icon--required: url('../assets/required.svg');
+  --dpra-icon--recommended: url('../assets/recommended.svg');
+
+  --md-primary-fg-color:       var(--aws-brand-color-darksquidink);
+  --md-accent-fg-color: var(--aws-brand-color-smile);
+
+}
+
+[data-md-color-scheme="default"] {
+  --md-typeset-a-color: #0073bb;
+}
+[data-md-color-scheme="slate"] {
+  --md-typeset-a-color: #44b9d6;
+}
+
 :root {
-  --md-admonition-icon--required: url('../assets/required.svg');
-  --md-admonition-icon--recommended: url('../assets/recommended.svg');
 }
 .md-typeset .admonition.required,
 .md-typeset details.required {
-  border-color: rgb(255, 153, 0);
+  border-color: var(--aws-brand-color-smile);
 }
 .md-typeset .required > .admonition-title,
 .md-typeset .required > summary {
@@ -82,14 +105,14 @@
 }
 .md-typeset .required > .admonition-title::before,
 .md-typeset .required > summary::before {
-  background-color: rgb(255, 153, 0);
-  -webkit-mask-image: var(--md-admonition-icon--required);
-  mask-image: var(--md-admonition-icon--required);
+  background-color: var(--aws-brand-color-smile);
+  -webkit-mask-image: var(--dpra-icon--required);
+  mask-image: var(--dpra-icon--required);
 }
 
 .md-typeset .admonition.recommended,
 .md-typeset details.recommended {
-  border-color: rgb(212, 218, 218)
+  border-color: var(--aws-brand-color-stone);
 }
 .md-typeset .recommended > .admonition-title,
 .md-typeset .recommended > summary {
@@ -97,7 +120,7 @@
 }
 .md-typeset .recommended > .admonition-title::before,
 .md-typeset .recommended > summary::before {
-  background-color: rgb(212, 218, 218);
-  -webkit-mask-image: var(--md-admonition-icon--recommended);
-  mask-image: var(--md-admonition-icon--recommended);
+  background-color: var(--aws-brand-color-stone);
+  -webkit-mask-image: var(--dpra-icon--recommended);
+  mask-image: var(--dpra-icon--recommended);
 }

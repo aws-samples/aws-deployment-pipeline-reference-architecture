@@ -21,6 +21,8 @@ before_script:
 
 test:
   stage: test
+  variables:
+    ENABLE_PDF_EXPORT: 1
   script:
   - mkdocs build --verbose --site-dir test
   artifacts:
@@ -31,6 +33,8 @@ test:
 
 pages:
   stage: deploy
+  variables:
+    ENABLE_PDF_EXPORT: 1
   script:
   - mkdocs build --verbose --site-dir public
   artifacts:
