@@ -1,4 +1,4 @@
-# Architecture 
+# Architecture
 
 Applications and Services are the most common use case for a deployment pipeline. In this pipeline type, it will get application source code files, tests, static analysis, database deployment, configuration, and other code to perform build, test, deploy, and release processes. The pipeline launches an environment from the compute image artifacts generated in the compute image pipeline. Integration and other automated tests are run on the environment(s) as part of the deployment pipeline.
 
