@@ -1,6 +1,6 @@
 # CDK Pipeline
 
-This presents a reference implementation of the [Application Pipeline](..) reference architecture. The pipeline is built with [AWS CodePipeline](https://aws.amazon.com/codepipeline/) and uses [AWS CodeBuild](https://aws.amazon.com/codebuild/) for building the software and performing testing tasks. All the infrastructure for this reference implementation is defined with [AWS Cloud Development Kit](https://aws.amazon.com/cdk/). The source code for this reference implementation is available in [GitLab](https://gitlab.aws.dev/devops/dpra/-/tree/main/examples/cdk-application-pipeline) for running in your own local account.
+This presents a reference implementation of the [Application Pipeline](..) reference architecture. The pipeline is built with [AWS CodePipeline](https://aws.amazon.com/codepipeline/) and uses [AWS CodeBuild](https://aws.amazon.com/codebuild/) for building the software and performing testing tasks. All the infrastructure for this reference implementation is defined with [AWS Cloud Development Kit](https://aws.amazon.com/cdk/). The pipeliens are defined using the [CDK Pipelines](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.pipelines-readme.html) L3 constructs. The source code for this reference implementation is available in [GitLab](https://gitlab.aws.dev/devops/dpra/-/tree/main/examples/cdk-application-pipeline) for running in your own local account.
 
 ```graphviz dot pipeline.png
 digraph G {
@@ -114,7 +114,7 @@ digraph G {
     <!--/codeinclude-->
 
 ???+ required "Test Source Code"
-    The reference implementation includes source code for unit, integration and end-to-end testing. Unit and integration tests can be found in `src/test/java`. For example, `FruitControllerTest.java` performs unit tests of each API path:
+    The reference implementation includes source code for unit, integration and end-to-end testing. Unit and integration tests can be found in `src/test/java`. For example, `FruitControllerTest.java` performs unit tests of each API path with the [JUnit](https://junit.org/) testing library:
 
     <!--codeinclude-->
     [](../../examples/cdk-application-pipeline/src/test/java/com/amazonaws/dpri/fruits/FruitControllerTest.java) block:shouldReturnList
@@ -164,7 +164,7 @@ digraph G {
     <!--/codeinclude-->
 
 ???+ required "Database Source Code"
-    Code managed the schema and initial data for the application is defined using [Liquibase](https://www.liquibase.org/) in `src/main/resources/db/changelog/db.changelog-master.yml`:
+    The code that manages the schema and initial data for the application is defined using [Liquibase](https://www.liquibase.org/) in `src/main/resources/db/changelog/db.changelog-master.yml`:
 
     <!--codeinclude-->
     [](../../examples/cdk-application-pipeline/src/main/resources/db/changelog/db.changelog-master.yaml)
@@ -175,610 +175,252 @@ digraph G {
 Actions in this stage all run in less than 10 minutes so that developers can take action on fast feedback before moving on to their next task. Each of the actions below are defined as code with [AWS Cloud Development Kit](https://aws.amazon.com/cdk/).
 
 ???+ required "Build Code"
-    Convert code into artifacts that can be deployed to an environment. Most builds complete in seconds. Examples include but are not limited to [Maven](https://maven.apache.org/) and [tsc](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
+    The Java source code is compiled, unit tested and packaged by [Maven](https://maven.apache.org/). A step is added to the pipeline through a CDK construct called `MavenBuild`:
+
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/infrastructure/src/maven-build/index.ts) inside_block:constructor
+    <!--/codeinclude-->
 
 ???+ required "Unit Tests"
-    Run the test code to verify that individual functions and methods of classes, components or modules of the *Application Source Code* are performing according to expectations. These tests are fast-running tests with zero dependencies on external systems returning results in seconds. Examples of unit testing frameworks include but are not limited to [JUnit](https://junit.org/), [Jest](https://jestjs.io/), and [pytest](https://pytest.org/).
+    The unit tests are run by [Maven](https://maven.apache.org/) at the same time the `Build Code` action occurs. The results of the unit tests are uploaded to [AWS Code Build Test Reports](https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html) to track over time.
+
+    ![](assets/unit-test-report.png)
 
 ???+ required "Code Quality"
-    Run various automated static analysis tools that generate reports on code quality, coding standards, security, code coverage, and other aspects according to the team and/or organization’s best practices. AWS recommends that teams fail the build when important practices are violated (e.g., a security violation is discovered in the code). These checks usually run in seconds. Examples of tools to measure code quality include but are not limited to [Amazon CodeGuru](https://aws.amazon.com/codeguru/), [SonarQube](https://www.sonarqube.org/), [black](https://github.com/psf/black), and [ESLint](https://eslint.org/).
+    A CDK construct was created to require that [Amazon CodeGuru](https://aws.amazon.com/codeguru/) performed a review on the most recent changes and that the recommendations don't exceed the severity thresholds. If no review was found or if the severity thresholds were exceeded, the pipeline fails. The construct is added to the pipeline with:
 
-    ```graphviz dot codequality.png
-digraph G {
-    rankdir=LR
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/infrastructure/src/pipeline.ts) block:CodeGuruReviewCheck
+    <!--/codeinclude-->
 
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
+    The `Filter` attribute can be customized to control what categories of recommendations are considered and what the thresholds are:
 
-        source[label="Application Source Code" color="#d4dada"] 
-        iac[label="Infrastructure Source Code" color="#d4dada"] 
-        quality[label="Static Analysis Tools" color="#d4dada" fontcolor="black"] 
-
-        quality -> source [label="analyze"]
-        quality -> iac [label="analyze"]
+    ```typescript
+    export enum CodeGuruReviewRecommendationCategory {
+        AWS_BEST_PRACTICES = 'AWSBestPractices',
+        AWS_CLOUDFORMATION_ISSUES = 'AWSCloudFormationIssues',
+        CODE_INCONSISTENCIES = 'CodeInconsistencies',
+        CODE_MAINTENANCE_ISSUES = 'CodeMaintenanceIssues',
+        CONCURRENCY_ISSUES = 'ConcurrencyIssues',
+        DUPLICATE_CODE = 'DuplicateCode',
+        INPUT_VALIDATIONS = 'InputValidations',
+        JAVA_BEST_PRACTICES = 'JavaBestPractices',
+        PYTHON_BEST_PRACTICES = 'PythonBestPractices',
+        RESOURCE_LEAKS = 'ResourceLeaks',
+        SECURITY_ISSUES = 'SecurityIssues',
     }
-}
-```
+    export class CodeGuruReviewFilter { 
+        // Limit which recommendation categories to include
+        RecommendationCategories!: CodeGuruReviewRecommendationCategory[];
+
+        // Fail if more that this # of lines of code were suppressed aws-codeguru-reviewer.yml
+        MaxSuppressedLinesOfCodeCount?: number;
+
+        // Fail if more than this # of CRITICAL recommendations were found
+        MaxCriticalRecommendations?: number;
+
+        // Fail if more than this # of HIGH recommendations were found
+        MaxHighRecommendations?: number;
+
+        // Fail if more than this # of MEDIUM recommendations were found
+        MaxMediumRecommendations?: number;
+
+        // Fail if more than this # of INFO recommendations were found
+        MaxInfoRecommendations?: number;
+
+        // Fail if more than this # of LOW recommendations were found
+        MaxLowRecommendations?: number;
+    }
+    ```
+
+
+    This adds an action to CodePipeline for 
+
+    ![](assets/codeguru-review.png)
 
 ???+ required "Secrets Detection"
-    Identify secrets such as usernames, passwords, and access keys in code. When discovering secrets, the build should fail immediately. Examples of secret detection tools include but are not limited to [GitGuardian](https://www.gitguardian.com/) and [gitleaks](https://github.com/zricethezav/gitleaks).
-
-    ```graphviz dot secrets.png
-digraph G {
-    rankdir=LR
-
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-
-        source[label="Application Source Code" color="#d4dada"] 
-        iac[label="Application Source Code" color="#d4dada"] 
-        secrets[label="Secrets Detection" color="#d4dada" fontcolor="black"] 
-
-        secrets -> source [label="analyze"]
-        secrets -> iac [label="analyze"]
-    }
-}
-```
+    The same CDK construct that was created for *Code Quality* above is also used for secrets detection with [Amazon CodeGuru](https://aws.amazon.com/codeguru/).
 
 ???+ required "Static Application Security Testing (SAST)"
-    Analyze code for application security violations such as [XML External Entity Processing](https://owasp.org/www-community/vulnerabilities/XML_External_Entity_(XXE)_Processing), [SQL Injection](https://owasp.org/www-community/attacks/SQL_Injection), and [Cross Site Scripting](https://owasp.org/www-community/attacks/xss/). Examples of tools to perform static application security testing include but are not limited to [Amazon CodeGuru](https://aws.amazon.com/codeguru/), [SonarQube](https://www.sonarqube.org/), and [Checkmarx](https://checkmarx.com/).
-
-    ```graphviz dot sast.png
-digraph G {
-    rankdir=LR
-
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-
-        source[label="Application Source Code" color="#d4dada"] 
-        sast[label="SAST" color="#d4dada" fontcolor="black"] 
-
-        sast -> source [label="analyze"]
-    }
-}
-```
+    The same CDK construct that was created for *Code Quality* above is also used for SAST with [Amazon CodeGuru](https://aws.amazon.com/codeguru/).
 
 ???+ required "Package and Store Artifact(s)"
-    While the *Build Code* action will package most of the relevant artifacts, there may be additional steps to automate for packaging the code artifacts. Artifacts should only be built and packaged once and then deployed to various environments to validate the artifact. Artfiacts should never be rebuilt during subsequent deploy stages. Once packaged, automation is run in this action to store the artifacts in an artifact repository for future deployments. Examples of artifact repositories include but are not limited to [AWS CodeArtifact](https://aws.amazon.com/codeartifact/), [Amazon ECR](https://aws.amazon.com/ecr/), and [JFrog Artifactory](https://jfrog.com/artifactory/).
+    [AWS Cloud Development Kit](https://aws.amazon.com/cdk/) handles the packaging and storing of assets during the `Synth` action and `Assets` stage. The `Synth` action generates the CloudFormation templates to be deployed into the subsequent environments along with staging up the files necessary to create a docker image. The `Assets` stage then performs the docker build step to create a new image and push the image to [Amazon ECR](https://aws.amazon.com/ecr/) repositories in each environment account.
 
-    ```graphviz dot artifact.png
-digraph G {
-    rankdir=LR
-
-    node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-
-        source[label="Application Source Code" color="#d4dada"] 
-        artifact[label="Packaged Artifact" color="#d4dada" fontcolor="black"] 
-
-        source -> artifact [label="package"]
-    }
-
-    repo[label="Artifact Repository" color="#d4dada" fontcolor="black"]
-
-    artifact -> repo [label="store" fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-}
-```
+    ![](assets/build-package.png)
 
 ???+ required "Software Composition Analysis (SCA)"
-    Run software composition analysis (SCA) tools to find vulnerabilities to package repositories related to open source use, licensing, and security vulnerabilities. SCA tools also launch workflows to fix these vulnerabilities. These tools also require a software bill of materials (SBOM) exist in the source code. Examples of bill of materials include but are not limited to Java `pom.xml`, JavaScript `yarn.lock`, and Ruby `Gemfile.lock`. Example SCA tools include but are not limited to [Dependabot](https://github.com/dependabot), [Snyk](https://snyk.io/product/open-source-security-management/), and [Blackduck](https://www.blackducksoftware.com/).
-    ```graphviz dot sca.png
-digraph G {
-    rankdir=LR
-
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-
-        artifact[label="Packaged Artifact" color="#d4dada"] 
-        sca[label="SCA" color="#d4dada" fontcolor="black"] 
-
-        sca -> artifact [label="analyze"]
-    }
-}
-```
+    `TODO: build CDK component to check ECR image scan`
 
 ## Test (Beta)
 
-???+ recommended "Launch Environment"
-    Consume the compute image from an image repository (e.g., AMI or a container repo) and launch an environment from the image using *Infrastructure Source Code*. The beta images is generally not accessible to pubic customers and is only used for internal software validaition. Beta environment should be in a different AWS Account from the tools used to run the deployment pipeline.  Access to the beta environment should be handled via [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) rather than long lived credentials from IAM users. Example tools for defining infrastructure code include but are not limited to [AWS Cloud Development Kit](https://aws.amazon.com/cdk/), [AWS CloudFormation](https://aws.amazon.com/cloudformation/) and [HashiCorp Terraform](https://www.terraform.io/).
+???+ required "Launch Environment"
+    The infrastructure for each environment is defined in [AWS Cloud Development Kit](https://aws.amazon.com/cdk/):
 
-    ```graphviz dot launch.png
-digraph G {
-    compound=true
-    rankdir=LR
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/infrastructure/src/deployment/index.ts) inside_block:constructor
+    <!--/codeinclude-->
 
-    node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-    edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
+    The `DeploymentStack` construct is then instantiated for each environment:
 
-        iac[label="Infrastructure Source Code" color="#d4dada" fontcolor="black"]
-    }
-    subgraph cluster_env {
-        label=<<b>Environment</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
+    ```typescript
+    export const constants = {
+        APP_NAME: 'fruit-api',
+        TOOLCHAIN_ENV: { account: '000000000', region: 'us-west-2' },
+        BETA_ENV: { account: '111111111', region: 'us-west-2' },
+        GAMMA_ENV: { account: '222222222', region: 'us-west-2' },
+        PROD_ENV: { account: '333333333', region: 'us-west-2' },
+    } as const;
+
+    const betaStage = new DeploymentStage(this, 'Beta', {
+      env: constants.BETA_ENV,
+    });
+    pipeline.addStage(betaStage);
+    ```
+
+???+ required "Database Deploy"
+    Spring Boot is configured to run [Liquibase](https://www.liquibase.org/) on startup. This reads the configuration in `src/main/resources/db/changelog/db.changelog-master.yml` to define the tables and initial data for the database:
+
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/src/main/resources/db/changelog/db.changelog-master.yaml)
+    <!--/codeinclude-->
+
+
+???+ required "Deploy Software"
+    The *Launch Environment* action above creates a new [Amazon ECS Task Definition](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html) for the new docker image and then updates the Amazon ECS Service to use the new Task Definition. for the new docker image and then updates the Amazon ECS Service to use the new Task Definition. for the new docker image and then updates the Amazon ECS Service to use the new Task Definition.
+
+???+ required "Integration Tests"
+    Integration tests are preformed during the *Build Source* action. They are defined with with [SoapUI](https://www.soapui.org/) in `fruit-api-soapui-project.xml`. They are executed by [Maven](https://maven.apache.org/) in the `integration-test` phase using plugins in `pom.xml`.  Spring Boot is configure to start a local instance of the application with an H2 database during the `pre-integration-test` phase and then to terminate on the `post-integration-test` phase.  The results of the unit tests are uploaded to [AWS Code Build Test Reports](https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html) to track over time.
+
+    ```xml
+        <plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+					  <id>pre-integration-test</id>
+					  <goals>
+						<goal>start</goal>
+					  </goals>
+					</execution>
+					<execution>
+					  <id>post-integration-test</id>
+					  <goals>
+						<goal>stop</goal>
+					  </goals>
+					</execution>
+				  </executions>
+			</plugin>
+			<plugin>
+				<groupId>com.smartbear.soapui</groupId>
+				<artifactId>soapui-maven-plugin</artifactId>
+				<version>5.7.0</version>
+				<configuration>
+					<junitReport>true</junitReport>
+					<outputFolder>target/soapui-reports</outputFolder>
+					<endpoint>${soapui.endpoint}</endpoint>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+    ```
+
+???+ required "End-to-End (E2E) Tests"
+    End-to-End tests are preformed after the *Launch Environment* and *Deploy Software* actions:
+
+    ![](assets/deploy-beta.png)
     
-        env[label="" style="invis"]
-    }
+    The tests are defined with with [SoapUI](https://www.soapui.org/) in `fruit-api-soapui-project.xml`. They are executed by [Maven](https://maven.apache.org/) with the endpoint overridden to the URL from the CloudFormation output. A CDK construct called `SoapUITest` was created to create the CodeBuild Project to run SoapUI. 
 
-    iac -> env [label="launch" fontcolor="black" color="black"]
-}
-```
-
-???+ recommended "Database Deploy"
-    Apply changes to the beta database using the *Database Source Code*. Best practice is to connect to the beta database through [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) and [IAM database authentication for RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html) rather than long lived database credentials. If database credentials must be used, then they should be loaded from a secret manager such as [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/). Changes to the database should be incremental, only applying the changes since the prior deployment. Examples of tools that apply incremental database changes include but are not limited to [Liquibase](https://www.liquibase.org/).
-
-    ```graphviz dot db.png
-digraph G {
-    compound=true
-    rankdir=LR
-
-    node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-    edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-
-        db_source[label="Database Source Code" color="#d4dada" fontcolor="black"]
-    }
-    subgraph cluster_env {
-        label=<<b>Environment</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/infrastructure/src/soapui-test/index.ts) inside_block:constructor
+    <!--/codeinclude-->
     
-        db[label="Database" color="#d4dada" fontcolor="black"]
-    }
-    db_source -> db [label="deploy" fontcolor="black" color="black"]
-}
-```
-
-???+ recommended "Deploy Software"
-    Deploy software to the beta environment. Software is not deployed from source but rather the artifact that was packaged and stored in the *Build Stage* will be used for the deployment. Software deployments should be performed through *Infrastructure Source Code*. Access to the beta environment should be handled via [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) rather than long lived credentials from IAM users. Examples of tools to deploy software include but are not limited to [AWS CodeDeploy](https://aws.amazon.com/codedeploy/).
-    ```graphviz dot software.png
-digraph G {
-    compound=true
-    rankdir=LR
-
-    node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-    edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-
-        iac[label="Infrastructure Source Code" color="#d4dada" fontcolor="black"]
-    }
-    subgraph cluster_env {
-        label=<<b>Environment</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-    
-        software[label="Application" color="#d4dada" fontcolor="black"]
-    }
-    repo[label="Artifact Repository" color="#d4dada" fontcolor="black"]
-    repo -> iac[label="get artifact" fontcolor="black" color="black"]
-    iac -> software [label="deploy" fontcolor="black" color="black"]
-}
-```
-
-???+ recommended "Integration Tests"
-    Run automated tests that verify if the application satisifes business requirements. These tests require the application to be running in the beta environment. Integration tests may come in the form of behavior-driven tests, automated acceptance tests, or automated tests linked to requirements and/or stories in a tracking system. Examples of tools to define integration tests include but are not limited to [Cucumber](https://cucumber.io) and [SoapUI](https://www.soapui.org).
-    ```graphviz dot int.png
-digraph G {
-    compound=true
-    rankdir=LR
-
-    node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-    edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-
-        test_source[label="Test Source Code" color="#d4dada" fontcolor="black"]
-    }
-    subgraph cluster_env {
-        label=<<b>Environment</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-    
-        app[label="Application" color="#d4dada" fontcolor="black"]
-    }
-    test_source -> app [label="test" fontcolor="black" color="black"]
-}
-```
-
-???+ recommended "End-to-End (E2E) Tests"
-    Run automated end-to-end testing from the users’ perspective in the beta environment. These tests verify the user workflow, including when performed through a UI. These test are the slowest to run and hardest to maintain and therefore it is recommended to only have a few end-to-end tests that cover the most important application workflows. Examples of tools to define end-to-end tests include but are not limited to [Cypress](https://cypress.io) and [Selenium](https://selenium.dev).
-    ```graphviz dot e2e.png
-digraph G {
-    compound=true
-    rankdir=LR
-
-    node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-    edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-
-        test_source[label="Test Source Code" color="#d4dada" fontcolor="black"]
-    }
-    subgraph cluster_env {
-        label=<<b>Environment</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-    
-        app[label="Application" color="#d4dada" fontcolor="black"]
-    }
-    test_source -> app [label="test" fontcolor="black" color="black"]
-}
-```
+    The results of the unit tests are uploaded to [AWS Code Build Test Reports](https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html) to track over time.
 
 ## Test (Gamma)
 
 ???+ required "Launch Environment"
-    Consume the compute image from an image repository (e.g., AMI or a container repo) and launch an environment from the image using *Infrastructure Source Code*. Gamma environment should be in a different AWS Account from the tools used to run the deployment pipeline.  Access to the gamma environment should be handled via [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) rather than long lived credentials from IAM users. Example tools for defining infrastructure code include but are not limited to [AWS Cloud Development Kit](https://aws.amazon.com/cdk/), [AWS CloudFormation](https://aws.amazon.com/cloudformation/) and [HashiCorp Terraform](https://www.terraform.io/).
-    ```graphviz dot launch.png
-digraph G {
-    compound=true
-    rankdir=LR
+    The infrastructure for each environment is defined in [AWS Cloud Development Kit](https://aws.amazon.com/cdk/):
 
-    node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-    edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/infrastructure/src/deployment/index.ts) inside_block:constructor
+    <!--/codeinclude-->
 
-        iac[label="Infrastructure Source Code" color="#d4dada" fontcolor="black"]
-    }
-    subgraph cluster_env {
-        label=<<b>Environment</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-    
-        env[label="" style="invis"]
-    }
+    The `DeploymentStack` construct is then instantiated for each environment:
 
-    iac -> env [label="launch" fontcolor="black" color="black"]
-}
-```
+    ```typescript
+    export const constants = {
+        APP_NAME: 'fruit-api',
+        TOOLCHAIN_ENV: { account: '000000000', region: 'us-west-2' },
+        BETA_ENV: { account: '111111111', region: 'us-west-2' },
+        GAMMA_ENV: { account: '222222222', region: 'us-west-2' },
+        PROD_ENV: { account: '333333333', region: 'us-west-2' },
+    } as const;
+
+    const gammaStage = new DeploymentStage(this, 'Gamma', {
+      env: constants.GAMMA_ENV,
+    });
+    pipeline.addStage(gammaStage);
+    ```
 
 ???+ required "Database Deploy"
-    Apply changes to the gamma database using the *Database Source Code*. Best practice is to connect to the gamma database through [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) and [IAM database authentication for RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html) rather than long lived database credentials. If database credentials must be used, then they should be loaded from a secret manager such as [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/). Changes to the database should be incremental, only applying the changes since the prior deployment. Examples of tools that apply incremental database changes include but are not limited to [Liquibase](https://www.liquibase.org/).
-    ```graphviz dot db.png
-digraph G {
-    compound=true
-    rankdir=LR
+    Spring Boot is configured to run [Liquibase](https://www.liquibase.org/) on startup. This reads the configuration in `src/main/resources/db/changelog/db.changelog-master.yml` to define the tables and initial data for the database:
 
-    node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-    edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-
-        db_source[label="Database Source Code" color="#d4dada" fontcolor="black"]
-    }
-    subgraph cluster_env {
-        label=<<b>Environment</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-    
-        db[label="Database" color="#d4dada" fontcolor="black"]
-    }
-    db_source -> db [label="deploy" fontcolor="black" color="black"]
-}
-```
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/src/main/resources/db/changelog/db.changelog-master.yaml)
+    <!--/codeinclude-->
 
 ???+ required "Deploy Software"
-    Deploy software to the gamma environment. Software is not deployed from source but rather the artifact that was packaged and stored in the *Build Stage* will be used for the deployment. Software deployments should be performed through *Infrastructure Source Code*. Access to the gamma environment should be handled via [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) rather than long lived credentials from IAM users. Examples of tools to deploy software include but are not limited to [AWS CodeDeploy](https://aws.amazon.com/codedeploy/).
-    ```graphviz dot software.png
-digraph G {
-    compound=true
-    rankdir=LR
-
-    node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-    edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-
-        iac[label="Infrastructure Source Code" color="#d4dada" fontcolor="black"]
-    }
-    subgraph cluster_env {
-        label=<<b>Environment</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-    
-        software[label="Application" color="#d4dada" fontcolor="black"]
-    }
-    repo[label="Artifact Repository" color="#d4dada" fontcolor="black"]
-    repo -> iac[label="get artifact" fontcolor="black" color="black"]
-    iac -> software [label="deploy" fontcolor="black" color="black"]
-}
-```
+    The *Launch Environment* action above creates a new [Amazon ECS Task Definition](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html) for the new docker image and then updates the Amazon ECS Service to use the new Task Definition. for the new docker image and then updates the Amazon ECS Service to use the new Task Definition. for the new docker image and then updates the Amazon ECS Service to use the new Task Definition.
 
 ???+ required "Application Monitoring & Logging"
-    Monitor deployments across regions and fail when threshold breached. The thresholds for metric alarms should be defined in the *Infrastructure Source Code* and deployed along with the rest of the infrastructure in an environment. Ideally, deployments should be automatically failed and rolled back when error thresholds are breached. Examples of automated rollback include [AWS CloudFormation monitor & rollback](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-rollback-triggers.html), [AWS CodeDeploy rollback](https://docs.aws.amazon.com/codedeploy/latest/userguide/deployments-rollback-and-redeploy.html) and [Flagger](https://flagger.app/).
-    ```graphviz dot mon.png
-digraph G {
-    compound=true
-    rankdir=LR
-
-    node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-    edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-
-        iac[label="Infrastructure Source Code" color="#d4dada" fontcolor="black"]
-    }
-    subgraph cluster_env {
-        label=<<b>Environment</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    
-        app[label="Application" color="#d4dada" fontcolor="black"]
-        logs[label="Logs" color="#d4dada" fontcolor="black"]
-        metrics[label="Metrics" color="#d4dada" fontcolor="black"]
-        app -> logs
-        app -> metrics
-    }
-    logs -> iac [label="monitor" fontcolor="black" color="black"]
-    metrics -> iac [label="monitor" fontcolor="black" color="black"]
-    iac -> app [label="rollback" fontcolor="black" color="black"]
-}
-```
+    [Amazon ECS](https://aws.amazon.com/ecs/) uses [Amazon CloudWatch Metrics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html) and [Amazon CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html) for observability by default.
 
 ???+ required "Synthetic Tests"
-    Tests that run continuously in the background in a given environment to generate traffic and verify the system is healthy. These tests serve two purposes: 1/ Ensure there is always adequate traffic in the environment to trigger alarms if a deployment is unhealthy 2/ Test specific workflows and assert that the system is functioning correctly. Examples of tools that can be used for synthetic tests include but are not limited to [Amazon CloudWatch Synthetics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html) and [Datadog Synthetic Monitoring](https://docs.datadoghq.com/synthetics/).
-    ```graphviz dot synthetic.png
-digraph G {
-    compound=true
-    rankdir=LR
+    `TODO: build CDK stack to deploy Amazon CloudWatch Synthetics`
 
-    node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-    edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-
-        iac[label="Infrastructure Source Code" color="#d4dada" fontcolor="black"]
-    }
-    subgraph cluster_env {
-        label=<<b>Environment</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    
-        app[label="Application" color="#d4dada" fontcolor="black"]
-        synthetic[label="Synthetic Tests" color="#d4dada" fontcolor="black"]
-        metrics[label="Metrics" color="#d4dada" fontcolor="black"]
-        synthetic -> app[label="synthetic tests" color="black" fontcolor="black"]
-        app -> metrics
-    }
-    metrics -> iac [label="monitor" fontcolor="black" color="black"]
-    iac -> app [label="rollback" fontcolor="black" color="black"]
-}
-```
-
-???+ recommended "Performance Tests"
-    Run longer-running automated capacity tests against environments that simulate production capacity. Measure metrics such as the transaction success rates, response time and throughput. Determine if application meets performance requirements and compare metrics to past performance to look for performance degredation. Examples of tools that can be used for performance tests include but are not limited to [JMeter](https://jmeter.apache.org) and [Gatling](https://gatling.io).
-    ```graphviz dot perf.png
-digraph G {
-    compound=true
-    rankdir=LR
-
-    node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-    edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-
-        tests[label="Test Source Code" color="#d4dada" fontcolor="black"]
-    }
-    subgraph cluster_env {
-        label=<<b>Environment</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    
-        app[label="Application" color="#d4dada" fontcolor="black"]
-        metrics[label="Metrics" color="#d4dada" fontcolor="black"]
-        app -> metrics
-    }
-    tests -> app [label="execute tests" fontcolor="black" color="black"]
-    metrics -> tests [label="monitor" fontcolor="black" color="black"]
-}
-```
+???+ required "Performance Tests"
+    `TODO: build CDK construct to run JMeter tests`
 
 ???+ recommended "Chaos/Resiliency Tests"
-    Inject failures into environments to identify areas of the application that are susceptible to failure. Tests are defined as code and applied to the environment while the system is under load. The success rate, response time and throughput are measured during the periods when the failures are injected and compared to periods without the failures. Any significant deviation should fail the pipeline. Examples of tools that can be used for chaos/resilience testing include but are not limited to [AWS Fault Injection Simulator](https://aws.amazon.com/fis/) and [ChaosToolkit](https://chaostoolkit.org/).
-    ```graphviz dot chaos.png
-digraph G {
-    compound=true
-    rankdir=LR
-
-    node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-    edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-
-        tests[label="Test Source Code" color="#d4dada" fontcolor="black"]
-    }
-    subgraph cluster_env {
-        label=<<b>Environment</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
+    `Not Implemented`
     
-        app[label="Application" color="#d4dada" fontcolor="black"]
-        metrics[label="Metrics" color="#d4dada" fontcolor="black"]
-        app -> metrics
-    }
-    tests -> app [label="inject faults" fontcolor="black" color="black"]
-    metrics -> tests [label="monitor" fontcolor="black" color="black"]
-}
-```
 
 ## Prod
 
 ???+ required "Optional Approval"
-    As part of a automated workflow, obtain authorized human approval before deploying to the production environment.
+    A manual approval step is added to the end of the `Beta` and `Gamma` stages. The step is added at the end to keep the environment in a stable state while manual testing is performed. Once the step is approved, the pipeline continues execution to the next stage.
+
+    ```typescript
+        pipeline.addStage(betaStage, {
+            post: [
+                new SoapUITest(this, 'E2E Test', {
+                    source: source.codePipelineSource,
+                    endpoint: betaStage.apiUrl,
+                }),
+                new ManualApprovalStep('PromoteFromBeta'),
+            ],
+        });
+    ```
 
 ???+ required "Database Deploy"
-    Apply changes to the production database using the *Database Source Code*. Best practice is to connect to the production database through [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) and [IAM database authentication for RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html) rather than long lived database credentials. If database credentials must be used, then they should be loaded from a secret manager such as [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/). Changes to the database should be incremental, only applying the changes since the prior deployment. Examples of tools that apply incremental database changes include but are not limited to [Liquibase](https://www.liquibase.org/).
-    ```graphviz dot db.png
-digraph G {
-    compound=true
-    rankdir=LR
+    Spring Boot is configured to run [Liquibase](https://www.liquibase.org/) on startup. This reads the configuration in `src/main/resources/db/changelog/db.changelog-master.yml` to define the tables and initial data for the database:
 
-    node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-    edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-
-        db_source[label="Database Source Code" color="#d4dada" fontcolor="black"]
-    }
-    subgraph cluster_env {
-        label=<<b>Environment</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-    
-        db[label="Database" color="#d4dada" fontcolor="black"]
-    }
-    db_source -> db [label="deploy" fontcolor="black" color="black"]
-}
-```
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/src/main/resources/db/changelog/db.changelog-master.yaml)
+    <!--/codeinclude-->
 
 ???+ required "Progressive Deployment"
-    Deploy software into production environment using one of several progressive deployment models: Blue/Green, Canary, Rolling Changes, or All At Once. Software deployments should be performed through *Infrastructure Source Code*. Access to the production environment should be handled via [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) rather than long lived credentials from IAM users. Examples of tools to deploy software include but are not limited to [AWS CodeDeploy](https://aws.amazon.com/codedeploy/). Ideally, deployments should be automatically failed and rolled back when error thresholds are breached. Examples of automated rollback include [AWS CloudFormation monitor & rollback](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-rollback-triggers.html), [AWS CodeDeploy rollback](https://docs.aws.amazon.com/codedeploy/latest/userguide/deployments-rollback-and-redeploy.html) and [Flagger](https://flagger.app/).
-    ```graphviz dot progdep.png
-digraph G {
-    compound=true
-    rankdir=LR
+    `TODO: add blue/green deployment with CodeDeploy`
 
-    node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-    edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-
-        iac[label="Infrastructure Source Code" color="#d4dada" fontcolor="black"]
-    }
-    subgraph cluster_env {
-        label=<<b>Environment</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    
-        app[label="Application" color="#d4dada" fontcolor="black"]
-        metrics[label="Metrics" color="#d4dada" fontcolor="black"]
-        app -> metrics
-    }
-    metrics -> iac [label="monitor" fontcolor="black" color="black"]
-    iac -> app [label="rollback" fontcolor="black" color="black"]
-}
-```
-
-???+ recommended "Synthetic Tests"
-    Tests that run continuously in the background in a givent environment to generate traffic and verify the system is healthy. These tests serve two purposes: 1/ Ensure there is always adequate traffic in the environment to trigger alarms if a deployment is unhealthy 2/ Test specific workflows and assert that the system is functioning correctly. Examples of tools that can be used for synthetic tests include but are not limited to [Amazon CloudWatch Synthetics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html) and [Datadog Synthetic Monitoring](https://docs.datadoghq.com/synthetics/).
-
-    ```graphviz dot synthetic.png
-digraph G {
-    compound=true
-    rankdir=LR
-
-    node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-    edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-
-        iac[label="Infrastructure Source Code" color="#d4dada" fontcolor="black"]
-    }
-    subgraph cluster_env {
-        label=<<b>Environment</b>>
-        fontname="Helvetica,Arial,sans-serif"
-        graph[color="black" style="dashed" fontcolor="black"]
-        edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    
-        app[label="Application" color="#d4dada" fontcolor="black"]
-        synthetic[label="Synthetic Tests" color="#d4dada" fontcolor="black"]
-        metrics[label="Metrics" color="#d4dada" fontcolor="black"]
-        synthetic -> app[label="synthetic tests" color="black" fontcolor="black"]
-        app -> metrics
-    }
-    metrics -> iac [label="monitor" fontcolor="black" color="black"]
-    iac -> app [label="rollback" fontcolor="black" color="black"]
-}
-```
+???+ required "Synthetic Tests"
+    `TODO: build CDK stack to deploy Amazon CloudWatch Synthetics`

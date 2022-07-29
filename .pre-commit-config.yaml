@@ -3,5 +3,5 @@ repos:
     hooks:
     - id: mkbuild
       name: Build mkdocs site
-      entry: bash -c 'mkdocs build'
+      entry: bash -c 'ENABLE_PDF_EXPORT=1 mkdocs build'
       language: system

@@ -77,7 +77,7 @@ export class PipelineStack extends Stack {
         new ManualApprovalStep('PromoteFromBeta'),
       ],
     });
-    0
+
     const gammaStage = new DeploymentStage(this, 'Gamma', {
       env: constants.GAMMA_ENV,
     });
