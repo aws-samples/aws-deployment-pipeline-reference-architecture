@@ -1,0 +1,53 @@
+databaseChangeLog:
+   - changeSet:
+       id: "1"
+       author: AWS
+       changes:
+       - createTable:
+           tableName: fruit
+           columns:
+           - column:
+               name: id
+               type: bigint
+               autoIncrement: true
+               constraints:  
+                   primaryKey:  true  
+                   nullable:  false  
+           - column:
+               name: name
+               type: varchar(250)
+
+       - insert:
+           tableName: fruit
+           columns: 
+           - column:
+               name: name 
+               value: Apple
+
+       - insert:
+           tableName: fruit
+           columns: 
+           - column:
+               name: name 
+               value: Orange
+
+       - insert:
+           tableName: fruit
+           columns: 
+           - column:
+               name: name 
+               value: Banana
+
+       - insert:
+           tableName: fruit
+           columns: 
+           - column:
+               name: name 
+               value: Cherry
+
+       - insert:
+           tableName: fruit
+           columns: 
+           - column:
+               name: name 
+               value: Grape

@@ -28,11 +28,18 @@ theme:
         name: Switch to light mode
 nav:
   - Overview: 'index.md'
-  - Application Pipeline: 'application-pipeline.md'
-  #- Compute Image Pipeline: 'compute-image-pipeline.md'
-  #- Account Fleet Management Pipeline: 'account-fleet-management-pipeline.md'
-  #- Machine Learning Pipeline: 'machine-learning-pipeline.md'
-  #- Dynamic Configuration Deployment Pipeline: 'dynamic-configuration-deployment-pipeline.md'
+  - Application Pipeline: 
+    - Architecture: 'application-pipeline/index.md'
+    - Reference Implementations: 
+      - CDK Pipeline: 'application-pipeline/ri-cdk-pipeline.md'
+  # - Compute Image Pipeline: 
+  #   - Architecture: 'compute-image-pipeline/index.md'
+  # - Account Fleet Management Pipeline: 
+  #   - Architecture: 'account-fleet-management-pipeline/index.md'
+  # - Machine Learning Pipeline: 
+  #   - Architecture: 'machine-learning-pipeline/index.md'
+  # - Dynamic Configuration Deployment Pipeline: 
+  #   - Architecture: 'dynamic-configuration-deployment-pipeline/index.md'
 
 markdown_extensions:
   - def_list
@@ -60,6 +67,7 @@ markdown_extensions:
   - mkdocs_graphviz
 plugins:
   - search
+  - codeinclude
   - with-pdf:
       author: AWS Professional Services
       copyright: Copyright © Amazon Web Services, Inc. and/or its affiliates. All rights reserved.

@@ -3,5 +3,6 @@ mkdocs-material
 mkdocs-mermaid2-plugin
 mkdocs-graphviz
 mkdocs-with-pdf
+mkdocs-codeinclude-plugin
 pre-commit
 Markdown==3.3.7
