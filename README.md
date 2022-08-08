@@ -1,15 +1,29 @@
-## My Project
+# Overview
 
-TODO: Fill this README out!
+This repository contains the source for the [DPRA content](https://aws-samples.github.io/aws-deployment-pipeline-reference-architecture).
 
-Be sure to:
+## Local Development
 
-* Change the title in this README
-* Edit your repository description on GitHub
+The easiest approach is to use the preconfigured [development container](https://code.visualstudio.com/docs/remote/containers) within VS Code.
 
-## Security
+Alternatively, you can install these required dependencies manually:
 
-See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+```bash
+brew install graphviz
+pip install -r requirements.txt
+```
+
+Setup [pre-commit](https://pre-commit.com) hooks:
+
+```bash
+pre-commit install
+```
+
+Start server with:
+
+```bash
+mkdocs serve
+```
 
 ## License Summary
 

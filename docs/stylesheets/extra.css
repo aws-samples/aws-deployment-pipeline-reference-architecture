@@ -1,0 +1,137 @@
+.cardwrapper {
+  display: flex;
+  padding: 20px 20px 0px 20px;
+}
+
+.cardwrapper > .card:first-of-type {
+  margin-right: 10px;
+}
+
+.cardwrapper > .card:nth-of-type(2) {
+  margin-right: 10px;
+}
+
+.cardwrapper > .card:nth-of-type(3) {
+  margin-right: 10px;
+}
+
+.card {
+  padding-bottom: 0px;
+  width: 33vw;
+  background-color: rgba(255, 153, 0, 0.8);
+  display: block;
+  flex-grow: 1;
+  padding: 20px 20px 0px 20px;
+  height: auto;
+  overflow: hidden;
+  transition: ease-in-out 200ms;
+  box-shadow: 0px 10px 10px rgba(30, 30, 30, 0.08);
+  border-collapse: collapse;
+  cursor: default;
+  text-align: center;
+}
+
+.card:link {
+  color: #000;
+}
+.card:visited {
+  color: #000;
+}
+.card:active {
+  color: #000;
+}
+
+.card:hover {
+  box-shadow: 0px 10px 20px rgba(30, 30, 30, 0.16);
+  background-color: rgba(255, 153, 0, 1);
+  color: #000 !important;
+  cursor: pointer;
+}
+
+.card > h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.card.disabled {
+  background-color: rgb(212, 218, 218);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.card.disabled::after {
+  content: "🛠 under development 🛠";
+}
+
+.card.disabled:hover {
+  cursor: not-allowed;
+}
+
+/* Source of colors: https://brand.amazon.com/aws/visual-guidelines-ob/colors */
+:root > * {
+  --aws-brand-color-darksquidink: #161E2D;
+  --aws-brand-color-squidink: #232F3E;
+  --aws-brand-color-anchor: #003181;
+  --aws-brand-color-sky: #2074D5;
+  --aws-brand-color-smile: #FF9900;
+  --aws-brand-color-rind: #FBD8BF;
+  --aws-brand-color-stone: #d4dada;
+  --aws-brand-color-paper: #f1f3f3;
+
+  --dpra-icon--required: url('../assets/required.svg');
+  --dpra-icon--recommended: url('../assets/recommended.svg');
+
+  --md-primary-fg-color:       var(--aws-brand-color-darksquidink);
+  --md-accent-fg-color: var(--aws-brand-color-smile);
+
+}
+
+[data-md-color-scheme="default"] {
+  --md-typeset-a-color: #0073bb;
+}
+[data-md-color-scheme="slate"] {
+  --md-typeset-a-color: #44b9d6;
+}
+
+:root {
+}
+.md-typeset .admonition.required,
+.md-typeset details.required {
+  border-color: var(--aws-brand-color-smile);
+}
+.md-typeset .required > .admonition-title,
+.md-typeset .required > summary {
+  background-color: rgba(255, 153, 0, 0.1);
+}
+.md-typeset .required > .admonition-title::before,
+.md-typeset .required > summary::before {
+  background-color: var(--aws-brand-color-smile);
+  -webkit-mask-image: var(--dpra-icon--required);
+  mask-image: var(--dpra-icon--required);
+}
+
+.md-typeset .admonition.recommended,
+.md-typeset details.recommended {
+  border-color: var(--aws-brand-color-stone);
+}
+.md-typeset .recommended > .admonition-title,
+.md-typeset .recommended > summary {
+  background-color: rgba(212, 218, 218, 0.3);
+}
+.md-typeset .recommended > .admonition-title::before,
+.md-typeset .recommended > summary::before {
+  background-color: var(--aws-brand-color-stone);
+  -webkit-mask-image: var(--dpra-icon--recommended);
+  mask-image: var(--dpra-icon--recommended);
+}
+
+@media print {
+  .md-typeset .required > .admonition-title::before,
+  .md-typeset .required > summary::before {
+    display: none;
+  }
+  .md-typeset .recommended > .admonition-title::before,
+  .md-typeset .recommended > summary::before {
+    display: none;
+  }
+}

@@ -1,0 +1,7 @@
+repos:
+-   repo: local
+    hooks:
+    - id: mkbuild
+      name: Build mkdocs site
+      entry: bash -c 'ENABLE_PDF_EXPORT=1 mkdocs build'
+      language: system

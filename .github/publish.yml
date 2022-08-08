@@ -1,0 +1,21 @@
+name: Publish
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - name: Install Graphviz
+        run: sudo apt-get install -y graphviz
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Deploy to Pages
+        run: mkdocs gh-deploy --force
+        env:
+          ENABLE_PDF_EXPORT: 1
