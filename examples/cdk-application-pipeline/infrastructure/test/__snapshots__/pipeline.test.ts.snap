@@ -295,8 +295,8 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-Beta/TestStackBetafruitapiF56320B1.assets.json\\\\\\" --verbose publish \\\\\\"82cb53ab65c52cb2313f7644d87a7295c3b1bf744276c58afb36f6bdca330ce5:834418886742-us-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-Prod/TestStackProdfruitapi49CAAEE6.assets.json\\\\\\" --verbose publish \\\\\\"82cb53ab65c52cb2313f7644d87a7295c3b1bf744276c58afb36f6bdca330ce5:211909469734-us-west-2\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-TestStack-Beta/TestStackBetafruitapiF56320B1.assets.json\\\\\\" --verbose publish \\\\\\"052af581d69bd871bbd4cbe4811e4648b289839c774e02ac8d5024b0e123a4d5:834418886742-us-west-2\\\\\\"\\",
+        \\"cdk-assets --path \\\\\\"assembly-TestStack-Prod/TestStackProdfruitapi49CAAEE6.assets.json\\\\\\" --verbose publish \\\\\\"052af581d69bd871bbd4cbe4811e4648b289839c774e02ac8d5024b0e123a4d5:211909469734-us-west-2\\\\\\"\\"
       ]
     }
   }

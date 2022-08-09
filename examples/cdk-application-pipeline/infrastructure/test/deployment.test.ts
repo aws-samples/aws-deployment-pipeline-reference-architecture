@@ -46,6 +46,32 @@ describe('Deployment', () => {
       '/TestStack/AccessLogBucket/Resource',
       [{ id: 'AwsSolutions-S1', reason: 'Dont need access logs for a bucket that is for access logs' }],
     );
+
+    // Suppress CDK-NAG for ECS Task environment variables for database host/port
+    NagSuppressions.addResourceSuppressionsByPath(
+      stack,
+      '/TestStack/FargateService/TaskDef/Resource',
+      [{ id: 'AwsSolutions-ECS2', reason: 'Allow environment variables' }],
+    );
+
+    // Suppress CDK-NAG for secret rotation
+    NagSuppressions.addResourceSuppressionsByPath(
+      stack,
+      '/TestStack/AuroraSecret/Resource',
+      [{ id: 'AwsSolutions-SMG4', reason: 'Dont require secret rotation' }],
+    );
+
+    // Suppress CDK-NAG for RDS Serverless
+    NagSuppressions.addResourceSuppressionsByPath(
+      stack,
+      '/TestStack/AuroraCluster/Resource',
+      [
+        { id: 'AwsSolutions-RDS6', reason: 'IAM authentication not supported on Serverless v1' },
+        { id: 'AwsSolutions-RDS11', reason: 'Custom port not supported on Serverless v1' },
+        { id: 'AwsSolutions-RDS14', reason: 'Backtrack not supported on Serverless v1' },
+        { id: 'AwsSolutions-RDS16', reason: 'CloudWatch Log Export not supported on Serverless v1' },
+      ],
+    );
   });
 
   test('Snapshot', () => {
