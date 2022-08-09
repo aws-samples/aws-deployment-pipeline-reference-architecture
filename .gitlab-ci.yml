@@ -13,17 +13,14 @@ sast:
 include:
 - template: Security/SAST.gitlab-ci.yml
 
-image: python:3.9-bullseye
-
-before_script:
-  - apt-get update && apt-get install -y graphviz
-  - pip install -r requirements.txt
-
 test:
   stage: test
   variables:
     ENABLE_PDF_EXPORT: 1
+  image: python:3.9-bullseye
   script:
+  - apt-get update && apt-get install -y graphviz
+  - pip install -r requirements.txt
   - mkdocs build --verbose --site-dir test
   artifacts:
     paths:
@@ -35,7 +32,10 @@ pages:
   stage: deploy
   variables:
     ENABLE_PDF_EXPORT: 1
+  image: python:3.9-bullseye
   script:
+  - apt-get update && apt-get install -y graphviz
+  - pip install -r requirements.txt
   - mkdocs build --verbose --site-dir public
   artifacts:
     paths:
