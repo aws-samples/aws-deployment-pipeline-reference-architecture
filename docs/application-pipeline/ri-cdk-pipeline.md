@@ -238,6 +238,8 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
 
     ![](assets/codeguru-review.png)
 
+    Additionally, [cdk-nag](https://github.com/cdklabs/cdk-nag) is run against both the pipeline stack and the deployment stack to identify any security issues with the resources being created. The pipeline will fail if any are detected.
+
 ???+ required "Secrets Detection"
     The same CDK construct that was created for *Code Quality* above is also used for secrets detection with [Amazon CodeGuru](https://aws.amazon.com/codeguru/).
 

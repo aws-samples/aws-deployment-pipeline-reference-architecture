@@ -11,15 +11,15 @@ yarn install
 npm run build
 ```
 
-Uncomment the environments in [constants.ts](infrastructure/src/constants.ts) and add your own AWS Account IDs:
+Create a new file [infrastructure/src/constants.ts](infrastructure/src/constants.ts) from [infrastructure/src/constants.example.ts](infrastructure/src/constants.example.ts] and update with your own AWS Account IDs:
 
 ```typescript
 export const constants = {
   APP_NAME: 'fruit-api',
-  //TOOLCHAIN_ENV: { account: '00000000', region: 'us-west-2' },
-  //BETA_ENV: { account: '111111111', region: 'us-west-2' },
-  //GAMMA_ENV: { account: '222222222', region: 'us-west-2' },
-  //PROD_ENV: { account: '333333333', region: 'us-west-2' },
+  TOOLCHAIN_ENV: { account: '00000000', region: 'us-west-2' },
+  BETA_ENV: { account: '111111111', region: 'us-west-2' },
+  GAMMA_ENV: { account: '222222222', region: 'us-west-2' },
+  PROD_ENV: { account: '333333333', region: 'us-west-2' },
 } as const;
 ```
 

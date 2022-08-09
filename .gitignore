@@ -4,3 +4,4 @@ site/
 .vscode/
 acat-output.json
 acat_report/
+examples/cdk-application-pipeline/infrastructure/src/constants.ts

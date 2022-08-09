@@ -25,6 +25,10 @@
       "type": "build"
     },
     {
+      "name": "cdk-nag",
+      "type": "build"
+    },
+    {
       "name": "esbuild",
       "type": "build"
     },

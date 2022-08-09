@@ -30,6 +30,7 @@
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "aws-cdk": "^2.1.0",
+    "cdk-nag": "^2.15.39",
     "esbuild": "^0.14.50",
     "eslint": "^8",
     "eslint-import-resolver-node": "^0.3.6",

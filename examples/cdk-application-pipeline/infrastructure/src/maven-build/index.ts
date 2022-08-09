@@ -1,5 +1,5 @@
 import { BuildSpec, Cache } from 'aws-cdk-lib/aws-codebuild';
-import { Bucket } from 'aws-cdk-lib/aws-s3';
+import { BlockPublicAccess, Bucket, BucketEncryption } from 'aws-cdk-lib/aws-s3';
 import { CodeBuildStep, CodePipelineSource } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
 
@@ -12,7 +12,11 @@ export interface MavenBuildProps {
 }
 export class MavenBuild extends CodeBuildStep {
   constructor(scope: Construct, id: string, props: MavenBuildProps) {
-    const cacheBucket = new Bucket(scope, `${id}CacheBucket`);
+    const cacheBucket = new Bucket(scope, `${id}CacheBucket`, {
+      encryption: BucketEncryption.S3_MANAGED,
+      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+      enforceSSL: true,
+    });
     const stepProps = {
       input: props.source,
       commands: [],
