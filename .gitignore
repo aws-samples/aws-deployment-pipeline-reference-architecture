@@ -2,3 +2,5 @@
 /test/
 site/
 .vscode/
+acat-output.json
+acat_report/
