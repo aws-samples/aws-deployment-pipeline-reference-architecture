@@ -1,0 +1,45 @@
+# You can override the included template(s) by including variable overrides
+# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
+# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
+# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
+# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
+# Note that environment variables can be set in several places
+# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+stages:
+- test
+- deploy
+sast:
+  stage: test
+include:
+- template: Security/SAST.gitlab-ci.yml
+
+image: python:3.9-bullseye
+
+before_script:
+  - apt-get update && apt-get install -y graphviz
+  - pip install -r requirements.txt
+
+test:
+  stage: test
+  variables:
+    ENABLE_PDF_EXPORT: 1
+  script:
+  - mkdocs build --verbose --site-dir test
+  artifacts:
+    paths:
+    - test
+  rules:
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+
+pages:
+  stage: deploy
+  variables:
+    ENABLE_PDF_EXPORT: 1
+  script:
+  - mkdocs build --verbose --site-dir public
+  artifacts:
+    paths:
+    - public
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+
