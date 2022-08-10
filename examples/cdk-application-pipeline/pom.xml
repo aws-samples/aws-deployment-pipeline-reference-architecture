@@ -17,6 +17,10 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<soapui.endpoint>http://localhost:8080</soapui.endpoint>
+		<jmeter.endpoint>http://localhost:8080</jmeter.endpoint>
+		<jmeter.threads>10</jmeter.threads>
+		<jmeter.duration>60</jmeter.duration>
+		<jmeter.throughput>300</jmeter.throughput>
 	</properties>
 
 	<dependencies>
@@ -98,6 +102,48 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.lazerycode.jmeter</groupId>
+				<artifactId>jmeter-maven-plugin</artifactId>
+				<version>3.6.1</version>
+				<executions>
+					<!-- Generate JMeter configuration -->
+					<execution>
+						<id>configuration</id>
+						<goals>
+							<goal>configure</goal>
+						</goals>
+					</execution>
+					<!-- Run JMeter tests -->
+					<execution>
+						<id>jmeter-test</id>
+						<goals>
+							<goal>jmeter</goal>
+						</goals>
+						<configuration>
+							<selectedConfiguration>configuration</selectedConfiguration>
+						</configuration>
+					</execution>
+					<!-- Fail build on errors in test -->
+					<execution>
+						<id>jmeter-result</id>
+						<goals>
+							<goal>results</goal>
+						</goals>
+						<configuration>
+							<selectedConfiguration>configuration</selectedConfiguration>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<propertiesUser>
+						<URL>${jmeter.endpoint}</URL>
+						<THREADS>${jmeter.threads}</THREADS>
+						<DURATION>${jmeter.duration}</DURATION>
+						<THROUGHPUT>${jmeter.throughput}</THROUGHPUT>
+					</propertiesUser>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

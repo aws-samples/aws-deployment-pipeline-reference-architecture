@@ -4,6 +4,7 @@ site/
 .vscode/
 acat-output.json
 acat_report/
+jmeter.log
 
 
 examples/cdk-application-pipeline/infrastructure/src/constants.ts

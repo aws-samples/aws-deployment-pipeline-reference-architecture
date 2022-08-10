@@ -399,7 +399,11 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     <!--/codeinclude-->
 
 ???+ required "Performance Tests"
-    `TODO: build CDK construct to run JMeter tests`
+    [Apache JMeter](https://jmeter.apache.org/) is used to run performance tests against the deployed application. The tests are stored in `src/test/jmeter` and added to the pipeline via CDK:
+
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/infrastructure/src/pipeline.ts) block:JMeterTest
+    <!--/codeinclude-->
 
 ???+ recommended "Chaos/Resiliency Tests"
     `Not Implemented`
@@ -438,4 +442,3 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     <!--codeinclude-->
     [](../../examples/cdk-application-pipeline/infrastructure/src/deployment/synthetic.ts) inside_block:constructor
     <!--/codeinclude-->
-    

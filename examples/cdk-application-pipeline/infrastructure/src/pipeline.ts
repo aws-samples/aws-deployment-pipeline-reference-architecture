@@ -86,9 +86,12 @@ export class PipelineStack extends Stack {
 
     pipeline.addStage(gammaStage, {
       post: [
-        new JMeterTest('Performance Test', {
+        new JMeterTest(this, 'Performance Test', {
           source: source.codePipelineSource,
           endpoint: betaStage.apiUrl,
+          threads: 500,
+          duration: 3000,
+          throughput: 300000,
         }),
         new ManualApprovalStep('PromoteFromGamma'),
       ],
