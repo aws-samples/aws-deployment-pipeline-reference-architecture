@@ -33,14 +33,14 @@
         Material for MkDocs
       </a>
     {% endif %}
-    <div>
-        Pipe icons created by
-        <a 
-            href="https://www.flaticon.com/free-icons/pipe" 
-            title="pipe icons"
-            target="_blank" rel="noopener"
-        >
-            Freepik - Flaticon
-        </a>
-    </div>
   </div>
+<a
+  href="{{base_url}}/pdf/document.pdf"
+  title="Download PDF"
+  data-md-component="source"
+>
+  <div class="md-source__icon md-icon">
+    {% set icon = "fontawesome/solid/file-pdf" %}
+    {% include ".icons/" ~ icon ~ ".svg" %}
+  </div>
+</a>

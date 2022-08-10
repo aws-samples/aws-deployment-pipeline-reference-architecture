@@ -125,6 +125,15 @@
   mask-image: var(--dpra-icon--recommended);
 }
 
+.md-source__repository {
+  max-width: max-content;
+}
+
+.md-header__source {
+  max-width: max-content;
+  width: auto;
+}
+
 @media print {
   .md-typeset .required > .admonition-title::before,
   .md-typeset .required > summary::before {
