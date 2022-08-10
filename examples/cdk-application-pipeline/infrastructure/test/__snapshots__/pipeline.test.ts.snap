@@ -295,8 +295,8 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-Beta/TestStackBetafruitapiF56320B1.assets.json\\\\\\" --verbose publish \\\\\\"052af581d69bd871bbd4cbe4811e4648b289839c774e02ac8d5024b0e123a4d5:834418886742-us-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-Prod/TestStackProdfruitapi49CAAEE6.assets.json\\\\\\" --verbose publish \\\\\\"052af581d69bd871bbd4cbe4811e4648b289839c774e02ac8d5024b0e123a4d5:211909469734-us-west-2\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-TestStack-Beta/TestStackBetafruitapiF56320B1.assets.json\\\\\\" --verbose publish \\\\\\"e53bb4b4986d38ed62d34caa85764638671e46e4a7a4319c7c296ca37fe92315:834418886742-us-west-2\\\\\\"\\",
+        \\"cdk-assets --path \\\\\\"assembly-TestStack-Prod/TestStackProdfruitapi49CAAEE6.assets.json\\\\\\" --verbose publish \\\\\\"e53bb4b4986d38ed62d34caa85764638671e46e4a7a4319c7c296ca37fe92315:211909469734-us-west-2\\\\\\"\\"
       ]
     }
   }
@@ -463,6 +463,213 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
+    "fruitapiAssetsFileAsset10798E6EF": Object {
+      "Properties": Object {
+        "Artifacts": Object {
+          "Type": "CODEPIPELINE",
+        },
+        "Cache": Object {
+          "Type": "NO_CACHE",
+        },
+        "Description": "Pipeline step TestStack/Pipeline/Assets/FileAsset1",
+        "EncryptionKey": Object {
+          "Fn::GetAtt": Array [
+            "fruitapiPipelineArtifactsBucketEncryptionKey9E5E2FC5",
+            "Arn",
+          ],
+        },
+        "Environment": Object {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "Image": "aws/codebuild/standard:5.0",
+          "ImagePullCredentialsType": "CODEBUILD",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER",
+        },
+        "ServiceRole": Object {
+          "Fn::GetAtt": Array [
+            "fruitapiAssetsFileRole2CEFDD50",
+            "Arn",
+          ],
+        },
+        "Source": Object {
+          "BuildSpec": "{
+  \\"version\\": \\"0.2\\",
+  \\"phases\\": {
+    \\"install\\": {
+      \\"commands\\": [
+        \\"npm install -g cdk-assets@2\\"
+      ]
+    },
+    \\"build\\": {
+      \\"commands\\": [
+        \\"cdk-assets --path \\\\\\"assembly-TestStack-Beta/TestStackBetafruitapiF56320B1.assets.json\\\\\\" --verbose publish \\\\\\"fee4831da47b606b7939f26c3d2c08d3be03f758f9b0b2bf7a0f1d4439aff699:834418886742-us-west-2\\\\\\"\\",
+        \\"cdk-assets --path \\\\\\"assembly-TestStack-Prod/TestStackProdfruitapi49CAAEE6.assets.json\\\\\\" --verbose publish \\\\\\"fee4831da47b606b7939f26c3d2c08d3be03f758f9b0b2bf7a0f1d4439aff699:211909469734-us-west-2\\\\\\"\\"
+      ]
+    }
+  }
+}",
+          "Type": "CODEPIPELINE",
+        },
+      },
+      "Type": "AWS::CodeBuild::Project",
+    },
+    "fruitapiAssetsFileRole2CEFDD50": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "codebuild.amazonaws.com",
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::dummy:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "fruitapiAssetsFileRoleDefaultPolicyE93AC574": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":logs:us-east-1:dummy:log-group:/aws/codebuild/*",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codebuild:us-east-1:dummy:report-group/*",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::Sub": "arn:\${AWS::Partition}:iam::834418886742:role/cdk-hnb659fds-file-publishing-role-834418886742-us-west-2",
+                },
+                Object {
+                  "Fn::Sub": "arn:\${AWS::Partition}:iam::211909469734:role/cdk-hnb659fds-file-publishing-role-211909469734-us-west-2",
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "fruitapiPipelineArtifactsBucket07B9157E",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "fruitapiPipelineArtifactsBucket07B9157E",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "kms:Decrypt",
+                "kms:DescribeKey",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "fruitapiPipelineArtifactsBucketEncryptionKey9E5E2FC5",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "fruitapiAssetsFileRoleDefaultPolicyE93AC574",
+        "Roles": Array [
+          Object {
+            "Ref": "fruitapiAssetsFileRole2CEFDD50",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "fruitapiCodeBuildActionRole9A61A6CE": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
@@ -552,6 +759,20 @@ Object {
               "Resource": Object {
                 "Fn::GetAtt": Array [
                   "fruitapiAssetsDockerAsset14F79F031",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "fruitapiAssetsFileAsset10798E6EF",
                   "Arn",
                 ],
               },
@@ -878,6 +1099,32 @@ Object {
                 },
                 "RunOrder": 1,
               },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ProjectName": Object {
+                    "Ref": "fruitapiAssetsFileAsset10798E6EF",
+                  },
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "Synth_Output",
+                  },
+                ],
+                "Name": "FileAsset1",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "fruitapiCodeBuildActionRole9A61A6CE",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
             ],
             "Name": "Assets",
           },
@@ -907,6 +1154,7 @@ Object {
                     ],
                   },
                   "StackName": "Beta-fruit-api",
+                  "TemplateConfiguration": "Synth_Output::assembly-TestStack-Beta/TestStackBetafruitapiF56320B1.template.json.config.json",
                   "TemplatePath": "Synth_Output::assembly-TestStack-Beta/TestStackBetafruitapiF56320B1.template.json",
                 },
                 "InputArtifacts": Array [
@@ -1031,6 +1279,7 @@ Object {
                     ],
                   },
                   "StackName": "Gamma-fruit-api",
+                  "TemplateConfiguration": "Synth_Output::assembly-TestStack-Gamma/TestStackGammafruitapi76ECF3FE.template.json.config.json",
                   "TemplatePath": "Synth_Output::assembly-TestStack-Gamma/TestStackGammafruitapi76ECF3FE.template.json",
                 },
                 "InputArtifacts": Array [
@@ -1154,6 +1403,7 @@ Object {
                     ],
                   },
                   "StackName": "Prod-fruit-api",
+                  "TemplateConfiguration": "Synth_Output::assembly-TestStack-Prod/TestStackProdfruitapi49CAAEE6.template.json.config.json",
                   "TemplatePath": "Synth_Output::assembly-TestStack-Prod/TestStackProdfruitapi49CAAEE6.template.json",
                 },
                 "InputArtifacts": Array [

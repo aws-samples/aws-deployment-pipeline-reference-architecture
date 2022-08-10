@@ -1,4 +1,4 @@
-import { Stack, StackProps, Stage, StageProps } from 'aws-cdk-lib';
+import { Stack, StackProps, Stage, StageProps, Tags } from 'aws-cdk-lib';
 import { BuildSpec } from 'aws-cdk-lib/aws-codebuild';
 import { AssetImage } from 'aws-cdk-lib/aws-ecs';
 import { CodePipeline, CodeBuildStep, ManualApprovalStep } from 'aws-cdk-lib/pipelines';
@@ -67,6 +67,7 @@ export class PipelineStack extends Stack {
     const betaStage = new DeploymentStage(this, 'Beta', {
       env: constants.BETA_ENV,
     });
+    Tags.of(betaStage).add('Environment', 'Beta');
 
     pipeline.addStage(betaStage, {
       post: [
@@ -81,6 +82,7 @@ export class PipelineStack extends Stack {
     const gammaStage = new DeploymentStage(this, 'Gamma', {
       env: constants.GAMMA_ENV,
     });
+    Tags.of(gammaStage).add('Environment', 'Gamma');
 
     pipeline.addStage(gammaStage, {
       post: [
@@ -95,6 +97,7 @@ export class PipelineStack extends Stack {
     const prodStage = new DeploymentStage(this, 'Prod', {
       env: constants.PROD_ENV,
     });
+    Tags.of(prodStage).add('Environment', 'Prod');
     pipeline.addStage(prodStage);
   }
 }

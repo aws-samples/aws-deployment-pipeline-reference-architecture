@@ -1,6 +1,6 @@
 const { awscdk } = require('projen');
 const project = new awscdk.AwsCdkTypeScriptApp({
-  cdkVersion: '2.1.0',
+  cdkVersion: '2.36.0',
   defaultReleaseBranch: 'main',
   name: 'dpri',
   srcdir: 'infrastructure/src',
@@ -20,7 +20,12 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     '@types/aws-lambda',
     '@aws-sdk/client-codeguru-reviewer',
     '@aws-sdk/client-codepipeline',
+    '@aws-cdk/aws-synthetics-alpha',
   ],
+
+  jestOptions: {
+    jestVersion: '^27.0',
+  },
 
   /* Build dependencies for this module. */
   devDeps: [

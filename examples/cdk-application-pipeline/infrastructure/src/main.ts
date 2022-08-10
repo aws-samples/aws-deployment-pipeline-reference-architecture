@@ -1,4 +1,4 @@
-import { App } from 'aws-cdk-lib';
+import { App, Tags } from 'aws-cdk-lib';
 import { AssetImage } from 'aws-cdk-lib/aws-ecs';
 import { constants } from './constants';
 import { DeploymentStack } from './deployment';
@@ -20,5 +20,7 @@ if (app.node.tryGetContext('deployMode') == 'local') {
     env: constants.TOOLCHAIN_ENV,
   });
 }
+
+Tags.of(app).add('Application', constants.APP_NAME);
 
 app.synth();

@@ -72,6 +72,22 @@ describe('Deployment', () => {
         { id: 'AwsSolutions-RDS16', reason: 'CloudWatch Log Export not supported on Serverless v1' },
       ],
     );
+
+    // Suppress CDK-NAG for Canary
+    NagSuppressions.addResourceSuppressionsByPath(
+      stack,
+      '/TestStack/SyntheticTest/SyntheticTest/ArtifactsBucket/Resource',
+      [
+        { id: 'AwsSolutions-S1', reason: 'Dont need access logs for canary bucket' },
+        { id: 'AwsSolutions-S2', reason: 'Dont require public access block for canary bucket' },
+        { id: 'AwsSolutions-IAM5', reason: 'Allow resource:*', appliesTo: ['Resource::*'] },
+      ],
+    );
+    NagSuppressions.addResourceSuppressionsByPath(
+      stack,
+      '/TestStack/SyntheticTest/SyntheticTest/ServiceRole/Resource',
+      [{ id: 'AwsSolutions-IAM5', reason: 'Allow resource:*' }],
+    );
   });
 
   test('Snapshot', () => {

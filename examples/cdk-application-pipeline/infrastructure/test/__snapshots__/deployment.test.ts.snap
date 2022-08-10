@@ -209,6 +209,15 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
+    "AppLogGroup7D8CD952": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "LogGroupName": "/aws/ecs/service/teststack",
+        "RetentionInDays": 7,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
     "AuroraCluster23D869C0": Object {
       "DeletionPolicy": "Snapshot",
       "Metadata": Object {
@@ -234,6 +243,8 @@ Object {
         },
       },
       "Properties": Object {
+        "CopyTagsToSnapshot": true,
+        "DBClusterIdentifier": "teststack",
         "DBClusterParameterGroupName": "default.aurora-mysql5.7",
         "DBSubnetGroupName": Object {
           "Ref": "AuroraClusterSubnetsF3E9E6AD",
@@ -371,8 +382,9 @@ Object {
           "ExcludeCharacters": " %+~\`#$&*()|[]{}:;<>?!'/@\\"\\\\",
           "GenerateStringKey": "password",
           "PasswordLength": 30,
-          "SecretStringTemplate": "{\\"username\\":\\"fruit-user\\"}",
+          "SecretStringTemplate": "{\\"username\\":\\"fruitapi\\"}",
         },
+        "Name": "teststack-DB",
       },
       "Type": "AWS::SecretsManager::Secret",
       "UpdateReplacePolicy": "Delete",
@@ -391,6 +403,7 @@ Object {
     },
     "ClusterEB0386A7": Object {
       "Properties": Object {
+        "ClusterName": "teststack",
         "ClusterSettings": Array [
           Object {
             "Name": "containerInsights",
@@ -400,12 +413,42 @@ Object {
       },
       "Type": "AWS::ECS::Cluster",
     },
+    "ElbResponseTimeAlarm78B10A7D": Object {
+      "Properties": Object {
+        "AlarmName": "teststack-ElbResponseTime",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "LoadBalancer",
+            "Value": Object {
+              "Fn::GetAtt": Array [
+                "FargateServiceLBB353E155",
+                "LoadBalancerFullName",
+              ],
+            },
+          },
+        ],
+        "EvaluationPeriods": 3,
+        "MetricName": "TargetResponseTime",
+        "Namespace": "AWS/ApplicationELB",
+        "Period": 300,
+        "Statistic": "Average",
+        "Threshold": 1000,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
     "FargateServiceECC8084D": Object {
       "DependsOn": Array [
         "FargateServiceLBPublicListenerECSGroupBE57E081",
         "FargateServiceLBPublicListener4B4929CA",
       ],
       "Properties": Object {
+        "CapacityProviderStrategy": Array [
+          Object {
+            "CapacityProvider": "FARGATE_SPOT",
+            "Weight": 1,
+          },
+        ],
         "Cluster": Object {
           "Ref": "ClusterEB0386A7",
         },
@@ -416,7 +459,6 @@ Object {
         "DesiredCount": 3,
         "EnableECSManagedTags": false,
         "HealthCheckGracePeriodSeconds": 60,
-        "LaunchType": "FARGATE",
         "LoadBalancers": Array [
           Object {
             "ContainerName": "web",
@@ -450,6 +492,7 @@ Object {
             ],
           },
         },
+        "ServiceName": "teststack",
         "TaskDefinition": Object {
           "Ref": "FargateServiceTaskDef940E3A80",
         },
@@ -546,6 +589,10 @@ Object {
           Object {
             "Key": "stickiness.enabled",
             "Value": "false",
+          },
+          Object {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "5",
           },
         ],
         "TargetType": "ip",
@@ -694,16 +741,16 @@ Object {
             ],
             "Essential": true,
             "Image": Object {
-              "Fn::Sub": "dummy.dkr.ecr.us-east-1.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-dummy-us-east-1:052af581d69bd871bbd4cbe4811e4648b289839c774e02ac8d5024b0e123a4d5",
+              "Fn::Sub": "dummy.dkr.ecr.us-east-1.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-dummy-us-east-1:e53bb4b4986d38ed62d34caa85764638671e46e4a7a4319c7c296ca37fe92315",
             },
             "LogConfiguration": Object {
               "LogDriver": "awslogs",
               "Options": Object {
                 "awslogs-group": Object {
-                  "Ref": "FargateServiceTaskDefwebLogGroup71FAF541",
+                  "Ref": "AppLogGroup7D8CD952",
                 },
                 "awslogs-region": "us-east-1",
-                "awslogs-stream-prefix": "FargateService",
+                "awslogs-stream-prefix": "service",
               },
             },
             "Memory": 1024,
@@ -753,7 +800,7 @@ Object {
             "Arn",
           ],
         },
-        "Family": "TestStackFargateServiceTaskDefD249D4E8",
+        "Family": "teststack",
         "Memory": "1024",
         "NetworkMode": "awsvpc",
         "RequiresCompatibilities": Array [
@@ -835,7 +882,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "FargateServiceTaskDefwebLogGroup71FAF541",
+                  "AppLogGroup7D8CD952",
                   "Arn",
                 ],
               },
@@ -879,10 +926,318 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "FargateServiceTaskDefwebLogGroup71FAF541": Object {
+    "HealthAlarm371A639B": Object {
+      "Properties": Object {
+        "AlarmName": "teststack-Health",
+        "AlarmRule": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "(ALARM(\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ElbResponseTimeAlarm78B10A7D",
+                  "Arn",
+                ],
+              },
+              "\\") OR ALARM(\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "SyntheticTestCanarySuccessAlarm5E743E72",
+                  "Arn",
+                ],
+              },
+              "\\") OR ALARM(\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "SyntheticTestCanaryDurationAlarm0034B8A1",
+                  "Arn",
+                ],
+              },
+              "\\"))",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::CloudWatch::CompositeAlarm",
+    },
+    "SyntheticTest7431F0B5": Object {
+      "Properties": Object {
+        "ArtifactS3Location": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "s3://",
+              Object {
+                "Ref": "SyntheticTestArtifactsBucketE42C1786",
+              },
+            ],
+          ],
+        },
+        "Code": Object {
+          "Handler": "index.handler",
+          "S3Bucket": "cdk-hnb659fds-assets-dummy-us-east-1",
+          "S3Key": "fee4831da47b606b7939f26c3d2c08d3be03f758f9b0b2bf7a0f1d4439aff699.zip",
+        },
+        "ExecutionRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "SyntheticTestServiceRole12E22F25",
+            "Arn",
+          ],
+        },
+        "Name": "teststack",
+        "RunConfig": Object {
+          "EnvironmentVariables": Object {
+            "url": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "http://",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "FargateServiceLBB353E155",
+                      "DNSName",
+                    ],
+                  },
+                ],
+              ],
+            },
+          },
+        },
+        "RuntimeVersion": "syn-nodejs-puppeteer-3.5",
+        "Schedule": Object {
+          "DurationInSeconds": "0",
+          "Expression": "rate(5 minutes)",
+        },
+        "StartCanaryAfterCreation": true,
+      },
+      "Type": "AWS::Synthetics::Canary",
+    },
+    "SyntheticTestArtifactsBucketE42C1786": Object {
       "DeletionPolicy": "Retain",
-      "Type": "AWS::Logs::LogGroup",
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-S1",
+              "reason": "Dont need access logs for canary bucket",
+            },
+            Object {
+              "id": "AwsSolutions-S2",
+              "reason": "Dont require public access block for canary bucket",
+            },
+            Object {
+              "applies_to": Array [
+                "Resource::*",
+              ],
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow resource:*",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "SSEAlgorithm": "aws:kms",
+              },
+            },
+          ],
+        },
+      },
+      "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
+    },
+    "SyntheticTestArtifactsBucketPolicyF91074A7": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "SyntheticTestArtifactsBucketE42C1786",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:SecureTransport": "false",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": Object {
+                "AWS": "*",
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "SyntheticTestArtifactsBucketE42C1786",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "SyntheticTestArtifactsBucketE42C1786",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "SyntheticTestCanaryDurationAlarm0034B8A1": Object {
+      "Properties": Object {
+        "AlarmName": "teststack-CanaryDuration",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "CanaryName",
+            "Value": Object {
+              "Ref": "SyntheticTest7431F0B5",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "Duration",
+        "Namespace": "CloudWatchSynthetics",
+        "Period": 300,
+        "Statistic": "Average",
+        "Threshold": 1000,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "SyntheticTestCanarySuccessAlarm5E743E72": Object {
+      "Properties": Object {
+        "AlarmName": "teststack-CanarySuccessRate",
+        "ComparisonOperator": "LessThanThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "CanaryName",
+            "Value": Object {
+              "Ref": "SyntheticTest7431F0B5",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "SuccessPercent",
+        "Namespace": "CloudWatchSynthetics",
+        "Period": 300,
+        "Statistic": "Average",
+        "Threshold": 100,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "SyntheticTestServiceRole12E22F25": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow resource:*",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Policies": Array [
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": "s3:ListAllMyBuckets",
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": "s3:GetBucketLocation",
+                  "Effect": "Allow",
+                  "Resource": Object {
+                    "Fn::GetAtt": Array [
+                      "SyntheticTestArtifactsBucketE42C1786",
+                      "Arn",
+                    ],
+                  },
+                },
+                Object {
+                  "Action": "s3:PutObject",
+                  "Effect": "Allow",
+                  "Resource": Object {
+                    "Fn::Join": Array [
+                      "",
+                      Array [
+                        Object {
+                          "Fn::GetAtt": Array [
+                            "SyntheticTestArtifactsBucketE42C1786",
+                            "Arn",
+                          ],
+                        },
+                        "/*",
+                      ],
+                    ],
+                  },
+                },
+                Object {
+                  "Action": "cloudwatch:PutMetricData",
+                  "Condition": Object {
+                    "StringEquals": Object {
+                      "cloudwatch:namespace": "CloudWatchSynthetics",
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": Array [
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup",
+                    "logs:PutLogEvents",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": Object {
+                    "Fn::Join": Array [
+                      "",
+                      Array [
+                        "arn:",
+                        Object {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":logs:us-east-1:dummy:log-group:/aws/lambda/cwsyn-*",
+                      ],
+                    ],
+                  },
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "canaryPolicy",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "Vpc8378EB38": Object {
       "Properties": Object {
