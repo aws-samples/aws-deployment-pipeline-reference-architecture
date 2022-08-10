@@ -1,18 +1,16 @@
 # Machine Learning Pipeline
 
-WIP
-AWS implementation:
-Using step functions or [Amazon MWAA](https://aws.amazon.com/managed-workflows-for-apache-airflow/)
+TODO, reference architecture has not completed design & review process.
 
-https://aws.amazon.com/blogs/big-data/building-complex-workflows-with-amazon-mwaa-aws-step-functions-aws-glue-and-amazon-emr/
-
-Work with [Bhushan Chirmade](https://app.slack.com/team/W017PJLJTEG)
-
+Reference Materials:
+* https://aws.amazon.com/blogs/machine-learning/mlops-foundation-roadmap-for-enterprises-with-amazon-sagemaker/
+* https://github.com/aws-samples/sagemaker-custom-project-templates/tree/main/mlops-multi-account-cdk
+* https://docs.aws.amazon.com/whitepapers/latest/ml-best-practices-healthcare-life-sciences/ml-best-practices-healthcare-life-sciences.pdf?did=wp_card&trk=wp_card
+* https://github.com/aws-samples/sagemaker-mlops-with-terraform
 
 ```mermaid
-
 flowchart
-    todo
+    TODO
 ```
 
 ## Source
@@ -26,4 +24,3 @@ flowchart
 ## Test (Gamma)
 
 ## Prod
-

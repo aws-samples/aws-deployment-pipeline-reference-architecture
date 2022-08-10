@@ -2,13 +2,13 @@
 
 Reference implementation of application pipeline from DPRA.
 
-## Running
+## Setup
 
 Install dependencies and build:
 
 ```bash
+npm install yarn
 yarn install
-npm run build
 ```
 
 Create a new file [infrastructure/src/constants.ts](infrastructure/src/constants.ts) from [infrastructure/src/constants.example.ts](infrastructure/src/constants.example.ts] and update with your own AWS Account IDs:
@@ -22,6 +22,14 @@ export const constants = {
   PROD_ENV: { account: '333333333', region: 'us-west-2' },
 } as const;
 ```
+
+## Tests
+
+```bash
+npm run build
+```
+
+## AWS Deployment
 
 You need 4 AWS accounts: Toolchain, Beta, Gamma, Prod. First, bootstrap the toolchain account:
 
