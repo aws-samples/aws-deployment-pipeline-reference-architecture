@@ -238,7 +238,11 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
 
     ![](assets/codeguru-review.png)
 
-    Additionally, [cdk-nag](https://github.com/cdklabs/cdk-nag) is run against both the pipeline stack and the deployment stack to identify any security issues with the resources being created. The pipeline will fail if any are detected.
+    Additionally, [cdk-nag](https://github.com/cdklabs/cdk-nag) is run against both the pipeline stack and the deployment stack to identify any security issues with the resources being created. The pipeline will fail if any are detected. The following code demonstrates how cdk-nag is called as a part of the build stage. The code also demonstrates how to suppress findings.
+
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/infrastructure/test/deployment.test.ts) inside_block:beforeEach
+    <!--/codeinclude-->
 
 ???+ required "Secrets Detection"
     The same CDK construct that was created for *Code Quality* above is also used for secrets detection with [Amazon CodeGuru](https://aws.amazon.com/codeguru/).
@@ -388,7 +392,11 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     [Amazon ECS](https://aws.amazon.com/ecs/) uses [Amazon CloudWatch Metrics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html) and [Amazon CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html) for observability by default.
 
 ???+ required "Synthetic Tests"
-    `TODO: build CDK stack to deploy Amazon CloudWatch Synthetics`
+    [Amazon CloudWatch Synthetics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html) is used to continuously deliver traffic to the application and assert that requests are successful and responses are received within a given threshold. The canary is defined via CDK:
+
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/infrastructure/src/deployment/synthetic.ts) inside_block:constructor
+    <!--/codeinclude-->
 
 ???+ required "Performance Tests"
     `TODO: build CDK construct to run JMeter tests`
@@ -425,4 +433,9 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     `TODO: add blue/green deployment with CodeDeploy`
 
 ???+ required "Synthetic Tests"
-    `TODO: build CDK stack to deploy Amazon CloudWatch Synthetics`
+    [Amazon CloudWatch Synthetics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html) is used to continuously deliver traffic to the application and assert that requests are successful and responses are received within a given threshold. The canary is defined via CDK:
+
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/infrastructure/src/deployment/synthetic.ts) inside_block:constructor
+    <!--/codeinclude-->
+    
