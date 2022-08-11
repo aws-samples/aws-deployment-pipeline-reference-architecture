@@ -174,6 +174,75 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
+    "PerformanceTestCacheBucket9B84122F": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "PerformanceTestCacheBucketPolicyF22C05E6": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "PerformanceTestCacheBucket9B84122F",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:SecureTransport": "false",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": Object {
+                "AWS": "*",
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "PerformanceTestCacheBucket9B84122F",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "PerformanceTestCacheBucket9B84122F",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
     "SourceCfnRepositoryAssociation738A9DD0": Object {
       "Properties": Object {
         "Name": Object {
@@ -295,8 +364,8 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-Beta/TestStackBetafruitapiF56320B1.assets.json\\\\\\" --verbose publish \\\\\\"e53bb4b4986d38ed62d34caa85764638671e46e4a7a4319c7c296ca37fe92315:834418886742-us-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-Prod/TestStackProdfruitapi49CAAEE6.assets.json\\\\\\" --verbose publish \\\\\\"e53bb4b4986d38ed62d34caa85764638671e46e4a7a4319c7c296ca37fe92315:211909469734-us-west-2\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-TestStack-Beta/TestStackBetafruitapiF56320B1.assets.json\\\\\\" --verbose publish \\\\\\"99de3b2e8d07502e2e3958ff3b69f02d494482f390441d48a69003a9261bf03c:834418886742-us-west-2\\\\\\"\\",
+        \\"cdk-assets --path \\\\\\"assembly-TestStack-Prod/TestStackProdfruitapi49CAAEE6.assets.json\\\\\\" --verbose publish \\\\\\"99de3b2e8d07502e2e3958ff3b69f02d494482f390441d48a69003a9261bf03c:211909469734-us-west-2\\\\\\"\\"
       ]
     }
   }
@@ -2883,7 +2952,20 @@ Object {
           "Type": "CODEPIPELINE",
         },
         "Cache": Object {
-          "Type": "NO_CACHE",
+          "Location": Object {
+            "Fn::Join": Array [
+              "/",
+              Array [
+                Object {
+                  "Ref": "PerformanceTestCacheBucket9B84122F",
+                },
+                Object {
+                  "Ref": "AWS::NoValue",
+                },
+              ],
+            ],
+          },
+          "Type": "S3",
         },
         "Description": "Pipeline step TestStack/Pipeline/Gamma/Performance_Test",
         "EncryptionKey": Object {
@@ -2907,11 +2989,35 @@ Object {
         },
         "Source": Object {
           "BuildSpec": "{
+  \\"env\\": {
+    \\"variables\\": {
+      \\"MAVEN_OPTS\\": \\"-XX:+TieredCompilation -XX:TieredStopAtLevel=1\\",
+      \\"MAVEN_ARGS\\": \\"--batch-mode --no-transfer-progress\\"
+    }
+  },
   \\"phases\\": {
+    \\"install\\": {
+      \\"runtime-versions\\": {
+        \\"java\\": \\"corretto11\\"
+      }
+    },
     \\"build\\": {
       \\"commands\\": [
-        \\"echo \${ENDPOINT}\\"
+        \\"mvn \${MAVEN_ARGS} soapui:test -Djmeter.endpoint=\${ENDPOINT} -Djmeter.threads=500 -Djmeter.duration=3000 -Djmeter.throughput=300000\\"
       ]
+    }
+  },
+  \\"cache\\": {
+    \\"paths\\": [
+      \\"/root/.m2/**/*\\"
+    ]
+  },
+  \\"reports\\": {
+    \\"e2e\\": {
+      \\"files\\": [
+        \\"target/soapui-reports/*.xml\\"
+      ],
+      \\"file-format\\": \\"JUNITXML\\"
     }
   },
   \\"version\\": \\"0.2\\"
@@ -2942,6 +3048,43 @@ Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "PerformanceTestCacheBucket9B84122F",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "PerformanceTestCacheBucket9B84122F",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
             Object {
               "Action": Array [
                 "logs:CreateLogGroup",
