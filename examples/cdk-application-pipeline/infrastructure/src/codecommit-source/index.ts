@@ -19,8 +19,13 @@ export class CodeCommitSource extends Construct {
   constructor(scope: Construct, id: string, props: CodeCommitSourceProps) {
     super(scope, id);
     this.trunkBranchName = props?.trunkBranchName || 'main';
-    const gitignore = fs.readFileSync('.gitignore').toString().split(/\r?\n/);
+    let gitignore = fs.readFileSync('.gitignore').toString().split(/\r?\n/);
     gitignore.push('.git/');
+
+    // hack to allow canary code to package properly
+    gitignore = gitignore.filter(g => g != 'node_modules/');
+    gitignore.push('/node_modules/');
+
     const codeAsset = new Asset(this, 'SourceAsset', {
       path: '.',
       ignoreMode: IgnoreMode.GIT,
