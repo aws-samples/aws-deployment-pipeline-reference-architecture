@@ -1,6 +1,6 @@
 # Overview
 
-This repository contains the source for the [DPRA content](https://aws-samples.github.io/aws-deployment-pipeline-reference-architecture).
+This repository contains the source for the [DPRA content](https://pipelines.devops.aws.dev).
 
 ## Local Development
 
