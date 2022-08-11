@@ -466,7 +466,7 @@ digraph G {
 }
 ```
 
-???+ required "Database Deploy"
+???+ recommended "Database Deploy"
     Apply changes to the gamma database using the *Database Source Code*. Best practice is to connect to the gamma database through [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) and [IAM database authentication for RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html) rather than long lived database credentials. If database credentials must be used, then they should be loaded from a secret manager such as [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/). Changes to the database should be incremental, only applying the changes since the prior deployment. Examples of tools that apply incremental database changes include but are not limited to [Liquibase](https://www.liquibase.org/).
     ```graphviz dot db.png
 digraph G {
