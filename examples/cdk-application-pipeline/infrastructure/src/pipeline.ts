@@ -6,6 +6,7 @@ import { Construct } from 'constructs';
 
 import { CodeCommitSource } from './codecommit-source';
 import { CodeGuruReviewCheck, CodeGuruReviewFilter } from './codeguru-review-check';
+import { TrivyScan } from './trivy-scan';
 import { constants } from './constants';
 import { DeploymentStack } from './deployment';
 import { JMeterTest } from './jmeter-test';
@@ -21,15 +22,20 @@ export class PipelineStack extends Stack {
     const source = new CodeCommitSource(this, 'Source', { repositoryName: constants.APP_NAME });
 
     const codeGuruSecurity = new CodeGuruReviewCheck('CodeGuruSecurity', {
-      Source: source.codePipelineSource,
-      ReviewRequired: false,
-      Filter: CodeGuruReviewFilter.defaultCodeSecurityFilter(),
+      source: source.codePipelineSource,
+      reviewRequired: false,
+      filter: CodeGuruReviewFilter.defaultCodeSecurityFilter(),
     });
     const codeGuruQuality = new CodeGuruReviewCheck('CodeGuruQuality', {
-      Source: source.codePipelineSource,
-      ReviewRequired: false,
-      Filter: CodeGuruReviewFilter.defaultCodeQualityFilter(),
+      source: source.codePipelineSource,
+      reviewRequired: false,
+      filter: CodeGuruReviewFilter.defaultCodeQualityFilter(),
     });
+    const trivyScan = new TrivyScan('TrivyScan', {
+      source: source.codePipelineSource,
+      severity: ['CRITICAL','HIGH'],
+      checks: ['vuln','config','secret'],
+    })
 
     const buildAction = new MavenBuild(this, 'Build', {
       source: source.codePipelineSource,
@@ -37,6 +43,7 @@ export class PipelineStack extends Stack {
 
     buildAction.addStepDependency(codeGuruQuality);
     buildAction.addStepDependency(codeGuruSecurity);
+    buildAction.addStepDependency(trivyScan);
 
     const synthAction = new CodeBuildStep('Synth', {
       input: buildAction,
@@ -110,7 +117,9 @@ class DeploymentStage extends Stage {
   constructor(scope: Construct, id: string, props?: StageProps) {
     super(scope, id, props);
     this.stack = new DeploymentStack(this, constants.APP_NAME, {
-      image: new AssetImage('.'),
+      image: new AssetImage('.', {
+        target: 'build'
+      }),
     });
   }
 

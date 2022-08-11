@@ -25,20 +25,20 @@ export class CodeGuruReviewFilter {
 
   static defaultCodeSecurityFilter(): CodeGuruReviewFilter {
     return {
-      RecommendationCategories: [
+      recommendationCategories: [
         CodeGuruReviewRecommendationCategory.SECURITY_ISSUES,
       ],
-      MaxSuppressedLinesOfCodeCount: 0,
-      MaxCriticalRecommendations: 0,
-      MaxHighRecommendations: 0,
-      MaxInfoRecommendations: 0,
-      MaxMediumRecommendations: 0,
-      MaxLowRecommendations: 0,
+      maxSuppressedLinesOfCodeCount: 0,
+      maxCriticalRecommendations: 0,
+      maxHighRecommendations: 0,
+      maxInfoRecommendations: 0,
+      maxMediumRecommendations: 0,
+      maxLowRecommendations: 0,
     };
   }
   static defaultCodeQualityFilter(): CodeGuruReviewFilter {
     return {
-      RecommendationCategories: [
+      recommendationCategories: [
         CodeGuruReviewRecommendationCategory.AWS_BEST_PRACTICES,
         CodeGuruReviewRecommendationCategory.CODE_INCONSISTENCIES,
         CodeGuruReviewRecommendationCategory.CODE_MAINTENANCE_ISSUES,
@@ -49,27 +49,27 @@ export class CodeGuruReviewFilter {
         CodeGuruReviewRecommendationCategory.JAVA_BEST_PRACTICES,
         CodeGuruReviewRecommendationCategory.PYTHON_BEST_PRACTICES,
       ],
-      MaxSuppressedLinesOfCodeCount: 0,
-      MaxCriticalRecommendations: 0,
-      MaxHighRecommendations: 0,
-      MaxInfoRecommendations: 0,
-      MaxMediumRecommendations: 0,
-      MaxLowRecommendations: 0,
+      maxSuppressedLinesOfCodeCount: 0,
+      maxCriticalRecommendations: 0,
+      maxHighRecommendations: 0,
+      maxInfoRecommendations: 0,
+      maxMediumRecommendations: 0,
+      maxLowRecommendations: 0,
     };
   }
-  RecommendationCategories!: CodeGuruReviewRecommendationCategory[];
-  MaxSuppressedLinesOfCodeCount?: number;
-  MaxCriticalRecommendations?: number;
-  MaxHighRecommendations?: number;
-  MaxInfoRecommendations?: number;
-  MaxMediumRecommendations?: number;
-  MaxLowRecommendations?: number;
+  recommendationCategories!: CodeGuruReviewRecommendationCategory[];
+  maxSuppressedLinesOfCodeCount?: number;
+  maxCriticalRecommendations?: number;
+  maxHighRecommendations?: number;
+  maxInfoRecommendations?: number;
+  maxMediumRecommendations?: number;
+  maxLowRecommendations?: number;
 }
 
 export class CodeGuruReviewCheckProps {
-  Source!: CodePipelineSource;
-  Filter?: CodeGuruReviewFilter;
-  ReviewRequired?: boolean; // default: true
+  source!: CodePipelineSource;
+  filter?: CodeGuruReviewFilter;
+  reviewRequired?: boolean; // default: true
 }
 
 export class CodeGuruReviewCheck extends Step implements ICodePipelineActionFactory {
@@ -79,16 +79,17 @@ export class CodeGuruReviewCheck extends Step implements ICodePipelineActionFact
   constructor(id: string, private readonly props: CodeGuruReviewCheckProps) {
     super(id);
     this.userParameters = CodeGuruReviewCheck.SourceParameters.reduce((params, name) => {
-      params[name] = props.Source.sourceAttribute(name);
+      params[name] = props.source.sourceAttribute(name);
       return params;
     }, {} as Record<string, string>);
 
-    if (props.Filter) {
-      for (let [key, val] of Object.entries(props.Filter)) {
-        this.userParameters[key] = val.toString();
+    if (props.filter) {
+      const capitalize = (s:string) => s.replace(/^./, c => c.toUpperCase());
+      for (let [key, val] of Object.entries(props.filter)) {
+        this.userParameters[capitalize(key)] = val.toString();
       }
     }
-    this.userParameters.ReviewRequired = (props.ReviewRequired !== false).toString();
+    this.userParameters.ReviewRequired = (props.reviewRequired !== false).toString();
     this.discoverReferencedOutputs(this.userParameters);
   }
 
@@ -110,7 +111,7 @@ export class CodeGuruReviewCheck extends Step implements ICodePipelineActionFact
     stage.addAction(new LambdaInvokeAction({
       actionName: this.id,
       runOrder: options.runOrder,
-      inputs: [options.artifacts.toCodePipeline(this.props.Source.primaryOutput!)],
+      inputs: [options.artifacts.toCodePipeline(this.props.source.primaryOutput!)],
       lambda: codeGuruLambda,
       userParameters: this.userParameters,
     }));

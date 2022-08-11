@@ -211,25 +211,25 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     }
     export class CodeGuruReviewFilter { 
         // Limit which recommendation categories to include
-        RecommendationCategories!: CodeGuruReviewRecommendationCategory[];
+        recommendationCategories!: CodeGuruReviewRecommendationCategory[];
 
         // Fail if more that this # of lines of code were suppressed aws-codeguru-reviewer.yml
-        MaxSuppressedLinesOfCodeCount?: number;
+        maxSuppressedLinesOfCodeCount?: number;
 
         // Fail if more than this # of CRITICAL recommendations were found
-        MaxCriticalRecommendations?: number;
+        maxCriticalRecommendations?: number;
 
         // Fail if more than this # of HIGH recommendations were found
-        MaxHighRecommendations?: number;
+        maxHighRecommendations?: number;
 
         // Fail if more than this # of MEDIUM recommendations were found
-        MaxMediumRecommendations?: number;
+        maxMediumRecommendations?: number;
 
         // Fail if more than this # of INFO recommendations were found
-        MaxInfoRecommendations?: number;
+        maxInfoRecommendations?: number;
 
         // Fail if more than this # of LOW recommendations were found
-        MaxLowRecommendations?: number;
+        maxLowRecommendations?: number;
     }
     ```
 
@@ -256,7 +256,17 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     ![](assets/build-package.png)
 
 ???+ required "Software Composition Analysis (SCA)"
-    `TODO: build CDK component to check ECR image scan`
+    [Trivy](https://aquasecurity.github.io/trivy) is used to scan the source for vulnerabilities in its dependencies. The `pom.xml` and `Dockerfile` files are scanned for configuration issues or vulnerabilities in any dependencies. The scanning is accomplished by a CDK construct that creates a CodeBuild job to run `trivy`:
+
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/infrastructure/src/pipeline.ts) block:TrivyScan
+    <!--/codeinclude-->
+
+    Trivy is also used within the `Dockerfile` to scan the image after it is built. The `docker build` will fail if Trivy finds any vulnerabilities in the final image:
+
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/Dockerfile)
+    <!--/codeinclude-->
 
 ## Test (Beta)
 
