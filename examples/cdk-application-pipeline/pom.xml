@@ -143,6 +143,7 @@
 						<DURATION>${jmeter.duration}</DURATION>
 						<THROUGHPUT>${jmeter.throughput}</THROUGHPUT>
 					</propertiesUser>
+					<errorRateThresholdInPercent>0.1</errorRateThresholdInPercent>
 				</configuration>
 			</plugin>
 		</plugins>
