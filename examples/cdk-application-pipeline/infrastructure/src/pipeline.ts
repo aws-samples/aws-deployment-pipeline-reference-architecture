@@ -83,7 +83,6 @@ export class PipelineStack extends Stack {
           source: source.codePipelineSource,
           endpoint: betaStage.apiUrl,
         }),
-        new ManualApprovalStep('PromoteFromBeta'),
       ],
     });
 
@@ -100,7 +99,7 @@ export class PipelineStack extends Stack {
           endpoint: gammaStage.apiUrl,
           threads: 300,
           duration: 300,
-          throughput: 100000,
+          throughput: 6000,
         }),
         new ManualApprovalStep('PromoteFromGamma'),
       ],

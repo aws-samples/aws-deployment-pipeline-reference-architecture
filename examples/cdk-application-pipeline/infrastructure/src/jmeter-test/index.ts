@@ -47,12 +47,6 @@ export class JMeterTest extends CodeBuildStep {
         cache: {
           paths: ['/root/.m2/**/*'],
         },
-        reports: {
-          e2e: {
-            'files': ['target/soapui-reports/*.xml'],
-            'file-format': 'JUNITXML',
-          },
-        },
         version: '0.2',
       }),
       cache: Cache.bucket(cacheBucket),
