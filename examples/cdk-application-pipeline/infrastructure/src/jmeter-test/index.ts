@@ -42,8 +42,7 @@ export class JMeterTest extends CodeBuildStep {
             },
           },
           build: {
-            commands: [`mvn \${MAVEN_ARGS} soapui:test -Djmeter.endpoint=\${ENDPOINT} -Djmeter.threads=${props.threads} -Djmeter.duration=${props.duration} -Djmeter.throughput=${props.throughput}`],
-          },
+            commands: [`mvn \${MAVEN_ARGS} compile jmeter:jmeter jmeter:results -Djmeter.endpoint=\${ENDPOINT} -Djmeter.threads=${props.threads} -Djmeter.duration=${props.duration} -Djmeter.throughput=${props.throughput}`],          },
         },
         cache: {
           paths: ['/root/.m2/**/*'],
