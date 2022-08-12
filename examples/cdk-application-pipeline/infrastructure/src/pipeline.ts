@@ -98,9 +98,9 @@ export class PipelineStack extends Stack {
         new JMeterTest(this, 'Performance Test', {
           source: source.codePipelineSource,
           endpoint: gammaStage.apiUrl,
-          threads: 500,
-          duration: 3000,
-          throughput: 300000,
+          threads: 300,
+          duration: 300,
+          throughput: 100000,
         }),
         new ManualApprovalStep('PromoteFromGamma'),
       ],
