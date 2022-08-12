@@ -36,20 +36,20 @@ export const constants = {
 
 ```bash
 # Use the AWS Profile for your toolchain account
-npx cdk bootstrap aws://$TOOLCHAIN_ACCOUNT_ID
+npx cdk bootstrap aws://$TOOLCHAIN_ACCOUNT_ID/$AWS_REGION
 ```
 
 6. Bootstrap the environment accounts:
 
 ```bash
 # Use the AWS Profile for your beta account
-npx cdk bootstrap --trust $TOOLCHAIN_ACCOUNT_ID aws://$BETA_ACCOUNT_ID
+npx cdk bootstrap --trust $TOOLCHAIN_ACCOUNT_ID aws://$BETA_ACCOUNT_ID/$AWS_REGION
 
 # Use the AWS Profile for your gamma account
-npx cdk bootstrap --trust $TOOLCHAIN_ACCOUNT_ID aws://$GAMMA_ACCOUNT_ID
+npx cdk bootstrap --trust $TOOLCHAIN_ACCOUNT_ID aws://$GAMMA_ACCOUNT_ID/$AWS_REGION
 
 # Use the AWS Profile for your production account
-npx cdk bootstrap --trust $TOOLCHAIN_ACCOUNT_ID aws://$PROD_ACCOUNT_ID
+npx cdk bootstrap --trust $TOOLCHAIN_ACCOUNT_ID aws://$PROD_ACCOUNT_ID/$AWS_REGION
 ```
 
 7. Deploy the pipeline to the toolchain account:
