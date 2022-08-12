@@ -103,7 +103,7 @@ export class DeploymentStack extends Stack {
       alarmName: `${appName}-ElbResponseTime`,
       metric: service.loadBalancer.metricTargetResponseTime(),
       evaluationPeriods: 3,
-      threshold: 1000,
+      threshold: 3, // seconds
       comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
     });
 
