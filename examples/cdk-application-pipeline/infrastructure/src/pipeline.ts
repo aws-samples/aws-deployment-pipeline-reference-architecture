@@ -97,7 +97,7 @@ export class PipelineStack extends Stack {
       post: [
         new JMeterTest(this, 'Performance Test', {
           source: source.codePipelineSource,
-          endpoint: betaStage.apiUrl,
+          endpoint: gammaStage.apiUrl,
           threads: 500,
           duration: 3000,
           throughput: 300000,
