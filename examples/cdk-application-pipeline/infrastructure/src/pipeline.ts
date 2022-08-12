@@ -75,6 +75,7 @@ export class PipelineStack extends Stack {
       env: constants.BETA_ENV,
     });
     Tags.of(betaStage).add('Environment', 'Beta');
+    Tags.of(betaStage).add('Application', constants.APP_NAME);
 
     pipeline.addStage(betaStage, {
       post: [
@@ -90,6 +91,7 @@ export class PipelineStack extends Stack {
       env: constants.GAMMA_ENV,
     });
     Tags.of(gammaStage).add('Environment', 'Gamma');
+    Tags.of(gammaStage).add('Application', constants.APP_NAME);
 
     pipeline.addStage(gammaStage, {
       post: [
@@ -107,7 +109,8 @@ export class PipelineStack extends Stack {
     const prodStage = new DeploymentStage(this, 'Prod', {
       env: constants.PROD_ENV,
     });
-    Tags.of(prodStage).add('Environment', 'Prod');
+    Tags.of(prodStage).add('Environment', 'Prod')
+    Tags.of(prodStage).add('Application', constants.APP_NAME);
     pipeline.addStage(prodStage);
   }
 }
