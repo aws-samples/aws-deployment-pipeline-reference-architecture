@@ -100,7 +100,7 @@ digraph G {
 
             approval[label="Optional Approval" color="#d4dada"]
             db_deploy_prod[label="DB Deploy" color="#ff9900"]
-            blue_green_deployment[label="Blue/Green Deployment" color="#ff9900"]
+            blue_green_deployment[label="Progressive Deployment" color="#ff9900"]
             synthetic_prod[label="Synthetic Tests" color="#ff9900"]
         }
 
