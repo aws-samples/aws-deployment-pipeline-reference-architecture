@@ -81,3 +81,8 @@ extra_javascript:
 
 extra_css:
   - stylesheets/extra.css
+
+extra:
+  analytics:
+    provider: google
+    property: G-Z5XE517K9W
