@@ -44,20 +44,6 @@ The DPRA covers the following deployment pipelines in detail:
         </p>
     </a>
 </div>
-<div class="cardwrapper">
-    <a href="machine-learning-pipeline" class="card disabled">
-        <h3>Machine Learning</h3>
-        <p>
-            Train, test and deploy machine learning models.
-        </p>
-    </a>
-    <a href="dynamic-configuration-deployment-pipeline" class="card disabled">
-        <h3>Dynamic Configuration</h3>
-        <p>
-            Push application configuration changes.
-        </p>
-    </a>
-</div>
 
 ## Definitions
 
