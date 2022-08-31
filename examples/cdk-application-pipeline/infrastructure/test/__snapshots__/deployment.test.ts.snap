@@ -3,6 +3,30 @@
 exports[`Deployment Snapshot 1`] = `
 Object {
   "Outputs": Object {
+    "ApiLoadBalancerDNSB0038DD0": Object {
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "ApiLB8D4BD609",
+          "DNSName",
+        ],
+      },
+    },
+    "ApiServiceURL135D4FCA": Object {
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "http://",
+            Object {
+              "Fn::GetAtt": Array [
+                "ApiLB8D4BD609",
+                "DNSName",
+              ],
+            },
+          ],
+        ],
+      },
+    },
     "ApiUrl": Object {
       "Value": Object {
         "Fn::Join": Array [
@@ -11,7 +35,7 @@ Object {
             "http://",
             Object {
               "Fn::GetAtt": Array [
-                "FargateServiceLBB353E155",
+                "ApiLB8D4BD609",
                 "DNSName",
               ],
             },
@@ -19,27 +43,11 @@ Object {
         ],
       },
     },
-    "FargateServiceLoadBalancerDNS9433D5F6": Object {
+    "DeploymentId": Object {
       "Value": Object {
         "Fn::GetAtt": Array [
-          "FargateServiceLBB353E155",
-          "DNSName",
-        ],
-      },
-    },
-    "FargateServiceServiceURL47701F45": Object {
-      "Value": Object {
-        "Fn::Join": Array [
-          "",
-          Array [
-            "http://",
-            Object {
-              "Fn::GetAtt": Array [
-                "FargateServiceLBB353E155",
-                "DNSName",
-              ],
-            },
-          ],
+          "BlueGreenSupportDeploymentWaitDeployment54620BA5",
+          "deploymentId",
         ],
       },
     },
@@ -209,14 +217,548 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
+    "ApiLB8D4BD609": Object {
+      "DependsOn": Array [
+        "AccessLogBucketPolicyF52D2D01",
+        "AccessLogBucketDA470295",
+        "VpcPublicSubnet1DefaultRoute3DA9E72A",
+        "VpcPublicSubnet2DefaultRoute97F91067",
+        "VpcPublicSubnet3DefaultRoute4697774F",
+      ],
+      "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+          Object {
+            "Key": "access_logs.s3.enabled",
+            "Value": "true",
+          },
+          Object {
+            "Key": "access_logs.s3.bucket",
+            "Value": Object {
+              "Ref": "AccessLogBucketDA470295",
+            },
+          },
+          Object {
+            "Key": "access_logs.s3.prefix",
+            "Value": "",
+          },
+        ],
+        "Scheme": "internet-facing",
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "ApiLBSecurityGroup70AC4E5C",
+              "GroupId",
+            ],
+          },
+        ],
+        "Subnets": Array [
+          Object {
+            "Ref": "VpcPublicSubnet1Subnet5C2D37C4",
+          },
+          Object {
+            "Ref": "VpcPublicSubnet2Subnet691E08A3",
+          },
+          Object {
+            "Ref": "VpcPublicSubnet3SubnetBE12F0B6",
+          },
+        ],
+        "Type": "application",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "ApiLBGreenListenerEE7EB3CB": Object {
+      "DependsOn": Array [
+        "AccessLogBucketPolicyF52D2D01",
+        "AccessLogBucketDA470295",
+      ],
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "BlueGreenSupportGreenTargetGroup8538E6BE",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "ApiLB8D4BD609",
+        },
+        "Port": 81,
+        "Protocol": "HTTP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "ApiLBPublicListener5142AAA5": Object {
+      "DependsOn": Array [
+        "AccessLogBucketPolicyF52D2D01",
+        "AccessLogBucketDA470295",
+      ],
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "ApiLBPublicListenerECSGroup45FF926A",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "ApiLB8D4BD609",
+        },
+        "Port": 80,
+        "Protocol": "HTTP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "ApiLBPublicListenerECSGroup45FF926A": Object {
+      "DependsOn": Array [
+        "AccessLogBucketPolicyF52D2D01",
+        "AccessLogBucketDA470295",
+      ],
+      "Properties": Object {
+        "HealthCheckIntervalSeconds": 60,
+        "HealthCheckPath": "/actuator/health",
+        "HealthyThresholdCount": 2,
+        "Port": 80,
+        "Protocol": "HTTP",
+        "TargetGroupAttributes": Array [
+          Object {
+            "Key": "stickiness.enabled",
+            "Value": "false",
+          },
+          Object {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "5",
+          },
+        ],
+        "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "ApiLBSecurityGroup70AC4E5C": Object {
+      "DependsOn": Array [
+        "AccessLogBucketPolicyF52D2D01",
+        "AccessLogBucketDA470295",
+      ],
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-EC23",
+              "reason": "Public ELB",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "GroupDescription": "Automatically created Security Group for ELB TestStackApiLBF4CC58DF",
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
+          },
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 81",
+            "FromPort": 81,
+            "IpProtocol": "tcp",
+            "ToPort": 81,
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ApiLBSecurityGrouptoTestStackApiServiceSecurityGroup56AF4AC580804BAC35E7": Object {
+      "DependsOn": Array [
+        "AccessLogBucketPolicyF52D2D01",
+        "AccessLogBucketDA470295",
+      ],
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "ApiServiceSecurityGroupB2E30D06",
+            "GroupId",
+          ],
+        },
+        "FromPort": 8080,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ApiLBSecurityGroup70AC4E5C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 8080,
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
+    },
+    "ApiServiceD5B4A50A": Object {
+      "DependsOn": Array [
+        "ApiLBPublicListenerECSGroup45FF926A",
+        "ApiLBPublicListener5142AAA5",
+        "ApiTaskDefExecutionRoleDefaultPolicyE5F94BFA",
+        "ApiTaskDefExecutionRole5CBCA7DA",
+        "ApiTaskDefCB0575BA",
+        "ApiTaskDefTaskRole69DE15BC",
+      ],
+      "Properties": Object {
+        "CapacityProviderStrategy": Array [
+          Object {
+            "CapacityProvider": "FARGATE_SPOT",
+            "Weight": 1,
+          },
+        ],
+        "Cluster": Object {
+          "Ref": "ClusterEB0386A7",
+        },
+        "DeploymentConfiguration": Object {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50,
+        },
+        "DeploymentController": Object {
+          "Type": "CODE_DEPLOY",
+        },
+        "DesiredCount": 3,
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LoadBalancers": Array [
+          Object {
+            "ContainerName": "web",
+            "ContainerPort": 8080,
+            "TargetGroupArn": Object {
+              "Ref": "ApiLBPublicListenerECSGroup45FF926A",
+            },
+          },
+        ],
+        "NetworkConfiguration": Object {
+          "AwsvpcConfiguration": Object {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": Array [
+              Object {
+                "Fn::GetAtt": Array [
+                  "ApiServiceSecurityGroupB2E30D06",
+                  "GroupId",
+                ],
+              },
+            ],
+            "Subnets": Array [
+              Object {
+                "Ref": "VpcPrivateSubnet1Subnet536B997A",
+              },
+              Object {
+                "Ref": "VpcPrivateSubnet2Subnet3788AAA1",
+              },
+              Object {
+                "Ref": "VpcPrivateSubnet3SubnetF258B56E",
+              },
+            ],
+          },
+        },
+        "TaskDefinition": "teststack",
+      },
+      "Type": "AWS::ECS::Service",
+    },
+    "ApiServiceSecurityGroupB2E30D06": Object {
+      "DependsOn": Array [
+        "ApiTaskDefExecutionRoleDefaultPolicyE5F94BFA",
+        "ApiTaskDefExecutionRole5CBCA7DA",
+        "ApiTaskDefCB0575BA",
+        "ApiTaskDefTaskRole69DE15BC",
+      ],
+      "Properties": Object {
+        "GroupDescription": "TestStack/Api/Service/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ApiServiceSecurityGroupfromTestStackApiLBSecurityGroup0540FC958080EEE77C0F": Object {
+      "DependsOn": Array [
+        "ApiTaskDefExecutionRoleDefaultPolicyE5F94BFA",
+        "ApiTaskDefExecutionRole5CBCA7DA",
+        "ApiTaskDefCB0575BA",
+        "ApiTaskDefTaskRole69DE15BC",
+      ],
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "FromPort": 8080,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ApiServiceSecurityGroupB2E30D06",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "ApiLBSecurityGroup70AC4E5C",
+            "GroupId",
+          ],
+        },
+        "ToPort": 8080,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "ApiTaskDefCB0575BA": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-ECS2",
+              "reason": "Allow environment variables",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "ContainerDefinitions": Array [
+          Object {
+            "Cpu": 512,
+            "Environment": Array [
+              Object {
+                "Name": "SPRING_DATASOURCE_URL",
+                "Value": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "jdbc:mysql://",
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "AuroraCluster23D869C0",
+                          "Endpoint.Address",
+                        ],
+                      },
+                      ":",
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "AuroraCluster23D869C0",
+                          "Endpoint.Port",
+                        ],
+                      },
+                      "/fruits",
+                    ],
+                  ],
+                },
+              },
+            ],
+            "Essential": true,
+            "Image": Object {
+              "Fn::Sub": "dummy.dkr.ecr.us-east-1.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-dummy-us-east-1:049ff34819d20fdc5f2fe91196be61d0faf11a9479d056a18d2ae0b3559d3667",
+            },
+            "LogConfiguration": Object {
+              "LogDriver": "awslogs",
+              "Options": Object {
+                "awslogs-group": Object {
+                  "Ref": "AppLogGroup7D8CD952",
+                },
+                "awslogs-region": "us-east-1",
+                "awslogs-stream-prefix": "service",
+              },
+            },
+            "Memory": 1024,
+            "Name": "web",
+            "PortMappings": Array [
+              Object {
+                "ContainerPort": 8080,
+                "Protocol": "tcp",
+              },
+            ],
+            "Secrets": Array [
+              Object {
+                "Name": "SPRING_DATASOURCE_USERNAME",
+                "ValueFrom": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Ref": "AuroraSecret41E6E877",
+                      },
+                      ":username::",
+                    ],
+                  ],
+                },
+              },
+              Object {
+                "Name": "SPRING_DATASOURCE_PASSWORD",
+                "ValueFrom": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Ref": "AuroraSecret41E6E877",
+                      },
+                      ":password::",
+                    ],
+                  ],
+                },
+              },
+            ],
+          },
+        ],
+        "Cpu": "512",
+        "ExecutionRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "ApiTaskDefExecutionRole5CBCA7DA",
+            "Arn",
+          ],
+        },
+        "Family": "teststack",
+        "Memory": "1024",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": Array [
+          "FARGATE",
+        ],
+        "TaskRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "ApiTaskDefTaskRole69DE15BC",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ECS::TaskDefinition",
+    },
+    "ApiTaskDefExecutionRole5CBCA7DA": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ApiTaskDefExecutionRoleDefaultPolicyE5F94BFA": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Resource::*",
+              ],
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow ecr:GetAuthorizationToken",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ecr:us-east-1:dummy:repository/cdk-hnb659fds-container-assets-dummy-us-east-1",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": Array [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "AppLogGroup7D8CD952",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "AuroraSecret41E6E877",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ApiTaskDefExecutionRoleDefaultPolicyE5F94BFA",
+        "Roles": Array [
+          Object {
+            "Ref": "ApiTaskDefExecutionRole5CBCA7DA",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ApiTaskDefTaskRole69DE15BC": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
     "AppLogGroup7D8CD952": Object {
-      "DeletionPolicy": "Retain",
+      "DeletionPolicy": "Delete",
       "Properties": Object {
         "LogGroupName": "/aws/ecs/service/teststack",
         "RetentionInDays": 7,
       },
       "Type": "AWS::Logs::LogGroup",
-      "UpdateReplacePolicy": "Retain",
+      "UpdateReplacePolicy": "Delete",
     },
     "AuroraCluster23D869C0": Object {
       "DeletionPolicy": "Snapshot",
@@ -226,6 +768,10 @@ Object {
             Object {
               "id": "AwsSolutions-RDS6",
               "reason": "IAM authentication not supported on Serverless v1",
+            },
+            Object {
+              "id": "AwsSolutions-RDS10",
+              "reason": "Disable delete protection to simplify cleanup of Reference Implementation",
             },
             Object {
               "id": "AwsSolutions-RDS11",
@@ -250,7 +796,7 @@ Object {
           "Ref": "AuroraClusterSubnetsF3E9E6AD",
         },
         "DatabaseName": "fruits",
-        "DeletionProtection": true,
+        "DeletionProtection": false,
         "Engine": "aurora-mysql",
         "EngineMode": "serverless",
         "MasterUserPassword": Object {
@@ -306,9 +852,9 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "AuroraClusterSecurityGroupfromTestStackFargateServiceSecurityGroupC3D83923IndirectPortE78BF232": Object {
+    "AuroraClusterSecurityGroupfromTestStackApiServiceSecurityGroup56AF4AC5IndirectPort7B73ECC0": Object {
       "Properties": Object {
-        "Description": "from TestStackFargateServiceSecurityGroupC3D83923:{IndirectPort}",
+        "Description": "from TestStackApiServiceSecurityGroup56AF4AC5:{IndirectPort}",
         "FromPort": Object {
           "Fn::GetAtt": Array [
             "AuroraCluster23D869C0",
@@ -324,7 +870,7 @@ Object {
         "IpProtocol": "tcp",
         "SourceSecurityGroupId": Object {
           "Fn::GetAtt": Array [
-            "FargateServiceSecurityGroup262B61DD",
+            "ApiServiceSecurityGroupB2E30D06",
             "GroupId",
           ],
         },
@@ -401,6 +947,1387 @@ Object {
       },
       "Type": "AWS::SecretsManager::SecretTargetAttachment",
     },
+    "BlueGreenSupportApplication7BE12B08": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "ApplicationName": "teststack",
+        "ComputePlatform": "ECS",
+      },
+      "Type": "AWS::CodeDeploy::Application",
+    },
+    "BlueGreenSupportCodeDeployRoleC666D376": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "codedeploy.us-east-1.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AWSCodeDeployRoleForECS",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BlueGreenSupportDeploymentGroup8566D19D": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "AlarmConfiguration": Object {
+          "Alarms": Array [
+            Object {
+              "Name": Object {
+                "Ref": "HealthAlarm371A639B",
+              },
+            },
+          ],
+          "Enabled": true,
+        },
+        "ApplicationName": Object {
+          "Ref": "BlueGreenSupportApplication7BE12B08",
+        },
+        "AutoRollbackConfiguration": Object {
+          "Enabled": true,
+          "Events": Array [
+            "DEPLOYMENT_FAILURE",
+            "DEPLOYMENT_STOP_ON_ALARM",
+          ],
+        },
+        "BlueGreenDeploymentConfiguration": Object {
+          "DeploymentReadyOption": Object {
+            "ActionOnTimeout": "CONTINUE_DEPLOYMENT",
+            "WaitTimeInMinutes": 0,
+          },
+          "TerminateBlueInstancesOnDeploymentSuccess": Object {
+            "Action": "TERMINATE",
+            "TerminationWaitTimeInMinutes": 5,
+          },
+        },
+        "DeploymentConfigName": "CodeDeployDefault.ECSLinear10PercentEvery1Minutes",
+        "DeploymentGroupName": "teststack",
+        "DeploymentStyle": Object {
+          "DeploymentOption": "WITH_TRAFFIC_CONTROL",
+          "DeploymentType": "BLUE_GREEN",
+        },
+        "ECSServices": Array [
+          Object {
+            "ClusterName": Object {
+              "Ref": "ClusterEB0386A7",
+            },
+            "ServiceName": Object {
+              "Fn::GetAtt": Array [
+                "ApiServiceD5B4A50A",
+                "Name",
+              ],
+            },
+          },
+        ],
+        "LoadBalancerInfo": Object {
+          "TargetGroupPairInfoList": Array [
+            Object {
+              "ProdTrafficRoute": Object {
+                "ListenerArns": Array [
+                  Object {
+                    "Ref": "ApiLBPublicListener5142AAA5",
+                  },
+                ],
+              },
+              "TargetGroups": Array [
+                Object {
+                  "Name": Object {
+                    "Fn::GetAtt": Array [
+                      "ApiLBPublicListenerECSGroup45FF926A",
+                      "TargetGroupName",
+                    ],
+                  },
+                },
+                Object {
+                  "Name": Object {
+                    "Fn::GetAtt": Array [
+                      "BlueGreenSupportGreenTargetGroup8538E6BE",
+                      "TargetGroupName",
+                    ],
+                  },
+                },
+              ],
+              "TestTrafficRoute": Object {
+                "ListenerArns": Array [
+                  Object {
+                    "Ref": "ApiLBGreenListenerEE7EB3CB",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        "ServiceRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "BlueGreenSupportCodeDeployRoleC666D376",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::CodeDeploy::DeploymentGroup",
+    },
+    "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkisCompleteF7E7B934": Object {
+      "DependsOn": Array [
+        "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkisCompleteServiceRoleDefaultPolicy737B9E61",
+        "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkisCompleteServiceRole777ED863",
+      ],
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow AWS wildcard on sub-resources",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Allow provider framework older runtime version",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "cdk-hnb659fds-assets-dummy-us-east-1",
+          "S3Key": "e7c95e1a12d903d913ebdd526c735f1ac58b2024882a5562110221fe685ebe85.zip",
+        },
+        "Description": "AWS CDK resource provider framework - isComplete (TestStack/BlueGreenSupport/DeploymentWait/CodeDeploymentProvider)",
+        "Environment": Object {
+          "Variables": Object {
+            "USER_IS_COMPLETE_FUNCTION_ARN": Object {
+              "Fn::GetAtt": Array [
+                "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployCompleteLambdaBC6EC186",
+                "Arn",
+              ],
+            },
+            "USER_ON_EVENT_FUNCTION_ARN": Object {
+              "Fn::GetAtt": Array [
+                "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployEventLambda8938169D",
+                "Arn",
+              ],
+            },
+          },
+        },
+        "Handler": "framework.isComplete",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkisCompleteServiceRole777ED863",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkisCompleteServiceRole777ED863": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow AWS wildcard on sub-resources",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Allow provider framework older runtime version",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkisCompleteServiceRoleDefaultPolicy737B9E61": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow AWS wildcard on sub-resources",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Allow provider framework older runtime version",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployEventLambda8938169D",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployEventLambda8938169D",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployCompleteLambdaBC6EC186",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployCompleteLambdaBC6EC186",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkisCompleteServiceRoleDefaultPolicy737B9E61",
+        "Roles": Array [
+          Object {
+            "Ref": "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkisCompleteServiceRole777ED863",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonEvent52F3458E": Object {
+      "DependsOn": Array [
+        "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonEventServiceRoleDefaultPolicy9EDFC822",
+        "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonEventServiceRole319B98D7",
+      ],
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow AWS wildcard on sub-resources",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Allow provider framework older runtime version",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "cdk-hnb659fds-assets-dummy-us-east-1",
+          "S3Key": "e7c95e1a12d903d913ebdd526c735f1ac58b2024882a5562110221fe685ebe85.zip",
+        },
+        "Description": "AWS CDK resource provider framework - onEvent (TestStack/BlueGreenSupport/DeploymentWait/CodeDeploymentProvider)",
+        "Environment": Object {
+          "Variables": Object {
+            "USER_IS_COMPLETE_FUNCTION_ARN": Object {
+              "Fn::GetAtt": Array [
+                "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployCompleteLambdaBC6EC186",
+                "Arn",
+              ],
+            },
+            "USER_ON_EVENT_FUNCTION_ARN": Object {
+              "Fn::GetAtt": Array [
+                "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployEventLambda8938169D",
+                "Arn",
+              ],
+            },
+            "WAITER_STATE_MACHINE_ARN": Object {
+              "Ref": "BlueGreenSupportDeploymentWaitCodeDeploymentProviderwaiterstatemachineDFEF5BC0",
+            },
+          },
+        },
+        "FunctionName": "TestStack-bluegreen-provider",
+        "Handler": "framework.onEvent",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonEventServiceRole319B98D7",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonEventServiceRole319B98D7": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow AWS wildcard on sub-resources",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Allow provider framework older runtime version",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonEventServiceRoleDefaultPolicy9EDFC822": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow AWS wildcard on sub-resources",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Allow provider framework older runtime version",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployEventLambda8938169D",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployEventLambda8938169D",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployCompleteLambdaBC6EC186",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployCompleteLambdaBC6EC186",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "states:StartExecution",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "BlueGreenSupportDeploymentWaitCodeDeploymentProviderwaiterstatemachineDFEF5BC0",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonEventServiceRoleDefaultPolicy9EDFC822",
+        "Roles": Array [
+          Object {
+            "Ref": "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonEventServiceRole319B98D7",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonTimeout3A41AD9D": Object {
+      "DependsOn": Array [
+        "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonTimeoutServiceRoleDefaultPolicy81A0BEE3",
+        "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonTimeoutServiceRoleE1FCCB08",
+      ],
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow AWS wildcard on sub-resources",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Allow provider framework older runtime version",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "cdk-hnb659fds-assets-dummy-us-east-1",
+          "S3Key": "e7c95e1a12d903d913ebdd526c735f1ac58b2024882a5562110221fe685ebe85.zip",
+        },
+        "Description": "AWS CDK resource provider framework - onTimeout (TestStack/BlueGreenSupport/DeploymentWait/CodeDeploymentProvider)",
+        "Environment": Object {
+          "Variables": Object {
+            "USER_IS_COMPLETE_FUNCTION_ARN": Object {
+              "Fn::GetAtt": Array [
+                "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployCompleteLambdaBC6EC186",
+                "Arn",
+              ],
+            },
+            "USER_ON_EVENT_FUNCTION_ARN": Object {
+              "Fn::GetAtt": Array [
+                "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployEventLambda8938169D",
+                "Arn",
+              ],
+            },
+          },
+        },
+        "Handler": "framework.onTimeout",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonTimeoutServiceRoleE1FCCB08",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonTimeoutServiceRoleDefaultPolicy81A0BEE3": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow AWS wildcard on sub-resources",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Allow provider framework older runtime version",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployEventLambda8938169D",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployEventLambda8938169D",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployCompleteLambdaBC6EC186",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployCompleteLambdaBC6EC186",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonTimeoutServiceRoleDefaultPolicy81A0BEE3",
+        "Roles": Array [
+          Object {
+            "Ref": "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonTimeoutServiceRoleE1FCCB08",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonTimeoutServiceRoleE1FCCB08": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow AWS wildcard on sub-resources",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Allow provider framework older runtime version",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BlueGreenSupportDeploymentWaitCodeDeploymentProviderwaiterstatemachineDFEF5BC0": Object {
+      "DependsOn": Array [
+        "BlueGreenSupportDeploymentWaitCodeDeploymentProviderwaiterstatemachineRoleDefaultPolicy1B144B19",
+        "BlueGreenSupportDeploymentWaitCodeDeploymentProviderwaiterstatemachineRole3CB2D9C0",
+      ],
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow AWS wildcard on sub-resources",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Allow provider framework older runtime version",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "DefinitionString": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"StartAt\\":\\"framework-isComplete-task\\",\\"States\\":{\\"framework-isComplete-task\\":{\\"End\\":true,\\"Retry\\":[{\\"ErrorEquals\\":[\\"States.ALL\\"],\\"IntervalSeconds\\":15,\\"MaxAttempts\\":240,\\"BackoffRate\\":1}],\\"Catch\\":[{\\"ErrorEquals\\":[\\"States.ALL\\"],\\"Next\\":\\"framework-onTimeout-task\\"}],\\"Type\\":\\"Task\\",\\"Resource\\":\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkisCompleteF7E7B934",
+                  "Arn",
+                ],
+              },
+              "\\"},\\"framework-onTimeout-task\\":{\\"End\\":true,\\"Type\\":\\"Task\\",\\"Resource\\":\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonTimeout3A41AD9D",
+                  "Arn",
+                ],
+              },
+              "\\"}}}",
+            ],
+          ],
+        },
+        "RoleArn": Object {
+          "Fn::GetAtt": Array [
+            "BlueGreenSupportDeploymentWaitCodeDeploymentProviderwaiterstatemachineRole3CB2D9C0",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::StepFunctions::StateMachine",
+    },
+    "BlueGreenSupportDeploymentWaitCodeDeploymentProviderwaiterstatemachineRole3CB2D9C0": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow AWS wildcard on sub-resources",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Allow provider framework older runtime version",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "states.us-east-1.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BlueGreenSupportDeploymentWaitCodeDeploymentProviderwaiterstatemachineRoleDefaultPolicy1B144B19": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow AWS wildcard on sub-resources",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Allow provider framework older runtime version",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkisCompleteF7E7B934",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkisCompleteF7E7B934",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonTimeout3A41AD9D",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonTimeout3A41AD9D",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "BlueGreenSupportDeploymentWaitCodeDeploymentProviderwaiterstatemachineRoleDefaultPolicy1B144B19",
+        "Roles": Array [
+          Object {
+            "Ref": "BlueGreenSupportDeploymentWaitCodeDeploymentProviderwaiterstatemachineRole3CB2D9C0",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "BlueGreenSupportDeploymentWaitDeployment54620BA5": Object {
+      "DeletionPolicy": "Delete",
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "BlueGreenSupportDeploymentWaitCodeDeploymentProviderframeworkonEvent52F3458E",
+            "Arn",
+          ],
+        },
+        "applicationName": Object {
+          "Ref": "BlueGreenSupportApplication7BE12B08",
+        },
+        "containerName": "web",
+        "containerPort": 8080,
+        "deploymentConfigName": "CodeDeployDefault.ECSLinear10PercentEvery1Minutes",
+        "deploymentGroupName": "teststack",
+        "taskDefinitionArn": Object {
+          "Ref": "ApiTaskDefCB0575BA",
+        },
+      },
+      "Type": "Custom::BlueGreenEcsDeployment",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployCompleteLambdaBC6EC186": Object {
+      "DependsOn": Array [
+        "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployCompleteLambdaServiceRoleDefaultPolicy9F82F57F",
+        "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployCompleteLambdaServiceRole6AC183E3",
+      ],
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "cdk-hnb659fds-assets-dummy-us-east-1",
+          "S3Key": "8c447fb824a947755a122af0c3527c85acb62beb6ae29cd81a03015da902f044.zip",
+        },
+        "Environment": Object {
+          "Variables": Object {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          },
+        },
+        "FunctionName": "TestStack-bluegreen-isComplete",
+        "Handler": "index.isComplete",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployCompleteLambdaServiceRole6AC183E3",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs16.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployCompleteLambdaServiceRole6AC183E3": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployCompleteLambdaServiceRoleDefaultPolicy9F82F57F": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "codedeploy:GetDeployment",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codedeploy:us-east-1:dummy:deploymentgroup:",
+                    Object {
+                      "Ref": "BlueGreenSupportApplication7BE12B08",
+                    },
+                    "/teststack",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployCompleteLambdaServiceRoleDefaultPolicy9F82F57F",
+        "Roles": Array [
+          Object {
+            "Ref": "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployCompleteLambdaServiceRole6AC183E3",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployEventLambda8938169D": Object {
+      "DependsOn": Array [
+        "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployEventLambdaServiceRoleDefaultPolicy323BD4FE",
+        "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployEventLambdaServiceRole7F65F351",
+      ],
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "cdk-hnb659fds-assets-dummy-us-east-1",
+          "S3Key": "8c447fb824a947755a122af0c3527c85acb62beb6ae29cd81a03015da902f044.zip",
+        },
+        "Environment": Object {
+          "Variables": Object {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          },
+        },
+        "FunctionName": "TestStack-bluegreen-onEvent",
+        "Handler": "index.onEvent",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployEventLambdaServiceRole7F65F351",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs16.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployEventLambdaServiceRole7F65F351": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployEventLambdaServiceRoleDefaultPolicy323BD4FE": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "codedeploy:GetApplicationRevision",
+                "codedeploy:RegisterApplicationRevision",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codedeploy:us-east-1:dummy:application:",
+                    Object {
+                      "Ref": "BlueGreenSupportApplication7BE12B08",
+                    },
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "codedeploy:CreateDeployment",
+                "codedeploy:StopDeployment",
+                "codedeploy:GetDeployment",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codedeploy:us-east-1:dummy:deploymentgroup:",
+                    Object {
+                      "Ref": "BlueGreenSupportApplication7BE12B08",
+                    },
+                    "/teststack",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": "codedeploy:GetDeploymentConfig",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codedeploy:us-east-1:dummy:deploymentconfig:CodeDeployDefault.ECSLinear10PercentEvery1Minutes",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployEventLambdaServiceRoleDefaultPolicy323BD4FE",
+        "Roles": Array [
+          Object {
+            "Ref": "BlueGreenSupportDeploymentWaitDeploymentWaitCodeDeployEventLambdaServiceRole7F65F351",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "BlueGreenSupportGreenTargetGroup8538E6BE": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWS managed policies",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "HealthCheckIntervalSeconds": 60,
+        "HealthCheckPath": "/actuator/health",
+        "HealthyThresholdCount": 2,
+        "Port": 81,
+        "Protocol": "HTTP",
+        "TargetGroupAttributes": Array [
+          Object {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "5",
+          },
+          Object {
+            "Key": "stickiness.enabled",
+            "Value": "false",
+          },
+        ],
+        "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
     "ClusterEB0386A7": Object {
       "Properties": Object {
         "ClusterName": "teststack",
@@ -422,509 +2349,20 @@ Object {
             "Name": "LoadBalancer",
             "Value": Object {
               "Fn::GetAtt": Array [
-                "FargateServiceLBB353E155",
+                "ApiLB8D4BD609",
                 "LoadBalancerFullName",
               ],
             },
           },
         ],
-        "EvaluationPeriods": 3,
+        "EvaluationPeriods": 2,
+        "ExtendedStatistic": "p95",
         "MetricName": "TargetResponseTime",
         "Namespace": "AWS/ApplicationELB",
-        "Period": 300,
-        "Statistic": "Average",
-        "Threshold": 1000,
+        "Period": 60,
+        "Threshold": 3,
       },
       "Type": "AWS::CloudWatch::Alarm",
-    },
-    "FargateServiceECC8084D": Object {
-      "DependsOn": Array [
-        "FargateServiceLBPublicListenerECSGroupBE57E081",
-        "FargateServiceLBPublicListener4B4929CA",
-      ],
-      "Properties": Object {
-        "CapacityProviderStrategy": Array [
-          Object {
-            "CapacityProvider": "FARGATE_SPOT",
-            "Weight": 1,
-          },
-        ],
-        "Cluster": Object {
-          "Ref": "ClusterEB0386A7",
-        },
-        "DeploymentConfiguration": Object {
-          "MaximumPercent": 200,
-          "MinimumHealthyPercent": 50,
-        },
-        "DesiredCount": 3,
-        "EnableECSManagedTags": false,
-        "HealthCheckGracePeriodSeconds": 60,
-        "LoadBalancers": Array [
-          Object {
-            "ContainerName": "web",
-            "ContainerPort": 8080,
-            "TargetGroupArn": Object {
-              "Ref": "FargateServiceLBPublicListenerECSGroupBE57E081",
-            },
-          },
-        ],
-        "NetworkConfiguration": Object {
-          "AwsvpcConfiguration": Object {
-            "AssignPublicIp": "DISABLED",
-            "SecurityGroups": Array [
-              Object {
-                "Fn::GetAtt": Array [
-                  "FargateServiceSecurityGroup262B61DD",
-                  "GroupId",
-                ],
-              },
-            ],
-            "Subnets": Array [
-              Object {
-                "Ref": "VpcPrivateSubnet1Subnet536B997A",
-              },
-              Object {
-                "Ref": "VpcPrivateSubnet2Subnet3788AAA1",
-              },
-              Object {
-                "Ref": "VpcPrivateSubnet3SubnetF258B56E",
-              },
-            ],
-          },
-        },
-        "ServiceName": "teststack",
-        "TaskDefinition": Object {
-          "Ref": "FargateServiceTaskDef940E3A80",
-        },
-      },
-      "Type": "AWS::ECS::Service",
-    },
-    "FargateServiceLBB353E155": Object {
-      "DependsOn": Array [
-        "AccessLogBucketPolicyF52D2D01",
-        "AccessLogBucketDA470295",
-        "VpcPublicSubnet1DefaultRoute3DA9E72A",
-        "VpcPublicSubnet2DefaultRoute97F91067",
-        "VpcPublicSubnet3DefaultRoute4697774F",
-      ],
-      "Properties": Object {
-        "LoadBalancerAttributes": Array [
-          Object {
-            "Key": "deletion_protection.enabled",
-            "Value": "false",
-          },
-          Object {
-            "Key": "access_logs.s3.enabled",
-            "Value": "true",
-          },
-          Object {
-            "Key": "access_logs.s3.bucket",
-            "Value": Object {
-              "Ref": "AccessLogBucketDA470295",
-            },
-          },
-          Object {
-            "Key": "access_logs.s3.prefix",
-            "Value": "",
-          },
-        ],
-        "Scheme": "internet-facing",
-        "SecurityGroups": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "FargateServiceLBSecurityGroup5F444C78",
-              "GroupId",
-            ],
-          },
-        ],
-        "Subnets": Array [
-          Object {
-            "Ref": "VpcPublicSubnet1Subnet5C2D37C4",
-          },
-          Object {
-            "Ref": "VpcPublicSubnet2Subnet691E08A3",
-          },
-          Object {
-            "Ref": "VpcPublicSubnet3SubnetBE12F0B6",
-          },
-        ],
-        "Type": "application",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
-    },
-    "FargateServiceLBPublicListener4B4929CA": Object {
-      "DependsOn": Array [
-        "AccessLogBucketPolicyF52D2D01",
-        "AccessLogBucketDA470295",
-      ],
-      "Properties": Object {
-        "DefaultActions": Array [
-          Object {
-            "TargetGroupArn": Object {
-              "Ref": "FargateServiceLBPublicListenerECSGroupBE57E081",
-            },
-            "Type": "forward",
-          },
-        ],
-        "LoadBalancerArn": Object {
-          "Ref": "FargateServiceLBB353E155",
-        },
-        "Port": 80,
-        "Protocol": "HTTP",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-    },
-    "FargateServiceLBPublicListenerECSGroupBE57E081": Object {
-      "DependsOn": Array [
-        "AccessLogBucketPolicyF52D2D01",
-        "AccessLogBucketDA470295",
-      ],
-      "Properties": Object {
-        "HealthCheckIntervalSeconds": 60,
-        "HealthCheckPath": "/actuator/health",
-        "HealthyThresholdCount": 2,
-        "Port": 80,
-        "Protocol": "HTTP",
-        "TargetGroupAttributes": Array [
-          Object {
-            "Key": "stickiness.enabled",
-            "Value": "false",
-          },
-          Object {
-            "Key": "deregistration_delay.timeout_seconds",
-            "Value": "5",
-          },
-        ],
-        "TargetType": "ip",
-        "UnhealthyThresholdCount": 2,
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
-    },
-    "FargateServiceLBSecurityGroup5F444C78": Object {
-      "DependsOn": Array [
-        "AccessLogBucketPolicyF52D2D01",
-        "AccessLogBucketDA470295",
-      ],
-      "Metadata": Object {
-        "cdk_nag": Object {
-          "rules_to_suppress": Array [
-            Object {
-              "id": "AwsSolutions-EC23",
-              "reason": "Public ELB",
-            },
-          ],
-        },
-      },
-      "Properties": Object {
-        "GroupDescription": "Automatically created Security Group for ELB TestStackFargateServiceLB3A9C232E",
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow from anyone on port 80",
-            "FromPort": 80,
-            "IpProtocol": "tcp",
-            "ToPort": 80,
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "FargateServiceLBSecurityGrouptoTestStackFargateServiceSecurityGroupC3D839238080D472D38B": Object {
-      "DependsOn": Array [
-        "AccessLogBucketPolicyF52D2D01",
-        "AccessLogBucketDA470295",
-      ],
-      "Properties": Object {
-        "Description": "Load balancer to target",
-        "DestinationSecurityGroupId": Object {
-          "Fn::GetAtt": Array [
-            "FargateServiceSecurityGroup262B61DD",
-            "GroupId",
-          ],
-        },
-        "FromPort": 8080,
-        "GroupId": Object {
-          "Fn::GetAtt": Array [
-            "FargateServiceLBSecurityGroup5F444C78",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "ToPort": 8080,
-      },
-      "Type": "AWS::EC2::SecurityGroupEgress",
-    },
-    "FargateServiceSecurityGroup262B61DD": Object {
-      "Properties": Object {
-        "GroupDescription": "TestStack/FargateService/Service/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "FargateServiceSecurityGroupfromTestStackFargateServiceLBSecurityGroup775BF6268080E75523AD": Object {
-      "Properties": Object {
-        "Description": "Load balancer to target",
-        "FromPort": 8080,
-        "GroupId": Object {
-          "Fn::GetAtt": Array [
-            "FargateServiceSecurityGroup262B61DD",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "SourceSecurityGroupId": Object {
-          "Fn::GetAtt": Array [
-            "FargateServiceLBSecurityGroup5F444C78",
-            "GroupId",
-          ],
-        },
-        "ToPort": 8080,
-      },
-      "Type": "AWS::EC2::SecurityGroupIngress",
-    },
-    "FargateServiceTaskDef940E3A80": Object {
-      "Metadata": Object {
-        "cdk_nag": Object {
-          "rules_to_suppress": Array [
-            Object {
-              "id": "AwsSolutions-ECS2",
-              "reason": "Allow environment variables",
-            },
-          ],
-        },
-      },
-      "Properties": Object {
-        "ContainerDefinitions": Array [
-          Object {
-            "Cpu": 512,
-            "Environment": Array [
-              Object {
-                "Name": "SPRING_DATASOURCE_URL",
-                "Value": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "jdbc:mysql://",
-                      Object {
-                        "Fn::GetAtt": Array [
-                          "AuroraCluster23D869C0",
-                          "Endpoint.Address",
-                        ],
-                      },
-                      ":",
-                      Object {
-                        "Fn::GetAtt": Array [
-                          "AuroraCluster23D869C0",
-                          "Endpoint.Port",
-                        ],
-                      },
-                      "/fruits",
-                    ],
-                  ],
-                },
-              },
-            ],
-            "Essential": true,
-            "Image": Object {
-              "Fn::Sub": "dummy.dkr.ecr.us-east-1.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-dummy-us-east-1:99de3b2e8d07502e2e3958ff3b69f02d494482f390441d48a69003a9261bf03c",
-            },
-            "LogConfiguration": Object {
-              "LogDriver": "awslogs",
-              "Options": Object {
-                "awslogs-group": Object {
-                  "Ref": "AppLogGroup7D8CD952",
-                },
-                "awslogs-region": "us-east-1",
-                "awslogs-stream-prefix": "service",
-              },
-            },
-            "Memory": 1024,
-            "Name": "web",
-            "PortMappings": Array [
-              Object {
-                "ContainerPort": 8080,
-                "Protocol": "tcp",
-              },
-            ],
-            "Secrets": Array [
-              Object {
-                "Name": "SPRING_DATASOURCE_USERNAME",
-                "ValueFrom": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      Object {
-                        "Ref": "AuroraSecret41E6E877",
-                      },
-                      ":username::",
-                    ],
-                  ],
-                },
-              },
-              Object {
-                "Name": "SPRING_DATASOURCE_PASSWORD",
-                "ValueFrom": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      Object {
-                        "Ref": "AuroraSecret41E6E877",
-                      },
-                      ":password::",
-                    ],
-                  ],
-                },
-              },
-            ],
-          },
-        ],
-        "Cpu": "512",
-        "ExecutionRoleArn": Object {
-          "Fn::GetAtt": Array [
-            "FargateServiceTaskDefExecutionRole9194820E",
-            "Arn",
-          ],
-        },
-        "Family": "teststack",
-        "Memory": "1024",
-        "NetworkMode": "awsvpc",
-        "RequiresCompatibilities": Array [
-          "FARGATE",
-        ],
-        "TaskRoleArn": Object {
-          "Fn::GetAtt": Array [
-            "FargateServiceTaskDefTaskRole8CDCF85E",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::ECS::TaskDefinition",
-    },
-    "FargateServiceTaskDefExecutionRole9194820E": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "ecs-tasks.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "FargateServiceTaskDefExecutionRoleDefaultPolicy827E7CA2": Object {
-      "Metadata": Object {
-        "cdk_nag": Object {
-          "rules_to_suppress": Array [
-            Object {
-              "applies_to": Array [
-                "Resource::*",
-              ],
-              "id": "AwsSolutions-IAM5",
-              "reason": "Allow ecr:GetAuthorizationToken",
-            },
-          ],
-        },
-      },
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:GetDownloadUrlForLayer",
-                "ecr:BatchGetImage",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:",
-                    Object {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":ecr:us-east-1:dummy:repository/cdk-hnb659fds-container-assets-dummy-us-east-1",
-                  ],
-                ],
-              },
-            },
-            Object {
-              "Action": "ecr:GetAuthorizationToken",
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            Object {
-              "Action": Array [
-                "logs:CreateLogStream",
-                "logs:PutLogEvents",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "AppLogGroup7D8CD952",
-                  "Arn",
-                ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "secretsmanager:GetSecretValue",
-                "secretsmanager:DescribeSecret",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Ref": "AuroraSecret41E6E877",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "FargateServiceTaskDefExecutionRoleDefaultPolicy827E7CA2",
-        "Roles": Array [
-          Object {
-            "Ref": "FargateServiceTaskDefExecutionRole9194820E",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "FargateServiceTaskDefTaskRole8CDCF85E": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "ecs-tasks.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::IAM::Role",
     },
     "HealthAlarm371A639B": Object {
       "Properties": Object {
@@ -977,7 +2415,7 @@ Object {
         "Code": Object {
           "Handler": "index.handler",
           "S3Bucket": "cdk-hnb659fds-assets-dummy-us-east-1",
-          "S3Key": "fee4831da47b606b7939f26c3d2c08d3be03f758f9b0b2bf7a0f1d4439aff699.zip",
+          "S3Key": "5f378cedb4a089a8cf4496cb6ab160c882b2f7e2706c3000c6a6d9c81408c487.zip",
         },
         "ExecutionRoleArn": Object {
           "Fn::GetAtt": Array [
@@ -988,6 +2426,7 @@ Object {
         "Name": "teststack",
         "RunConfig": Object {
           "EnvironmentVariables": Object {
+            "threadCount": "20",
             "url": Object {
               "Fn::Join": Array [
                 "",
@@ -995,7 +2434,7 @@ Object {
                   "http://",
                   Object {
                     "Fn::GetAtt": Array [
-                      "FargateServiceLBB353E155",
+                      "ApiLB8D4BD609",
                       "DNSName",
                     ],
                   },
@@ -1114,7 +2553,7 @@ Object {
         "Namespace": "CloudWatchSynthetics",
         "Period": 300,
         "Statistic": "Average",
-        "Threshold": 1000,
+        "Threshold": 5000,
       },
       "Type": "AWS::CloudWatch::Alarm",
     },

@@ -1,8 +1,7 @@
 import { CfnOutput } from 'aws-cdk-lib';
 import { BuildSpec, Cache } from 'aws-cdk-lib/aws-codebuild';
-import { BlockPublicAccess, Bucket, BucketEncryption } from 'aws-cdk-lib/aws-s3';
+import { Bucket } from 'aws-cdk-lib/aws-s3';
 import { CodeBuildStep, CodePipelineSource } from 'aws-cdk-lib/pipelines';
-import { Construct } from 'constructs';
 
 export interface SoapUITestProps {
   source: CodePipelineSource;
@@ -10,15 +9,11 @@ export interface SoapUITestProps {
   mavenOpts?: string;
   mavenArgs?: string;
   endpoint: CfnOutput;
+  cacheBucket?: Bucket;
 }
 
 export class SoapUITest extends CodeBuildStep {
-  constructor(scope: Construct, id: string, props: SoapUITestProps) {
-    const cacheBucket = new Bucket(scope, `${id}CacheBucket`, {
-      encryption: BucketEncryption.S3_MANAGED,
-      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-      enforceSSL: true,
-    });
+  constructor(id: string, props: SoapUITestProps) {
     const stepProps = {
       envFromCfnOutputs: {
         ENDPOINT: props.endpoint,
@@ -42,9 +37,9 @@ export class SoapUITest extends CodeBuildStep {
             commands: ['mvn ${MAVEN_ARGS} soapui:test -Dsoapui.endpoint=${ENDPOINT}'],
           },
         },
-        cache: {
+        cache: props.cacheBucket ? {
           paths: ['/root/.m2/**/*'],
-        },
+        } : undefined,
         reports: {
           e2e: {
             'files': ['target/soapui-reports/*.xml'],
@@ -53,7 +48,7 @@ export class SoapUITest extends CodeBuildStep {
         },
         version: '0.2',
       }),
-      cache: Cache.bucket(cacheBucket),
+      cache: props.cacheBucket ? Cache.bucket(props.cacheBucket) : undefined,
     };
     super(id, stepProps);
   }

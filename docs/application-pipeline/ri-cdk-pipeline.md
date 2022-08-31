@@ -279,20 +279,9 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
 
     The `DeploymentStack` construct is then instantiated for each environment:
 
-    ```typescript
-    export const constants = {
-        APP_NAME: 'fruit-api',
-        TOOLCHAIN_ENV: { account: '000000000', region: 'us-west-2' },
-        BETA_ENV: { account: '111111111', region: 'us-west-2' },
-        GAMMA_ENV: { account: '222222222', region: 'us-west-2' },
-        PROD_ENV: { account: '333333333', region: 'us-west-2' },
-    } as const;
-
-    const betaStage = new DeploymentStage(this, 'Beta', {
-      env: constants.BETA_ENV,
-    });
-    pipeline.addStage(betaStage);
-    ```
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/infrastructure/src/pipeline.ts) block:Beta
+    <!--/codeinclude-->
 
 ???+ required "Database Deploy"
     Spring Boot is configured to run [Liquibase](https://www.liquibase.org/) on startup. This reads the configuration in `src/main/resources/db/changelog/db.changelog-master.yml` to define the tables and initial data for the database:
@@ -303,7 +292,7 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
 
 
 ???+ required "Deploy Software"
-    The *Launch Environment* action above creates a new [Amazon ECS Task Definition](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html) for the new docker image and then updates the Amazon ECS Service to use the new Task Definition. for the new docker image and then updates the Amazon ECS Service to use the new Task Definition. for the new docker image and then updates the Amazon ECS Service to use the new Task Definition.
+    The *Launch Environment* action above creates a new [Amazon ECS Task Definition](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html) for the new docker image and then updates the Amazon ECS Service to use the new Task Definition.
 
 ???+ required "Integration Tests"
     Integration tests are preformed during the *Build Source* action. They are defined with with [SoapUI](https://www.soapui.org/) in `fruit-api-soapui-project.xml`. They are executed by [Maven](https://maven.apache.org/) in the `integration-test` phase using plugins in `pom.xml`.  Spring Boot is configure to start a local instance of the application with an H2 database during the `pre-integration-test` phase and then to terminate on the `post-integration-test` phase.  The results of the unit tests are uploaded to [AWS Code Build Test Reports](https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html) to track over time.
@@ -373,20 +362,9 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
 
     The `DeploymentStack` construct is then instantiated for each environment:
 
-    ```typescript
-    export const constants = {
-        APP_NAME: 'fruit-api',
-        TOOLCHAIN_ENV: { account: '000000000', region: 'us-west-2' },
-        BETA_ENV: { account: '111111111', region: 'us-west-2' },
-        GAMMA_ENV: { account: '222222222', region: 'us-west-2' },
-        PROD_ENV: { account: '333333333', region: 'us-west-2' },
-    } as const;
-
-    const gammaStage = new DeploymentStage(this, 'Gamma', {
-      env: constants.GAMMA_ENV,
-    });
-    pipeline.addStage(gammaStage);
-    ```
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/infrastructure/src/pipeline.ts) block:Gamma
+    <!--/codeinclude-->
 
 ???+ required "Database Deploy"
     Spring Boot is configured to run [Liquibase](https://www.liquibase.org/) on startup. This reads the configuration in `src/main/resources/db/changelog/db.changelog-master.yml` to define the tables and initial data for the database:
@@ -396,7 +374,7 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     <!--/codeinclude-->
 
 ???+ required "Deploy Software"
-    The *Launch Environment* action above creates a new [Amazon ECS Task Definition](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html) for the new docker image and then updates the Amazon ECS Service to use the new Task Definition. for the new docker image and then updates the Amazon ECS Service to use the new Task Definition. for the new docker image and then updates the Amazon ECS Service to use the new Task Definition.
+    The *Launch Environment* action above creates a new [Amazon ECS Task Definition](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html) for the new docker image and then updates the Amazon ECS Service to use the new Task Definition.
 
 ???+ required "Application Monitoring & Logging"
     [Amazon ECS](https://aws.amazon.com/ecs/) uses [Amazon CloudWatch Metrics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html) and [Amazon CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html) for observability by default.
@@ -422,17 +400,21 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
 ## Prod
 
 ???+ required "Optional Approval"
-    A manual approval step is added to the end of the `Beta` and `Gamma` stages. The step is added at the end to keep the environment in a stable state while manual testing is performed. Once the step is approved, the pipeline continues execution to the next stage.
+    A manual approval step is added to the end of the `Gamma` stage. The step is added at the end to keep the environment in a stable state while manual testing is performed. Once the step is approved, the pipeline continues execution to the next stage.
 
     ```typescript
-        pipeline.addStage(betaStage, {
-            post: [
-                new SoapUITest(this, 'E2E Test', {
-                    source: source.codePipelineSource,
-                    endpoint: betaStage.apiUrl,
+        new PipelineEnvironment(pipeline, Gamma, (deployment, stage) => {
+            stage.addPost(
+                new JMeterTest('Performance Test', {
+                source: source.codePipelineSource,
+                endpoint: deployment.apiUrl,
+                threads: 300,
+                duration: 300,
+                throughput: 6000,
+                cacheBucket,
                 }),
-                new ManualApprovalStep('PromoteFromBeta'),
-            ],
+                new ManualApprovalStep('PromoteFromGamma'),
+            );
         });
     ```
 
@@ -444,7 +426,81 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     <!--/codeinclude-->
 
 ???+ required "Progressive Deployment"
-    `TODO: add blue/green deployment with CodeDeploy`
+    Progressive deployment is implemented with [AWS CodeDeploy](https://aws.amazon.com/codedeploy/) for ECS. CodeDeploy performs a [linear blue/green](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/deployment-type-bluegreen.html) by deploying the new task definition as a new task with a separate target group and then shifting 10% of traffic every minute until all traffic is shifted. A CloudWatch alarm is monitored by CodeDeploy and an automatic rollback is triggered if the alarm exceeds the threshold.
+
+    ![](assets/traffic-shift.png)
+
+    Implementation of this type deployment presents challenges due to the following limitations:
+
+    * [aws/aws-cdk #1559](https://github.com/aws/aws-cdk/issues/1559) - Lack of support for Blue/Green ECS Deployment in CDK. This was dependend on [aws-cloudformation/cloudformation-coverage-roadmap #37](https://github.com/aws-cloudformation/cloudformation-coverage-roadmap/issues/37) and [aws-cloudformation/cloudformation-coverage-roadmap #483)(https://github.com/aws-cloudformation/cloudformation-coverage-roadmap/issues/483) which have been fixed.
+    * [aws/aws-cdk #19163](https://github.com/aws/aws-cdk/issues/19163) - CDK Pipelines aren't intended to be used with CodeDeploy actions.
+    * [AWS CloudFormation User Guide](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/blue-green.html#blue-green-considerations) - The use of `AWS::CodeDeploy::BlueGreen` hooks and `AWS::CodeDeployBlueGreen` restricts the types of changes that can be made. Additionally, you can't use auto-rollback capabilities of CodeDeploy.
+    * [aws/aws-cdk #5170](https://github.com/aws/aws-cdk/issues/5170) - CDK doesn't support defining CloudFormation rollback triggers. This rules out CloudFormation based blue/green deployments.
+
+    The solution was to create an [AWS CloudFormation Custom Resource](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources.html) to handle the creation of a CodeDeploy deployment.
+
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/infrastructure/src/blue-green-deploy/lambda/index.ts) block:onEvent
+    <!--/codeinclude-->
+
+    The custom resource is then created in CDK:
+
+    ```typescript
+    const deployment = new BlueGreenEcsDeployment(this, 'DeploymentWait', {
+      deploymentGroup: deploymentGroup,
+      taskDefinition: service.taskDefinition,
+      timeout: Duration.minutes(60),
+    });
+
+    new CfnOutput(this, 'DeploymentId', {
+      value: deployment.deploymentId,
+    }).overrideLogicalId('DeploymentId');
+    ```
+
+    Deployments are made incrementally across regions using the [CDK Pipeline - Wave](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.pipelines.Wave.html) construct. Each wave contains a list of regions to deploy to in parallel. One wave must fully complete before the next wave starts. The diagram below shows how each wave deploys to 2 regions at a time.
+
+    ![](assets/prod-waves.png)
+
+    Environments are configured in CDK with the list of waves:
+
+    ```typescript
+    // BETA environment is 1 wave with 1 region
+    export const Beta: EnvironmentConfig = {
+        name: 'Beta',
+        account: accounts.beta,
+        waves: [
+            ['us-west-2'],
+        ],
+    };
+
+    // GAMMA environment is 1 wave with 2 regions
+    export const Gamma: EnvironmentConfig = {
+        name: 'Gamma',
+        account: accounts.gamma,
+        waves: [
+            ['us-west-2', 'us-east-1'],
+        ],
+    };
+
+    // PROD environment is 3 wave with 2 regions each wave
+    export const Prod: EnvironmentConfig = {
+        name: 'Prod',
+        account: accounts.production,
+        waves: [
+            ['us-west-2', 'us-east-1'],
+            ['eu-central-1', 'eu-west-1'],
+            ['ap-south-1', 'ap-southeast-2'],
+        ],
+    };
+    ```
+
+    A `PipelineEnvironment` class is responsible for loading the `EnvironmentConfig` into CodePipeline stages:
+
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/infrastructure/src/pipeline.ts) block:PipelineEnvironment
+    <!--/codeinclude-->
+    
+
 
 ???+ required "Synthetic Tests"
     [Amazon CloudWatch Synthetics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html) is used to continuously deliver traffic to the application and assert that requests are successful and responses are received within a given threshold. The canary is defined via CDK:

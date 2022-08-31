@@ -1,6 +1,5 @@
 import { App, Aspects } from 'aws-cdk-lib';
 import { Annotations, Match, Template } from 'aws-cdk-lib/assertions';
-import { AssetImage } from 'aws-cdk-lib/aws-ecs';
 import { SynthesisMessage } from 'aws-cdk-lib/cx-api';
 import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
 import { DeploymentStack } from '../src/deployment';
@@ -15,10 +14,9 @@ describe('Deployment', () => {
   let app: App;
 
   beforeEach(() => {
-    app = new App();
+    const appName = 'fruit-api';
+    app = new App({ context: { appName } });
     stack = new DeploymentStack(app, 'TestStack', {
-      image: new AssetImage('.'),
-    }, {
       env: {
         account: 'dummy',
         region: 'us-east-1',
@@ -29,14 +27,14 @@ describe('Deployment', () => {
     // Suppress CDK-NAG for public ELB
     NagSuppressions.addResourceSuppressionsByPath(
       stack,
-      '/TestStack/FargateService/LB/SecurityGroup/Resource',
+      '/TestStack/Api/LB/SecurityGroup/Resource',
       [{ id: 'AwsSolutions-EC23', reason: 'Public ELB' }],
     );
 
     // Suppress CDK-NAG for TaskDefinition role and ecr:GetAuthorizationToken permission
     NagSuppressions.addResourceSuppressionsByPath(
       stack,
-      '/TestStack/FargateService/TaskDef/ExecutionRole/DefaultPolicy/Resource',
+      '/TestStack/Api/TaskDef/ExecutionRole/DefaultPolicy/Resource',
       [{ id: 'AwsSolutions-IAM5', reason: 'Allow ecr:GetAuthorizationToken', appliesTo: ['Resource::*'] }],
     );
 
@@ -50,7 +48,7 @@ describe('Deployment', () => {
     // Suppress CDK-NAG for ECS Task environment variables for database host/port
     NagSuppressions.addResourceSuppressionsByPath(
       stack,
-      '/TestStack/FargateService/TaskDef/Resource',
+      '/TestStack/Api/TaskDef/Resource',
       [{ id: 'AwsSolutions-ECS2', reason: 'Allow environment variables' }],
     );
 
@@ -67,6 +65,7 @@ describe('Deployment', () => {
       '/TestStack/AuroraCluster/Resource',
       [
         { id: 'AwsSolutions-RDS6', reason: 'IAM authentication not supported on Serverless v1' },
+        { id: 'AwsSolutions-RDS10', reason: 'Disable delete protection to simplify cleanup of Reference Implementation' },
         { id: 'AwsSolutions-RDS11', reason: 'Custom port not supported on Serverless v1' },
         { id: 'AwsSolutions-RDS14', reason: 'Backtrack not supported on Serverless v1' },
         { id: 'AwsSolutions-RDS16', reason: 'CloudWatch Log Export not supported on Serverless v1' },
@@ -87,6 +86,30 @@ describe('Deployment', () => {
       stack,
       '/TestStack/SyntheticTest/SyntheticTest/ServiceRole/Resource',
       [{ id: 'AwsSolutions-IAM5', reason: 'Allow resource:*' }],
+    );
+    NagSuppressions.addResourceSuppressionsByPath(
+      stack,
+      '/TestStack/BlueGreenSupport',
+      [
+        {
+          id: 'AwsSolutions-IAM4',
+          reason: 'Allow AWS managed policies',
+          appliesTo: [
+            'Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS',
+            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+          ],
+        },
+      ],
+      true,
+    );
+    NagSuppressions.addResourceSuppressionsByPath(
+      stack,
+      '/TestStack/BlueGreenSupport/DeploymentWait/CodeDeploymentProvider',
+      [
+        { id: 'AwsSolutions-IAM5', reason: 'Allow AWS wildcard on sub-resources' },
+        { id: 'AwsSolutions-L1', reason: 'Allow provider framework older runtime version' },
+      ],
+      true,
     );
   });
 

@@ -1,5 +1,13 @@
 {
   "tasks": {
+    "bootstrap": {
+      "name": "bootstrap",
+      "steps": [
+        {
+          "exec": "npx ts-node -P tsconfig.json --prefer-ts-exts  infrastructure/src/bootstrap.ts"
+        }
+      ]
+    },
     "build": {
       "name": "build",
       "description": "Full release build",

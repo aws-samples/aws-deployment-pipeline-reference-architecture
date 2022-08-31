@@ -13,7 +13,8 @@ describe('Pipeline', () => {
   let app: App;
 
   beforeEach(() => {
-    app = new App();
+    const appName = 'fruit-api';
+    app = new App({ context: { appName } });
     stack = new PipelineStack(app, 'TestStack', {
       env: {
         account: 'dummy',

@@ -1,0 +1,20 @@
+{
+  "name": "codedeploy-waiter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-codedeploy": "^3.137.0",
+    "@types/aws-lambda": "^8.10.101",
+    "yaml": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.23",
+    "typescript": "^4.0.2"
+  }
+}

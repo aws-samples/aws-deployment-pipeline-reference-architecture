@@ -1,25 +1,64 @@
-import { Stack, StackProps, Stage, StageProps, Tags } from 'aws-cdk-lib';
+import { CfnOutput, Environment, Stack, StackProps, Stage, Tags } from 'aws-cdk-lib';
 import { BuildSpec } from 'aws-cdk-lib/aws-codebuild';
-import { AssetImage } from 'aws-cdk-lib/aws-ecs';
-import { CodePipeline, CodeBuildStep, ManualApprovalStep } from 'aws-cdk-lib/pipelines';
+import { BlockPublicAccess, Bucket, BucketEncryption } from 'aws-cdk-lib/aws-s3';
+import { CodePipeline, CodeBuildStep, ManualApprovalStep, StageDeployment, Wave } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
 
+import { Account, Accounts } from './accounts';
 import { CodeCommitSource } from './codecommit-source';
 import { CodeGuruReviewCheck, CodeGuruReviewFilter } from './codeguru-review-check';
-import { TrivyScan } from './trivy-scan';
-import { constants } from './constants';
 import { DeploymentStack } from './deployment';
 import { JMeterTest } from './jmeter-test';
 
 import { MavenBuild } from './maven-build';
 import { SoapUITest } from './soapui-test';
+import { TrivyScan } from './trivy-scan';
+
+
+export const accounts = Accounts.load();
+
+// BETA environment is 1 wave with 1 region
+export const Beta: EnvironmentConfig = {
+  name: 'Beta',
+  account: accounts.beta,
+  waves: [
+    ['us-west-2'],
+  ],
+};
+
+// GAMMA environment is 1 wave with 2 regions
+export const Gamma: EnvironmentConfig = {
+  name: 'Gamma',
+  account: accounts.gamma,
+  waves: [
+    ['us-west-2', 'us-east-1'],
+  ],
+};
+
+// PROD environment is 3 wave with 2 regions each wave
+export const Prod: EnvironmentConfig = {
+  name: 'Prod',
+  account: accounts.production,
+  waves: [
+    ['us-west-2', 'us-east-1'],
+    ['eu-central-1', 'eu-west-1'],
+    ['ap-south-1', 'ap-southeast-2'],
+  ],
+};
 
 
 export class PipelineStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const source = new CodeCommitSource(this, 'Source', { repositoryName: constants.APP_NAME });
+    const appName = this.node.tryGetContext('appName');
+    const source = new CodeCommitSource(this, 'Source', { repositoryName: appName });
+
+    const cacheBucket = new Bucket(this, 'CacheBucket', {
+      encryption: BucketEncryption.S3_MANAGED,
+      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+      enforceSSL: true,
+    });
 
     const codeGuruSecurity = new CodeGuruReviewCheck('CodeGuruSecurity', {
       source: source.codePipelineSource,
@@ -33,12 +72,13 @@ export class PipelineStack extends Stack {
     });
     const trivyScan = new TrivyScan('TrivyScan', {
       source: source.codePipelineSource,
-      severity: ['CRITICAL','HIGH'],
-      checks: ['vuln','config','secret'],
-    })
+      severity: ['CRITICAL', 'HIGH'],
+      checks: ['vuln', 'config', 'secret'],
+    });
 
-    const buildAction = new MavenBuild(this, 'Build', {
+    const buildAction = new MavenBuild('Build', {
       source: source.codePipelineSource,
+      cacheBucket,
     });
 
     buildAction.addStepDependency(codeGuruQuality);
@@ -63,69 +103,95 @@ export class PipelineStack extends Stack {
       commands: [],
     });
 
-    const pipeline = new CodePipeline(this, constants.APP_NAME, {
-      pipelineName: constants.APP_NAME,
+    const pipeline = new CodePipeline(this, appName, {
+      pipelineName: appName,
       synth: synthAction,
       dockerEnabledForSynth: true,
       crossAccountKeys: true,
+      publishAssetsInParallel: false,
     });
 
 
-    const betaStage = new DeploymentStage(this, 'Beta', {
-      env: constants.BETA_ENV,
-    });
-    Tags.of(betaStage).add('Environment', 'Beta');
-    Tags.of(betaStage).add('Application', constants.APP_NAME);
-
-    pipeline.addStage(betaStage, {
-      post: [
-        new SoapUITest(this, 'E2E Test', {
+    new PipelineEnvironment(pipeline, Beta, (deployment, stage) => {
+      stage.addPost(
+        new SoapUITest('E2E Test', {
           source: source.codePipelineSource,
-          endpoint: betaStage.apiUrl,
+          endpoint: deployment.apiUrl,
+          cacheBucket,
         }),
-      ],
+      );
     });
 
-    const gammaStage = new DeploymentStage(this, 'Gamma', {
-      env: constants.GAMMA_ENV,
-    });
-    Tags.of(gammaStage).add('Environment', 'Gamma');
-    Tags.of(gammaStage).add('Application', constants.APP_NAME);
-
-    pipeline.addStage(gammaStage, {
-      post: [
-        new JMeterTest(this, 'Performance Test', {
+    new PipelineEnvironment(pipeline, Gamma, (deployment, stage) => {
+      stage.addPost(
+        new JMeterTest('Performance Test', {
           source: source.codePipelineSource,
-          endpoint: gammaStage.apiUrl,
+          endpoint: deployment.apiUrl,
           threads: 300,
           duration: 300,
           throughput: 6000,
+          cacheBucket,
         }),
-        new ManualApprovalStep('PromoteFromGamma'),
-      ],
+      );
+    }, wave => {
+      wave.addPost(
+        new ManualApprovalStep('PromoteToProd'),
+      );
     });
 
-    const prodStage = new DeploymentStage(this, 'Prod', {
-      env: constants.PROD_ENV,
-    });
-    Tags.of(prodStage).add('Environment', 'Prod')
-    Tags.of(prodStage).add('Application', constants.APP_NAME);
-    pipeline.addStage(prodStage);
+    new PipelineEnvironment(pipeline, Prod);
   }
 }
 
-class DeploymentStage extends Stage {
-  private readonly stack: DeploymentStack;
-  constructor(scope: Construct, id: string, props?: StageProps) {
-    super(scope, id, props);
-    this.stack = new DeploymentStack(this, constants.APP_NAME, {
-      image: new AssetImage('.', {
-        target: 'build'
-      }),
-    });
-  }
+type PipelineEnvironmentStageProcessor = (deployment: Deployment, stage: StageDeployment) => void;
+type PipelineEnvironmentWaveProcessor = (wave: Wave) => void;
 
-  get apiUrl() {
-    return this.stack.apiUrl;
+class PipelineEnvironment {
+  constructor(
+    pipeline: CodePipeline,
+    environment: EnvironmentConfig,
+    stagePostProcessor?: PipelineEnvironmentStageProcessor,
+    wavePostProcessor?: PipelineEnvironmentWaveProcessor) {
+    if (!environment.account?.accountId) {
+      throw new Error(`Missing accountId for environment '${environment.name}'. Do you need to update '.accounts.env'?`);
+    }
+    for (const [i, regions] of environment.waves.entries()) {
+      const wave = pipeline.addWave(`${environment.name}-${i}`);
+      for (const region of regions) {
+        const deployment = new Deployment(pipeline, environment.name, {
+          account: environment.account!.accountId!,
+          region,
+        });
+        const stage = wave.addStage(deployment);
+        if (stagePostProcessor) {
+          stagePostProcessor(deployment, stage);
+        }
+      }
+      if (wavePostProcessor) {
+        wavePostProcessor(wave);
+      }
+    }
   }
+}
+
+class Deployment extends Stage {
+  readonly apiUrl: CfnOutput;
+
+  constructor(scope: Construct, environmentName: string, env?: Environment) {
+    super(scope, `${environmentName}-${env!.region!}`, { env });
+    const appName = this.node.tryGetContext('appName');
+    const stack = new DeploymentStack(this, appName);
+    this.apiUrl = stack.apiUrl;
+
+    Tags.of(this).add('Environment', environmentName);
+    Tags.of(this).add('Application', appName);
+  }
+}
+
+type Region = string;
+type WaveRegions = Region[]
+interface EnvironmentConfig {
+  name: string;
+  account?: Account;
+  waves: WaveRegions[];
 }

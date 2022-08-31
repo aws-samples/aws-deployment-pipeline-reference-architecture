@@ -20,43 +20,17 @@ This reference implementation is intended to be used in your own accounts. By de
 1. Install prerequisite software: [Node.js](https://nodejs.org/en/)
 2. Install dependencies: `npx yarn install`
 3. Create 4 AWS Accounts: toolchain, beta, gamma, production
-4. Create a new file [infrastructure/src/constants.ts](infrastructure/src/constants.ts) from [infrastructure/src/constants.example.ts](infrastructure/src/constants.example.ts) and update with your own AWS Account IDs:
+4. Bootstrap the accounts:
 
-```typescript
-export const constants = {
-  APP_NAME: 'fruit-api',
-  TOOLCHAIN_ENV: { account: '00000000', region: 'us-west-2' },
-  BETA_ENV: { account: '111111111', region: 'us-west-2' },
-  GAMMA_ENV: { account: '222222222', region: 'us-west-2' },
-  PROD_ENV: { account: '333333333', region: 'us-west-2' },
-} as const;
+```bash
+npm run bootstrap --exec
 ```
 
-5. Bootstrap the toolchain account:
+5. Deploy the pipeline to the toolchain account:
 
 ```bash
 # Use the AWS Profile for your toolchain account
-npx cdk bootstrap aws://$TOOLCHAIN_ACCOUNT_ID/$AWS_REGION
-```
-
-6. Bootstrap the environment accounts:
-
-```bash
-# Use the AWS Profile for your beta account
-npx cdk bootstrap --trust $TOOLCHAIN_ACCOUNT_ID aws://$BETA_ACCOUNT_ID/$AWS_REGION
-
-# Use the AWS Profile for your gamma account
-npx cdk bootstrap --trust $TOOLCHAIN_ACCOUNT_ID aws://$GAMMA_ACCOUNT_ID/$AWS_REGION
-
-# Use the AWS Profile for your production account
-npx cdk bootstrap --trust $TOOLCHAIN_ACCOUNT_ID aws://$PROD_ACCOUNT_ID/$AWS_REGION
-```
-
-7. Deploy the pipeline to the toolchain account:
-
-```bash
-# Use the AWS Profile for your toolchain account
-npx cdk deploy
+npx cdk deploy --all
 ```
 
 8. (OPTIONAL) If you'd like to make changes and deploy with the pipeline, you'll need to [setup Git for AWS CodeCommit](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up.html) and then clone the new CodeCommit repository:

@@ -1,26 +1,27 @@
 import { App, Tags } from 'aws-cdk-lib';
-import { AssetImage } from 'aws-cdk-lib/aws-ecs';
-import { constants } from './constants';
 import { DeploymentStack } from './deployment';
-import { PipelineStack } from './pipeline';
+import { PipelineStack, accounts } from './pipeline';
 
-const app = new App();
+
+const appName = 'fruit-api';
+const app = new App({ context: { appName } });
 
 if (app.node.tryGetContext('deployMode') == 'local') {
-  new DeploymentStack(app, `Dev-${constants.APP_NAME}`, {
-    image: new AssetImage('.'),
-  }, {
+  new DeploymentStack(app, `Dev-${appName}`, {
     env: {
       account: process.env.CDK_DEFAULT_ACCOUNT,
       region: process.env.CDK_DEFAULT_REGION,
     },
   });
 } else {
-  new PipelineStack(app, `${constants.APP_NAME}-pipeline`, {
-    env: constants.TOOLCHAIN_ENV,
+  new PipelineStack(app, `${appName}-pipeline`, {
+    env: {
+      account: accounts.toolchain!.accountId,
+      region: process.env.CDK_DEFAULT_REGION,
+    },
   });
 }
 
-Tags.of(app).add('Application', constants.APP_NAME);
+Tags.of(app).add('Application', appName);
 
 app.synth();

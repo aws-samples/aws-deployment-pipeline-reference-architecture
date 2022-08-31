@@ -1,7 +1,6 @@
 import { BuildSpec, Cache } from 'aws-cdk-lib/aws-codebuild';
-import { BlockPublicAccess, Bucket, BucketEncryption } from 'aws-cdk-lib/aws-s3';
+import { Bucket } from 'aws-cdk-lib/aws-s3';
 import { CodeBuildStep, CodePipelineSource } from 'aws-cdk-lib/pipelines';
-import { Construct } from 'constructs';
 
 export interface MavenBuildProps {
   source: CodePipelineSource;
@@ -9,14 +8,10 @@ export interface MavenBuildProps {
   mavenOpts?: string;
   mavenArgs?: string;
   mavenGoal?: string;
+  cacheBucket?: Bucket;
 }
 export class MavenBuild extends CodeBuildStep {
-  constructor(scope: Construct, id: string, props: MavenBuildProps) {
-    const cacheBucket = new Bucket(scope, `${id}CacheBucket`, {
-      encryption: BucketEncryption.S3_MANAGED,
-      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-      enforceSSL: true,
-    });
+  constructor(id: string, props: MavenBuildProps) {
     const stepProps = {
       input: props.source,
       commands: [],
@@ -37,9 +32,9 @@ export class MavenBuild extends CodeBuildStep {
             commands: [`mvn \${MAVEN_ARGS} clean ${props.mavenGoal || 'verify'}`],
           },
         },
-        cache: {
+        cache: props.cacheBucket ? {
           paths: ['/root/.m2/**/*'],
-        },
+        } : undefined,
         reports: {
           unit: {
             'files': ['target/surefire-reports/*.xml'],
@@ -52,7 +47,7 @@ export class MavenBuild extends CodeBuildStep {
         },
         version: '0.2',
       }),
-      cache: Cache.bucket(cacheBucket),
+      cache: props.cacheBucket ? Cache.bucket(props.cacheBucket) : undefined,
       primaryOutputDirectory: '.',
     };
     super(id, stepProps);

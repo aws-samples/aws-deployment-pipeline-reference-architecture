@@ -15,12 +15,12 @@ export class TrivyScan extends CodeBuildStep {
       '--exit-code',
       '1',
       '--no-progress',
-    ]
-    if(props.severity) {
+    ];
+    if (props.severity) {
       trivyArgs.push('--severity');
       trivyArgs.push(props.severity.join(','));
     }
-    if(props.checks) {
+    if (props.checks) {
       trivyArgs.push('--security-checks');
       trivyArgs.push(props.checks.join(','));
     }
@@ -32,13 +32,13 @@ export class TrivyScan extends CodeBuildStep {
         phases: {
           install: {
             commands: [
-              `curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${props.trivyVersion || ''}`
-            ]
+              `curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${props.trivyVersion || ''}`,
+            ],
           },
           build: {
             commands: [
-              `trivy ${trivyArgs.join(' ')} .`
-            ]
+              `trivy ${trivyArgs.join(' ')} .`,
+            ],
           },
         },
         version: '0.2',

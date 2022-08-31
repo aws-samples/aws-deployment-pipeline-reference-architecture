@@ -1,27 +1,26 @@
-import { CfnOutput, Duration, Stack, StackProps } from 'aws-cdk-lib';
+import { CfnOutput, Duration, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import { Alarm, AlarmRule, ComparisonOperator, CompositeAlarm } from 'aws-cdk-lib/aws-cloudwatch';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import { FlowLog, FlowLogResourceType, Port } from 'aws-cdk-lib/aws-ec2';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
-import { AwsLogDriver, Secret } from 'aws-cdk-lib/aws-ecs';
+import { AssetImage, AwsLogDriver, Secret } from 'aws-cdk-lib/aws-ecs';
 import * as ecs_patterns from 'aws-cdk-lib/aws-ecs-patterns';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Credentials, DatabaseClusterEngine, DatabaseSecret, ServerlessCluster } from 'aws-cdk-lib/aws-rds';
 import { BlockPublicAccess, Bucket, BucketEncryption } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
+import { BlueGreenEcsSupport, BlueGreenEcsSupportProps } from '../blue-green-deploy';
 import { SyntheticTest } from './synthetic';
-
-export class DeploymentProps {
-  readonly image!: ecs.ContainerImage;
-}
 
 export class DeploymentStack extends Stack {
   public readonly apiUrl: CfnOutput;
 
-  constructor(scope: Construct, id: string, props: DeploymentProps, stackProps?: StackProps) {
+  constructor(scope: Construct, id: string, stackProps?: StackProps) {
     super(scope, id, stackProps);
 
-    const appName = Stack.of(this).stackName.toLowerCase();
+    const image = new AssetImage('.', { target: 'build' });
+
+    const appName = Stack.of(this).stackName.toLowerCase().replace(`-${Stack.of(this).region}-`, '-');
     const vpc = new ec2.Vpc(this, 'Vpc', {
       maxAzs: 3,
     });
@@ -37,7 +36,7 @@ export class DeploymentStack extends Stack {
       vpc,
       credentials: Credentials.fromSecret(dbSecret),
       defaultDatabaseName: dbName,
-      deletionProtection: true,
+      deletionProtection: false,
       clusterIdentifier: appName,
     });
 
@@ -49,10 +48,10 @@ export class DeploymentStack extends Stack {
     const appLogGroup = new LogGroup(this, 'AppLogGroup', {
       retention: RetentionDays.ONE_WEEK,
       logGroupName: `/aws/ecs/service/${appName}`,
+      removalPolicy: RemovalPolicy.DESTROY,
     });
-    const service = new ecs_patterns.ApplicationLoadBalancedFargateService(this, 'FargateService', {
+    const service = new ecs_patterns.ApplicationLoadBalancedFargateService(this, 'Api', {
       cluster,
-      serviceName: appName,
       capacityProviderStrategies: [
         {
           capacityProvider: 'FARGATE_SPOT',
@@ -65,7 +64,7 @@ export class DeploymentStack extends Stack {
       cpu: 512,
       memoryLimitMiB: 1024,
       taskImageOptions: {
-        image: props.image,
+        image,
         containerPort: 8080,
         family: appName,
         logDriver: AwsLogDriver.awsLogs({
@@ -101,8 +100,11 @@ export class DeploymentStack extends Stack {
 
     const elbResponseTime = new Alarm(this, 'ElbResponseTimeAlarm', {
       alarmName: `${appName}-ElbResponseTime`,
-      metric: service.loadBalancer.metricTargetResponseTime(),
-      evaluationPeriods: 3,
+      metric: service.loadBalancer.metricTargetResponseTime({
+        period: Duration.minutes(1),
+        statistic: 'p95',
+      }),
+      evaluationPeriods: 2,
       threshold: 3, // seconds
       comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
     });
@@ -110,8 +112,11 @@ export class DeploymentStack extends Stack {
     const syntheticTest = new SyntheticTest(this, 'SyntheticTest', {
       appName,
       url: `http://${service.listener.loadBalancer.loadBalancerDnsName}`,
+      threadCount: 20,
+      schedule: Duration.minutes(5),
     });
-    new CompositeAlarm(this, 'HealthAlarm', {
+    syntheticTest.node.addDependency(service.service);
+    const healthAlarm = new CompositeAlarm(this, 'HealthAlarm', {
       compositeAlarmName: `${appName}-Health`,
       alarmRule: AlarmRule.anyOf(
         elbResponseTime,
@@ -119,6 +124,10 @@ export class DeploymentStack extends Stack {
         syntheticTest.durationAlarm,
       ),
     });
+
+    new BlueGreenEcsSupport(this, 'BlueGreenSupport',
+      BlueGreenEcsSupportProps.from(service, { healthAlarms: [healthAlarm] }),
+    );
 
     this.apiUrl = new CfnOutput(this, 'ApiUrl', {
       value: `http://${service.listener.loadBalancer.loadBalancerDnsName}`,

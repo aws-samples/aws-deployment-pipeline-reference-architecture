@@ -91,6 +91,10 @@
       "type": "runtime"
     },
     {
+      "name": "@aws-sdk/client-codedeploy",
+      "type": "runtime"
+    },
+    {
       "name": "@aws-sdk/client-codeguru-reviewer",
       "type": "runtime"
     },
@@ -99,7 +103,23 @@
       "type": "runtime"
     },
     {
+      "name": "@aws-sdk/client-sts",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/credential-providers",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/shared-ini-file-loader",
+      "type": "runtime"
+    },
+    {
       "name": "@types/aws-lambda",
+      "type": "runtime"
+    },
+    {
+      "name": "@types/prompts",
       "type": "runtime"
     },
     {
@@ -110,6 +130,14 @@
     {
       "name": "constructs",
       "version": "^10.0.5",
+      "type": "runtime"
+    },
+    {
+      "name": "prompts",
+      "type": "runtime"
+    },
+    {
+      "name": "yaml",
       "type": "runtime"
     }
   ],

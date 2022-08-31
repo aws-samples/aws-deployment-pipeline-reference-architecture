@@ -1,8 +1,7 @@
 import { CfnOutput } from 'aws-cdk-lib';
 import { BuildSpec, Cache } from 'aws-cdk-lib/aws-codebuild';
-import { BlockPublicAccess, Bucket, BucketEncryption } from 'aws-cdk-lib/aws-s3';
+import { Bucket } from 'aws-cdk-lib/aws-s3';
 import { CodeBuildStep, CodePipelineSource } from 'aws-cdk-lib/pipelines';
-import { Construct } from 'constructs';
 
 export interface JMeterTestProps {
   source: CodePipelineSource;
@@ -13,15 +12,11 @@ export interface JMeterTestProps {
   threads: number;
   duration: number;
   throughput: number;
+  cacheBucket?: Bucket;
 }
 
 export class JMeterTest extends CodeBuildStep {
-  constructor(scope: Construct, id: string, props: JMeterTestProps) {
-    const cacheBucket = new Bucket(scope, `${id}CacheBucket`, {
-      encryption: BucketEncryption.S3_MANAGED,
-      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-      enforceSSL: true,
-    });
+  constructor(id: string, props: JMeterTestProps) {
     const stepProps = {
       envFromCfnOutputs: {
         ENDPOINT: props.endpoint,
@@ -41,15 +36,14 @@ export class JMeterTest extends CodeBuildStep {
               java: (props.javaRuntime || 'corretto11'),
             },
           },
-          build: {
-            commands: [`mvn \${MAVEN_ARGS} compile jmeter:jmeter jmeter:results -Djmeter.endpoint=\${ENDPOINT} -Djmeter.threads=${props.threads} -Djmeter.duration=${props.duration} -Djmeter.throughput=${props.throughput}`],          },
+          build: { commands: [`mvn \${MAVEN_ARGS} compile jmeter:jmeter jmeter:results -Djmeter.endpoint=\${ENDPOINT} -Djmeter.threads=${props.threads} -Djmeter.duration=${props.duration} -Djmeter.throughput=${props.throughput}`] },
         },
-        cache: {
+        cache: props.cacheBucket ? {
           paths: ['/root/.m2/**/*'],
-        },
+        } : undefined,
         version: '0.2',
       }),
-      cache: Cache.bucket(cacheBucket),
+      cache: props.cacheBucket ? Cache.bucket(props.cacheBucket) : undefined,
     };
     super(id, stepProps);
   }

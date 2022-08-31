@@ -15,12 +15,23 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     deployMode: 'pipeline',
   },
 
+  scripts: {
+    bootstrap: 'npx ts-node -P tsconfig.json --prefer-ts-exts  infrastructure/src/bootstrap.ts',
+  },
+
   /* Runtime dependencies of this module. */
   deps: [
     '@types/aws-lambda',
+    '@types/prompts',
     '@aws-sdk/client-codeguru-reviewer',
     '@aws-sdk/client-codepipeline',
+    '@aws-sdk/client-codedeploy',
+    '@aws-sdk/client-sts',
+    '@aws-sdk/shared-ini-file-loader',
     '@aws-cdk/aws-synthetics-alpha',
+    '@aws-sdk/credential-providers',
+    'prompts',
+    'yaml',
   ],
 
   jestOptions: {
