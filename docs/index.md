@@ -1,16 +1,16 @@
 # Overview
 
-A deployment pipeline is the key architectural construct for performing [Continuous Integration](https://aws.amazon.com/devops/continuous-integration/), [Delivery, and Deployment](https://aws.amazon.com/devops/continuous-delivery/). Pipelines consist of a series of stages - source, build, test, ..., pre-production-deploy, production-deploy. Each stage consists of a collection of actions that automate tasks in the software delivery lifecycle. There are different types of deployment pipelines for different use cases.
+A deployment pipeline is the key architectural construct for performing [Continuous Integration](https://aws.amazon.com/devops/continuous-integration/), [Delivery, and Deployment](https://aws.amazon.com/devops/continuous-delivery/). Pipelines consist of a series of stages like source, build, test, or deploy. Stages consist of automated tasks in the software delivery lifecycle. There are different types of deployment pipelines for different use cases.
 
-The Deployment Pipeline Reference Architecture (DPRA) for AWS [workloads](#workload) describes the stages and actions for different types of deployment pipelines that typically exist in modern systems. The DPRA also describes the practices teams can employ to increase the speed, stability, and security of software systems through the use of deployment pipelines. For a higher-level perspective, see Clare Liguori’s article in the Amazon Builder’s Library titled [Automating safe, hands-off deployments](https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments).
+The Deployment Pipeline Reference Architecture (DPRA) for AWS [workloads](#workload) describes the stages and actions for different types of pipelines that exist in modern systems. The DPRA also describes the practices teams employ to increase the velocity, stability, and security of software systems through the use of deployment pipelines. For a higher-level perspective, see Clare Liguori’s article in the Amazon Builder’s Library titled [Automating safe, hands-off deployments](https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments).
 
 Customers and third-party vendors can use the DPRA to create implementations - reference or otherwise - using their own set of services and tools. We have included reference implementations that use AWS and third-party tools. When an AWS service/tool is available, we list it; when there are no AWS services/tools, we list third-party tools. There are many third-party tools that can run on AWS so the ones we chose should only be seen as examples for illustrative purposes. Choose the best tool that meets the needs of your organization.
 
-Well-architected deployment pipelines create the following business outcomes:
+Modern deployment pipelines create the following business outcomes:
 
 * **Automation** - Everything necessary to build, test, deploy, and run an application should be defined as code - code for pipelines, accounts, networking, infrastructure, applications/services, configuration, data, security, compliance, governance, auditing, and documentation – any aspect inside and outside software systems.
 
-* **Consistency** - The source code should only be built and packaged once. The packaged artifact should then be staged in a registry with appropriate metadata and ready for deployment to any [environment](#environment). Source code should never change or be rebuilt after the initial build. The output of the pipeline should be versioned and able to be traced back to the source it was built from and from the business requirements that defined it.
+* **Consistency** - The source code should only be built and packaged once. The packaged artifact should then be staged in a registry with appropriate metadata and ready for deployment to any [environment](#environment). Build artifacts only once and then promote them through the pipeline. The output of the pipeline should be versioned and able to be traced back to the source it was built from and from the business requirements that defined it.
 
 * **Small Batches** - The pipeline should be constructed in such a way as to encourage the delivery of software early and often. This is accomplished by removing toil from the software delivery process through automation and fast feedback. Likewise, the pipeline should discourage the use of long-lived branches and encourage trunk-based development. Developers should be able to merge their changes to the trunk and deploy through the pipeline daily.
 
@@ -47,12 +47,12 @@ The DPRA covers the following deployment pipelines in detail:
 
 ## Definitions
 
-### Environment
-
-An **environment** is an isolated deployment of a [workload](#workload) and its dependencies. Environments can be created for validating changes, achieving data compliance, or for improving resiliency. Example environments include creating separate AWS accounts for each developer, creating separate AWS accounts for staging and production, and using multiple regions for production traffic. Best practice is for each environment to run in a separate AWS account.
-
 ### Workload
 
 A **workload** is a set of components that together deliver business value. A workload is usually the level of detail that business and technology leaders communicate about. Examples of workloads are marketing websites, e-commerce websites, the back-ends for a mobile app, analytic platforms, etc. Workloads vary in levels of architectural complexity, from static websites to architectures with multiple data stores and many components.
 
 (source: [AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html))
+
+### Environment
+
+An **environment** is an isolated target for deploying and testing a [workload](#workload) and its dependencies. Environments can be created for validating changes, achieving data compliance, or for improving resiliency. Example environments include creating separate AWS accounts for each developer, creating separate AWS accounts for staging and production, and using multiple regions for production traffic. Best practice is for each environment to run in a separate AWS account.

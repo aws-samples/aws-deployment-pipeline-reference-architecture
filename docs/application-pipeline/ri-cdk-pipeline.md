@@ -34,7 +34,7 @@ digraph G {
             test_src[label="Test Source" color="#ff9900"]
             infrastructure_src[label="Infrastructure Source" color="#ff9900"]
             static_assets[label="Static Assets" color="#ff9900"]
-            libs[label="Dependency Libraries" color="#ff9900"]
+            libs[label="Dependency Manifests" color="#ff9900"]
             config[label="Configuration" color="#ff9900"]
             db_src[label="Database Source" color="#ff9900"]
         }
@@ -50,6 +50,7 @@ digraph G {
             secrets_detection[label="Secrets Detection" color="#ff9900"]
             package_artifacts[label="Package Artifacts" color="#ff9900"]
             sca[label="SCA" color="#ff9900"]
+            sbom[label="SBOM" color="#ff9900"]
         }
 
         subgraph cluster_beta {
@@ -61,7 +62,7 @@ digraph G {
             db_deploy_beta[label="DB Deploy" color="#ff9900"]
             software_deploy_beta[label="Deploy Software" color="#ff9900"]
             int_test_beta[label="Integration Tests" color="#ff9900"]
-            e2e_test_beta[label="E2E Tests" color="#ff9900"]
+            e2e_test_beta[label="Acceptance Tests" color="#ff9900"]
         }
 
         subgraph cluster_gamma {
@@ -74,7 +75,7 @@ digraph G {
             software_deploy_gamma[label="Deploy Software" color="#ff9900"]
             app_monitor_gamma[label="Application Monitoring & Logging" color="#ff9900"]
             synthetic_gamma[label="Synthetic Tests" color="#ff9900"]
-            cap_test_gamma[label="Capacity Tests" color="#ff9900"]
+            cap_test_gamma[label="Performance Tests" color="#ff9900"]
         }
 
         subgraph cluster_prod {
@@ -120,7 +121,7 @@ digraph G {
     [](../../examples/cdk-application-pipeline/src/test/java/com/amazonaws/dpri/fruits/FruitControllerTest.java) block:shouldReturnList
     <!--/codeinclude-->
 
-    End-to-end tests are preformed with with [SoapUI](https://www.soapui.org/) and are defined in `fruit-api-soapui-project.xml`. They are executed by [Maven](https://maven.apache.org/) using plugins in `pom.xml`. 
+    Acceptance tests are preformed with with [SoapUI](https://www.soapui.org/) and are defined in `fruit-api-soapui-project.xml`. They are executed by [Maven](https://maven.apache.org/) using plugins in `pom.xml`. 
 
 ???+ required "Infrastructure Source Code"
     Code that defines both the deployment of the pipeline and the deployment of the application are stored in `infrastructure/` folder and uses [AWS Cloud Development Kit](https://aws.amazon.com/cdk/).
@@ -132,8 +133,8 @@ digraph G {
 ???+ required "Static Assets"
     There are no static assets used by the sample application.
 
-???+ required "Dependency Libraries"
-    All third-party libraries used by the sample application are define in the `pom.xml`:
+???+ required "Dependency Manifests"
+    All third-party dependencies used by the sample application are define in the `pom.xml`:
 
     ```xml
     <dependencies>
@@ -268,6 +269,9 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     [](../../examples/cdk-application-pipeline/Dockerfile)
     <!--/codeinclude-->
 
+???+ required "Software Bill of Materials (SBOM)"
+    Trivy generates an SBOM in the form of a [CycloneDX](https://cyclonedx.org/) JSON report. The SBOM is saved as a CodePipeline asset.
+
 ## Test (Beta)
 
 ???+ required "Launch Environment"
@@ -338,8 +342,8 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
 		</plugins>
     ```
 
-???+ required "End-to-End (E2E) Tests"
-    End-to-End tests are preformed after the *Launch Environment* and *Deploy Software* actions:
+???+ required "Acceptance Tests"
+    Acceptance tests are preformed after the *Launch Environment* and *Deploy Software* actions:
 
     ![](assets/deploy-beta.png)
     
@@ -393,9 +397,11 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     [](../../examples/cdk-application-pipeline/infrastructure/src/pipeline.ts) block:JMeterTest
     <!--/codeinclude-->
 
-???+ recommended "Chaos/Resiliency Tests"
+???+ recommended "Resilience Tests"
     `Not Implemented`
     
+???+ recommended "Dynamic Application Security Testing (DAST)"
+    `Not Implemented`
 
 ## Prod
 

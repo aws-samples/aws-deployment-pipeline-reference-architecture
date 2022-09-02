@@ -31,6 +31,7 @@ nav:
     - Architecture: 'application-pipeline/index.md'
     - Reference Implementations: 
       - CDK Pipeline: 'application-pipeline/ri-cdk-pipeline.md'
+    - Additional Sources: 'application-pipeline/additional-sources.md'
   # - Compute Image Pipeline: 
   #   - Architecture: 'compute-image-pipeline/index.md'
   # - Account Fleet Management Pipeline: 

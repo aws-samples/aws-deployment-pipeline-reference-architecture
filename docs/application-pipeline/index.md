@@ -1,6 +1,8 @@
 # Architecture
 
-Applications and Services are the most common use case for a deployment pipeline. In this pipeline type, it will get application source code files, tests, static analysis, database deployment, configuration, and other code to perform build, test, deploy, and release processes. The pipeline launches an environment from the compute image artifacts generated in the compute image pipeline. Integration and other automated tests are run on the environment(s) as part of the deployment pipeline.
+Applications are the most common use case for a deployment pipeline. This pipeline type will take source code files, tests, static analysis, database deployment, configuration, and other code to perform build, test, deploy, and release processes. The pipeline launches an environment from the compute image artifacts generated in the compute image pipeline. Automated tests are run on the environment(s) as part of the deployment pipeline.
+
+This pipeline encourages trunk based development in which developers frequently avoid long-lived branches and regulary commit their changes to the trunk. Therefore this pipeline only executes for commits to the trunk. Every commit to the trunk has a change to go to production if all steps of the pipeline complete successfully.
 
 ```graphviz dot pipeline.png
 digraph G {
@@ -53,7 +55,7 @@ digraph G {
             test_src[label="Test Source" color="#ff9900"]
             infrastructure_src[label="Infrastructure Source" color="#ff9900"]
             static_assets[label="Static Assets" color="#ff9900"]
-            libs[label="Dependency Libraries" color="#ff9900"]
+            libs[label="Dependency Manifests" color="#ff9900"]
             config[label="Configuration" color="#ff9900"]
             db_src[label="Database Source" color="#d4dada"]
         }
@@ -65,6 +67,7 @@ digraph G {
             call_build_service[label="Build Service" color="#ff9900"] 
             package_artifacts[label="Package Artifacts" color="#ff9900"]
             sca[label="SCA" color="#ff9900"]
+            sbom[label="SBOM" color="#ff9900"]
         }
 
         subgraph cluster_beta {
@@ -75,8 +78,8 @@ digraph G {
             launch_beta[label="Launch Env" color="#d4dada"] 
             db_deploy_beta[label="DB Deploy" color="#d4dada"]
             software_deploy_beta[label="Deploy Software" color="#d4dada"]
-            int_test_beta[label="Integration Tests" color="#d4dada"]
-            e2e_test_beta[label="E2E Tests" color="#d4dada"]
+            int_test_beta[label="Integration Tests" color="#ff9900"]
+            e2e_test_beta[label="Acceptance Tests" color="#ff9900"]
         }
 
         subgraph cluster_gamma {
@@ -89,8 +92,9 @@ digraph G {
             software_deploy_gamma[label="Deploy Software" color="#ff9900"]
             app_monitor_gamma[label="Application Monitoring & Logging" color="#ff9900"]
             synthetic_gamma[label="Synthetic Tests" color="#ff9900"]
-            cap_test_gamma[label="Capacity Tests" color="#d4dada"]
-            chaos_gamma[label="Chaos/Resiliency Tests" color="#d4dada"]
+            cap_test_gamma[label="Performance Tests" color="#d4dada"]
+            chaos_gamma[label="Resilience Tests" color="#d4dada"]
+            dast_gamma[label="DAST" color="#d4dada"]
         }
 
         subgraph cluster_prod {
@@ -120,7 +124,18 @@ digraph G {
 }
 ```
 
+The expected outcome of this pipeline is to be able to safely release software changes to customers within a couple hours. Deployment pipelines should publish the following metrics:
+
+* `Lead time` – the average amount of time it takes for a single commit to get all the way into production.
+* `Deploy frequency` – the number of production deployments within a given time period.
+* `Mean time between failure (MTBF)` – the average amount of time between the start of a successful pipeline and the start of a failed pipeline.
+* `Mean time to recover (MTTR)` – the average amount of time between the start of a failed pipeline and the start of the next successful pipeline.
+
+Each stage below will include a required and recommended actions. The actions will include guidance on what steps out to be perfomed in each action. References will be made to real-life examples of tools to help better define the actions involved in each stage. The use of these examples is not an endorsement of any specific tool.
+
 ## Source
+
+The source stage pulls in various types of code from a distributed version control system.
 
 ???+ required "Application Source Code"
     Code that is compiled, transpiled or interpreted for the purpose of delivering business capabilities through applications and/or services.
@@ -134,8 +149,8 @@ digraph G {
 ???+ required "Static Assets"
     Assets used by the *Application Source Code* such as html, css, and images.
 
-???+ required "Dependency Libraries"
-    References third-party code that is used by the *Application Source Code*. This could be libraries created by the same team, a separate team within the same organization, or from an external entity.
+???+ required "Dependency Manifests"
+    References to third-party code that is used by the *Application Source Code*. This could be libraries created by the same team, a separate team within the same organization, or from an external entity.
 
 ???+ required "Static Configuration"
     Files (e.g. JSON, XML, YAML or HCL) used to configure the behavior of the *Application Source Code*. Any configuration that is [environment](index.md#environment) specific should *not* be included in source and should be handled via [Dynamic Configuration Deployment Pipelines](../dynamic-configuration-deployment-pipeline).
@@ -160,7 +175,7 @@ Pre-Commit hooks are scripts that are executed on the developer's workstation wh
 All actions run in this stage are also run on developer's local environments prior to code commit and peer review. Actions in this stage should all run in less than 10 minutes so that developers can take action on fast feedback before moving on to their next task. If it’s taking more time, consider decoupling the system to reduce dependencies, optimizing the process, using more efficient tooling, or moving some of the actions to latter stages. Each of the actions below are defined and run in code.
 
 ???+ required "Build Code"
-    Convert code into artifacts that can be deployed to an environment. Most builds complete in seconds. Examples include but are not limited to [Maven](https://maven.apache.org/) and [tsc](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
+    Convert code into artifacts that can be promoted through environments. Most builds complete in seconds. Examples include but are not limited to [Maven](https://maven.apache.org/) and [tsc](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
 
 ???+ required "Unit Tests"
     Run the test code to verify that individual functions and methods of classes, components or modules of the *Application Source Code* are performing according to expectations. These tests are fast-running tests with zero dependencies on external systems returning results in seconds. Examples of unit testing frameworks include but are not limited to [JUnit](https://junit.org/), [Jest](https://jestjs.io/), and [pytest](https://pytest.org/).
@@ -236,7 +251,9 @@ digraph G {
 ```
 
 ???+ required "Package and Store Artifact(s)"
-    While the *Build Code* action will package most of the relevant artifacts, there may be additional steps to automate for packaging the code artifacts. Artifacts should only be built and packaged once and then deployed to various environments to validate the artifact. Artfiacts should never be rebuilt during subsequent deploy stages. Once packaged, automation is run in this action to store the artifacts in an artifact repository for future deployments. Examples of artifact repositories include but are not limited to [AWS CodeArtifact](https://aws.amazon.com/codeartifact/), [Amazon ECR](https://aws.amazon.com/ecr/), and [JFrog Artifactory](https://jfrog.com/artifactory/).
+    While the *Build Code* action will package most of the relevant artifacts, there may be additional steps to automate for packaging the code artifacts. Artifacts should only be built and packaged once and then deployed to various environments to validate the artifact. Artfiacts should never be rebuilt during subsequent deploy stages. Once packaged, automation is run in this action to store the artifacts in an artifact repository for future deployments. Examples of artifact repositories include but are not limited to [AWS CodeArtifact](https://aws.amazon.com/codeartifact/), [Amazon ECR](https://aws.amazon.com/ecr/), [Nexus](https://www.sonatype.com/products/nexus-repository), and [JFrog Artifactory](https://jfrog.com/artifactory/).
+
+    Packages should be signed with a digital-signature to allow deployment processes to confirm the code being deployed is from a trusted publisher and has not been altered. [AWS Signer](https://docs.aws.amazon.com/signer/index.html) can be used to signe code to be run by AWS Lambda. 
 
     ```graphviz dot artifact.png
 digraph G {
@@ -284,9 +301,12 @@ digraph G {
 }
 ```
 
+???+ required "Software Bill of Materials (SBOM)"
+    Generate a software bill of materials (SBOM) report detailing all the dependencies used. Examples of SBOM formats include [SPDX](https://spdx.dev/wp-content/uploads/sites/41/2020/08/SPDX-specification-2-2.pdf) and [CycloneDX](https://cyclonedx.org/)
+
 ## Test (Beta)
 
-Testing is performed in a beta environment to validate that the latest code is functioning as expected. This validation is done by first deploying the code and then running integration and end-to-end tests against the deployment.
+Testing is performed in a beta environment to validate that the latest code is functioning as expected. This validation is done by first deploying the code and then running integration and end-to-end tests against the deployment. Beta environments will have dependencies on the applications and services from other teams in their gamma environments. All actions performed in this stage should complete within 30 minutes to provide fast-feedback.
 
 ???+ recommended "Launch Environment"
     Consume the compute image from an image repository (e.g., AMI or a container repo) and launch an environment from the image using *Infrastructure Source Code*. The beta images is generally not accessible to pubic customers and is only used for internal software validaition. Beta environment should be in a different AWS Account from the tools used to run the deployment pipeline.  Access to the beta environment should be handled via [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) rather than long lived credentials from IAM users. Example tools for defining infrastructure code include but are not limited to [AWS Cloud Development Kit](https://aws.amazon.com/cdk/), [AWS CloudFormation](https://aws.amazon.com/cloudformation/) and [HashiCorp Terraform](https://www.terraform.io/).
@@ -320,7 +340,10 @@ digraph G {
 ```
 
 ???+ recommended "Database Deploy"
-    Apply changes to the beta database using the *Database Source Code*. Best practice is to connect to the beta database through [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) and [IAM database authentication for RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html) rather than long lived database credentials. If database credentials must be used, then they should be loaded from a secret manager such as [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/). Changes to the database should be incremental, only applying the changes since the prior deployment. Examples of tools that apply incremental database changes include but are not limited to [Liquibase](https://www.liquibase.org/).
+    Apply changes to the beta database using the *Database Source Code*. Changes should be made in a manner that [ensures rollback safety](https://aws.amazon.com/builders-library/ensuring-rollback-safety-during-deployments/). Best practice is to connect to the beta database through [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) and [IAM database authentication for RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html) rather than long lived database credentials. If database credentials must be used, then they should be loaded from a secret manager such as [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/). Changes to the database should be incremental, only applying the changes since the prior deployment. Examples of tools that apply incremental database changes include but are not limited to [Liquibase](https://www.liquibase.org/).
+
+    Test data management is beyond the scope of this reference architecuture but should be addressed during `Databse Deploy` in preparation of subsequent testing activity.
+
 
     ```graphviz dot db.png
 digraph G {
@@ -350,7 +373,7 @@ digraph G {
 ```
 
 ???+ recommended "Deploy Software"
-    Deploy software to the beta environment. Software is not deployed from source but rather the artifact that was packaged and stored in the *Build Stage* will be used for the deployment. Software deployments should be performed through *Infrastructure Source Code*. Access to the beta environment should be handled via [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) rather than long lived credentials from IAM users. Examples of tools to deploy software include but are not limited to [AWS CodeDeploy](https://aws.amazon.com/codedeploy/).
+    Deploy software to the beta environment. Software is not deployed from source but rather the artifact that was packaged and stored in the *Build Stage* will be used for the deployment. Software to be deployed should include digital signatures to verify that the software came from a trusted source and that no changes were made to the software. Software deployments should be performed through *Infrastructure Source Code*. Access to the beta environment should be handled via [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) rather than long lived credentials from IAM users. Examples of tools to deploy software include but are not limited to [AWS CodeDeploy](https://aws.amazon.com/codedeploy/).
     ```graphviz dot software.png
 digraph G {
     compound=true
@@ -380,7 +403,7 @@ digraph G {
 }
 ```
 
-???+ recommended "Integration Tests"
+???+ required "Integration Tests"
     Run automated tests that verify if the application satisifes business requirements. These tests require the application to be running in the beta environment. Integration tests may come in the form of behavior-driven tests, automated acceptance tests, or automated tests linked to requirements and/or stories in a tracking system. Examples of tools to define integration tests include but are not limited to [Cucumber](https://cucumber.io) and [SoapUI](https://www.soapui.org).
     ```graphviz dot int.png
 digraph G {
@@ -409,8 +432,8 @@ digraph G {
 }
 ```
 
-???+ recommended "End-to-End (E2E) Tests"
-    Run automated end-to-end testing from the users’ perspective in the beta environment. These tests verify the user workflow, including when performed through a UI. These test are the slowest to run and hardest to maintain and therefore it is recommended to only have a few end-to-end tests that cover the most important application workflows. Examples of tools to define end-to-end tests include but are not limited to [Cypress](https://cypress.io) and [Selenium](https://selenium.dev).
+???+ required "Acceptance Tests"
+    Run automated testing from the users’ perspective in the beta environment. These tests verify the user workflow, including when performed through a UI. These test are the slowest to run and hardest to maintain and therefore it is recommended to only have a few end-to-end tests that cover the most important application workflows. Examples of tools to define end-to-end tests include but are not limited to [Cypress](https://cypress.io) and [Selenium](https://selenium.dev).
     ```graphviz dot e2e.png
 digraph G {
     compound=true
@@ -440,7 +463,7 @@ digraph G {
 
 ## Test (Gamma)
 
-Testing is performed in a gamma environment to validate that the latest code can be safely deployed to production. The environment is as production-like as possible including configuration, monitoring, and traffic. Additionally, the environment should match the same regions that the production environment uses.
+Testing is performed in a gamma environment to validate that the latest code can be safely deployed to production. The environment is as production-like as possible including configuration, monitoring, and traffic. Additionally, the environment should match the same regions that the production environment uses. The gamma environment is used by other team's beta environments and therefore must maintain acceptable service levels to avoid impacting other team productivity. All actions performed in this stage should complete within 30 minutes to provide fast-feedback.
 
 ???+ required "Launch Environment"
     Consume the compute image from an image repository (e.g., AMI or a container repo) and launch an environment from the image using *Infrastructure Source Code*. Gamma environment should be in a different AWS Account from the tools used to run the deployment pipeline.  Access to the gamma environment should be handled via [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) rather than long lived credentials from IAM users. Example tools for defining infrastructure code include but are not limited to [AWS Cloud Development Kit](https://aws.amazon.com/cdk/), [AWS CloudFormation](https://aws.amazon.com/cloudformation/) and [HashiCorp Terraform](https://www.terraform.io/).
@@ -473,7 +496,7 @@ digraph G {
 ```
 
 ???+ recommended "Database Deploy"
-    Apply changes to the gamma database using the *Database Source Code*. Best practice is to connect to the gamma database through [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) and [IAM database authentication for RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html) rather than long lived database credentials. If database credentials must be used, then they should be loaded from a secret manager such as [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/). Changes to the database should be incremental, only applying the changes since the prior deployment. Examples of tools that apply incremental database changes include but are not limited to [Liquibase](https://www.liquibase.org/).
+    Apply changes to the gamma database using the *Database Source Code*. Changes should be made in a manner that [ensures rollback safety](https://aws.amazon.com/builders-library/ensuring-rollback-safety-during-deployments/). Best practice is to connect to the gamma database through [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) and [IAM database authentication for RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html) rather than long lived database credentials. If database credentials must be used, then they should be loaded from a secret manager such as [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/). Changes to the database should be incremental, only applying the changes since the prior deployment. Examples of tools that apply incremental database changes include but are not limited to [Liquibase](https://www.liquibase.org/).
     ```graphviz dot db.png
 digraph G {
     compound=true
@@ -502,7 +525,7 @@ digraph G {
 ```
 
 ???+ required "Deploy Software"
-    Deploy software to the gamma environment. Software is not deployed from source but rather the artifact that was packaged and stored in the *Build Stage* will be used for the deployment. Software deployments should be performed through *Infrastructure Source Code*. Access to the gamma environment should be handled via [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) rather than long lived credentials from IAM users. Examples of tools to deploy software include but are not limited to [AWS CodeDeploy](https://aws.amazon.com/codedeploy/).
+    Deploy software to the gamma environment. Software is not deployed from source but rather the artifact that was packaged and stored in the *Build Stage* will be used for the deployment. Software to be deployed should include digital signatures to verify that the software came from a trusted source and that no changes were made to the software. Software deployments should be performed through *Infrastructure Source Code*. Access to the gamma environment should be handled via [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) rather than long lived credentials from IAM users. Examples of tools to deploy software include but are not limited to [AWS CodeDeploy](https://aws.amazon.com/codedeploy/).
     ```graphviz dot software.png
 digraph G {
     compound=true
@@ -636,7 +659,7 @@ digraph G {
 }
 ```
 
-???+ recommended "Chaos/Resiliency Tests"
+???+ recommended "Resilience Tests"
     Inject failures into environments to identify areas of the application that are susceptible to failure. Tests are defined as code and applied to the environment while the system is under load. The success rate, response time and throughput are measured during the periods when the failures are injected and compared to periods without the failures. Any significant deviation should fail the pipeline. Examples of tools that can be used for chaos/resilience testing include but are not limited to [AWS Fault Injection Simulator](https://aws.amazon.com/fis/) and [ChaosToolkit](https://chaostoolkit.org/).
     ```graphviz dot chaos.png
 digraph G {
@@ -669,13 +692,16 @@ digraph G {
 }
 ```
 
+???+ recommended "Dynamic Application Security Testing (DAST)"
+    Perform testing of web applications and APIs by running automated scans against it to identify vulnerabilities through techniques such as cross-site scripting (XSS) and SQL injection(SQLi).  Examples of tools that can be used for dynamic application security testing include but are not limited to [OWASP ZAP](https://owasp.org/www-project-zap) and [StackHawk](https://www.stackhawk.com/).
+
 ## Prod
 
 ???+ required "Optional Approval"
     As part of a automated workflow, obtain authorized human approval before deploying to the production environment.
 
 ???+ required "Database Deploy"
-    Apply changes to the production database using the *Database Source Code*. Best practice is to connect to the production database through [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) and [IAM database authentication for RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html) rather than long lived database credentials. If database credentials must be used, then they should be loaded from a secret manager such as [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/). Changes to the database should be incremental, only applying the changes since the prior deployment. Examples of tools that apply incremental database changes include but are not limited to [Liquibase](https://www.liquibase.org/).
+    Apply changes to the production database using the *Database Source Code*. Changes should be made in a manner that [ensures rollback safety](https://aws.amazon.com/builders-library/ensuring-rollback-safety-during-deployments/). Best practice is to connect to the production database through [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) and [IAM database authentication for RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html) rather than long lived database credentials. If database credentials must be used, then they should be loaded from a secret manager such as [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/). Changes to the database should be incremental, only applying the changes since the prior deployment. Examples of tools that apply incremental database changes include but are not limited to [Liquibase](https://www.liquibase.org/).
     ```graphviz dot db.png
 digraph G {
     compound=true
@@ -704,7 +730,9 @@ digraph G {
 ```
 
 ???+ required "Progressive Deployment"
-    Deploy software into production environment using one of several progressive deployment models: Blue/Green, Canary, Rolling Changes, or All At Once. Software deployments should be performed through *Infrastructure Source Code*. Access to the production environment should be handled via [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) rather than long lived credentials from IAM users. Examples of tools to deploy software include but are not limited to [AWS CodeDeploy](https://aws.amazon.com/codedeploy/). Ideally, deployments should be automatically failed and rolled back when error thresholds are breached. Examples of automated rollback include [AWS CloudFormation monitor & rollback](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-rollback-triggers.html), [AWS CodeDeploy rollback](https://docs.aws.amazon.com/codedeploy/latest/userguide/deployments-rollback-and-redeploy.html) and [Flagger](https://flagger.app/).
+    Deployments should be made progressively in waves to limit the impact of failures. A common approach is to deploy changes to a subset of AWS regions and allow sufficient bake time to monitor performance and behavior before proceeding with additional waves of AWS regions. 
+    
+    Software should be deployed using one of several progressive deployment models: Blue/Green, Canary, Rolling Changes, or All At Once. Software deployments should be performed through *Infrastructure Source Code*. Access to the production environment should be handled via [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) rather than long lived credentials from IAM users. Examples of tools to deploy software include but are not limited to [AWS CodeDeploy](https://aws.amazon.com/codedeploy/). Ideally, deployments should be automatically failed and rolled back when error thresholds are breached. Examples of automated rollback include [AWS CloudFormation monitor & rollback](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-rollback-triggers.html), [AWS CodeDeploy rollback](https://docs.aws.amazon.com/codedeploy/latest/userguide/deployments-rollback-and-redeploy.html) and [Flagger](https://flagger.app/).
     ```graphviz dot progdep.png
 digraph G {
     compound=true

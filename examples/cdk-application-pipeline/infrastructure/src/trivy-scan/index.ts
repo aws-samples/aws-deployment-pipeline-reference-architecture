@@ -15,6 +15,10 @@ export class TrivyScan extends CodeBuildStep {
       '--exit-code',
       '1',
       '--no-progress',
+      '--format',
+      'cyclonedx',
+      '--output',
+      'sbom.json',
     ];
     if (props.severity) {
       trivyArgs.push('--severity');
