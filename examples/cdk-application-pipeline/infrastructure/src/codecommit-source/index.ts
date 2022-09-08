@@ -22,7 +22,8 @@ export class CodeCommitSource extends Construct {
     let gitignore = fs.readFileSync('.gitignore').toString().split(/\r?\n/);
     gitignore.push('.git/');
 
-    // hack to allow canary code to package properly
+    // Allow canary code to package properly
+    // see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries_WritingCanary_Nodejs.html#CloudWatch_Synthetics_Canaries_package
     gitignore = gitignore.filter(g => g != 'node_modules/');
     gitignore.push('/node_modules/');
 

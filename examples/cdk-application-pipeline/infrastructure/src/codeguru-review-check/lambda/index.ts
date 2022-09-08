@@ -110,5 +110,6 @@ async function findCodeGuruReview(props: CodeGuruReviewCheckProperties): Promise
       return summary!;
     }
   }
+
   return;
 }

@@ -80,6 +80,7 @@ export class CodeGuruReviewCheck extends Step implements ICodePipelineActionFact
     super(id);
     this.userParameters = CodeGuruReviewCheck.SourceParameters.reduce((params, name) => {
       params[name] = props.source.sourceAttribute(name);
+
       return params;
     }, {} as Record<string, string>);
 

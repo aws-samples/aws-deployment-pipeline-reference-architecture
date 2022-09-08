@@ -27,18 +27,18 @@ theme:
         name: Switch to light mode
 nav:
   - Overview: 'index.md'
-  - Application Pipeline: 
+  - Application Pipeline:
     - Architecture: 'application-pipeline/index.md'
-    - Reference Implementations: 
+    - Reference Implementations:
       - CDK Pipeline: 'application-pipeline/ri-cdk-pipeline.md'
     - Additional Sources: 'application-pipeline/additional-sources.md'
-  # - Compute Image Pipeline: 
+  # - Compute Image Pipeline:
   #   - Architecture: 'compute-image-pipeline/index.md'
-  # - Account Fleet Management Pipeline: 
+  # - Account Fleet Management Pipeline:
   #   - Architecture: 'account-fleet-management-pipeline/index.md'
-  # - Machine Learning Pipeline: 
+  # - Machine Learning Pipeline:
   #   - Architecture: 'machine-learning-pipeline/index.md'
-  # - Dynamic Configuration Deployment Pipeline: 
+  # - Dynamic Configuration Deployment Pipeline:
   #   - Architecture: 'dynamic-configuration-deployment-pipeline/index.md'
 
 markdown_extensions:

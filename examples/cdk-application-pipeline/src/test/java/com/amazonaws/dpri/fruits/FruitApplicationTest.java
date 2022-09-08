@@ -11,8 +11,8 @@ public class FruitApplicationTest {
     @Autowired
     private FruitController controller;
 
-	@Test
-	public void contextLoads() {
+    @Test
+    public void contextLoads() {
         assertThat(controller).isNotNull();
-	}
+    }
 }

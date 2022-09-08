@@ -36,27 +36,27 @@ public class FruitController {
     @GetMapping("/api/fruits/{id}")
     Fruit one(@PathVariable Long id) {
         return repository.findById(id)
-            .orElseThrow(() -> new FruitNotFoundException(id));
+                .orElseThrow(() -> new FruitNotFoundException(id));
     }
-   
+
     @PutMapping("/api/fruits/{id}")
     Fruit replaceFruit(@RequestBody Fruit newFruit, @PathVariable Long id) {
         return repository.findById(id)
-            .map(fruit -> {
-                fruit.setName(newFruit.getName());
-                return repository.save(fruit);
-            })
-            .orElseGet(() -> {
-                newFruit.setId(id);
-                return repository.save(newFruit);
-            });
+                .map(fruit -> {
+                    fruit.setName(newFruit.getName());
+                    return repository.save(fruit);
+                })
+                .orElseGet(() -> {
+                    newFruit.setId(id);
+                    return repository.save(newFruit);
+                });
     }
 
     @DeleteMapping("/api/fruits/{id}")
     void deleteFruit(@PathVariable Long id) {
         repository.deleteById(id);
     }
-    
+
 }
 
 @ControllerAdvice
@@ -71,8 +71,8 @@ class FruitNotFoundAdvice {
 
 }
 
-class FruitNotFoundException extends RuntimeException{
+class FruitNotFoundException extends RuntimeException {
     FruitNotFoundException(Long id) {
-        super("Unable to find fruit "+id);
+        super("Unable to find fruit " + id);
     }
 }

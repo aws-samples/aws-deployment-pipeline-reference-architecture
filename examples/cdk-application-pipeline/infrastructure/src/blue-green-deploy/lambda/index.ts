@@ -52,6 +52,7 @@ export async function onEvent(event: OnEvent): Promise<OnEventResponse> {
         },
       });
       console.log(`${event.RequestType}: new deploymentId '${resp.deploymentId}'`);
+
       return {
         PhysicalResourceId: resp.deploymentId!,
         Data: {
@@ -70,6 +71,7 @@ export async function onEvent(event: OnEvent): Promise<OnEventResponse> {
       } catch (e) {
         console.log(`Delete: Ignoring eror ${e}`);
       }
+
       return {};
     default:
       throw new Error(`Unknown request type: ${event.RequestType}`);
@@ -93,6 +95,7 @@ function formatAppSpecContent(props: DeploymentProperties): string {
       },
     }],
   };
+
   return stringify(appSpec);
 }
 
@@ -127,6 +130,7 @@ export async function isComplete(event: IsComplete): Promise<IsCompleteResponse>
         switch (resp.deploymentInfo?.status) {
           case DeploymentStatus.SUCCEEDED:
             console.log('COMPLETE: deployment finished successfully');
+
             return { IsComplete: true };
           case DeploymentStatus.FAILED:
           case DeploymentStatus.STOPPED:
@@ -139,6 +143,7 @@ export async function isComplete(event: IsComplete): Promise<IsCompleteResponse>
                 throw new Error(`Deployment ${resp.deploymentInfo.status}: [${errInfo?.code}] ${errInfo?.message}`);
               }
               console.log('INCOMPLETE: waiting for final status from a rollback');
+
               return { IsComplete: false }; // waiting for final status from rollback
             } else {
               console.log('COMPLETE: no rollback to wait for');
@@ -147,12 +152,14 @@ export async function isComplete(event: IsComplete): Promise<IsCompleteResponse>
             }
           default:
             console.log('INCOMPLETE: waiting for final status from deployment');
+
             return { IsComplete: false };
         }
       case 'Delete':
         switch (resp.deploymentInfo?.status) {
           case DeploymentStatus.SUCCEEDED:
             console.log('COMPLETE: deployment finished successfully - nothing to delete');
+
             return { IsComplete: true };
           case DeploymentStatus.FAILED:
           case DeploymentStatus.STOPPED:
@@ -161,15 +168,19 @@ export async function isComplete(event: IsComplete): Promise<IsCompleteResponse>
                 rollbackResp.deploymentInfo?.status == DeploymentStatus.FAILED ||
                 rollbackResp.deploymentInfo?.status == DeploymentStatus.STOPPED) {
                 console.log('COMPLETE: rollback in final status');
+
                 return { IsComplete: true }; // rollback finished, we're deleted
               }
               console.log('INCOMPLETE: waiting for final status from a rollback');
+
               return { IsComplete: false }; // waiting for rollback
             }
             console.log('COMPLETE: no rollback to wait for');
+
             return { IsComplete: true };
           default:
             console.log('INCOMPLETE: waiting for final status from deployment');
+
             return { IsComplete: false };
         }
       default:
@@ -179,6 +190,7 @@ export async function isComplete(event: IsComplete): Promise<IsCompleteResponse>
     if (event.RequestType === 'Delete') {
       console.error(e);
       console.log('COMPLETE: ignoring error - nothing to do');
+
       return { IsComplete: true };
     }
     throw e;

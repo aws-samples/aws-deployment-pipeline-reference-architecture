@@ -13,13 +13,20 @@ sast:
 include:
 - template: Security/SAST.gitlab-ci.yml
 
+markdownlint:
+  stage: test
+  image: node:18.8-bullseye
+  script:
+  - npm install -g markdownlint-cli
+  - markdownlint docs
+
 test:
   stage: test
   variables:
     ENABLE_PDF_EXPORT: 1
   image: python:3.9-bullseye
   script:
-  - apt-get update && apt-get install -y graphviz
+  - apt-get update && apt-get install -y graphviz=2.42.2-5
   - pip install -r requirements.txt
   - mkdocs build --verbose --site-dir test
   artifacts:
@@ -34,8 +41,10 @@ pages:
     ENABLE_PDF_EXPORT: 1
   image: python:3.9-bullseye
   script:
-  - apt-get update && apt-get install -y graphviz
+  - apt-get update && apt-get install -y graphviz=2.42.2-5
   - pip install -r requirements.txt
+  - npm install -g markdownlint-cli
+  - markdownlint docs
   - mkdocs build --verbose --site-dir public
   artifacts:
     paths:

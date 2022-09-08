@@ -17,8 +17,8 @@ digraph G {
         label=<<b>Legend</b>>
         graph[color="black" style="dashed"]
         node [shape=box style=filled fontcolor="black" width=2]
-        legend_required[label="Required" color="#ff9900"] 
-        legend_recommended[label="Recommended" color="#d4dada"] 
+        legend_required[label="Required" color="#ff9900"]
+        legend_recommended[label="Recommended" color="#d4dada"]
     }
 
     subgraph cluster_build_service {
@@ -64,7 +64,7 @@ digraph G {
             graph[penwidth=2 color="slategray"]
             node [shape=box style=filled fontcolor="black" width=2]
 
-            call_build_service[label="Build Service" color="#ff9900"] 
+            call_build_service[label="Build Service" color="#ff9900"]
             package_artifacts[label="Package Artifacts" color="#ff9900"]
             sca[label="SCA" color="#ff9900"]
             sbom[label="SBOM" color="#ff9900"]
@@ -75,7 +75,7 @@ digraph G {
             graph[penwidth=2 color="slategray"]
             node [shape=box style=filled fontcolor="black" width=2]
 
-            launch_beta[label="Launch Env" color="#d4dada"] 
+            launch_beta[label="Launch Env" color="#d4dada"]
             db_deploy_beta[label="DB Deploy" color="#d4dada"]
             software_deploy_beta[label="Deploy Software" color="#d4dada"]
             int_test_beta[label="Integration Tests" color="#ff9900"]
@@ -87,7 +87,7 @@ digraph G {
             graph[penwidth=2 color="slategray"]
             node [shape=box style=filled fontcolor="black" width=3]
 
-            launch_gamma[label="Launch Env" color="#ff9900"] 
+            launch_gamma[label="Launch Env" color="#ff9900"]
             db_deploy_gamma[label="DB Deploy" color="#ff9900"]
             software_deploy_gamma[label="Deploy Software" color="#ff9900"]
             app_monitor_gamma[label="Application Monitoring & Logging" color="#ff9900"]
@@ -102,7 +102,7 @@ digraph G {
             graph[penwidth=2 color="slategray"]
             node [shape=box style=filled fontcolor="black" width=3]
 
-            approval[label="Optional Approval" color="#d4dada"]
+            approval[label="Manual Approval" color="#d4dada"]
             db_deploy_prod[label="DB Deploy" color="#ff9900"]
             blue_green_deployment[label="Progressive Deployment" color="#ff9900"]
             synthetic_prod[label="Synthetic Tests" color="#ff9900"]
@@ -194,15 +194,15 @@ digraph G {
         node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
         edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
 
-        source[label="Application Source Code" color="#d4dada"] 
-        iac[label="Infrastructure Source Code" color="#d4dada"] 
-        quality[label="Static Analysis Tools" color="#d4dada" fontcolor="black"] 
+        source[label="Application Source Code" color="#d4dada"]
+        iac[label="Infrastructure Source Code" color="#d4dada"]
+        quality[label="Static Analysis Tools" color="#d4dada" fontcolor="black"]
 
         quality -> source [label="analyze"]
         quality -> iac [label="analyze"]
     }
 }
-```
+    ```
 
 ???+ required "Secrets Detection"
     Identify secrets such as usernames, passwords, and access keys in code. When discovering secrets, the build should fail immediately. Examples of secret detection tools include but are not limited to [GitGuardian](https://www.gitguardian.com/) and [gitleaks](https://github.com/zricethezav/gitleaks).
@@ -218,15 +218,15 @@ digraph G {
         node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
         edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
 
-        source[label="Application Source Code" color="#d4dada"] 
-        iac[label="Application Source Code" color="#d4dada"] 
-        secrets[label="Secrets Detection" color="#d4dada" fontcolor="black"] 
+        source[label="Application Source Code" color="#d4dada"]
+        iac[label="Application Source Code" color="#d4dada"]
+        secrets[label="Secrets Detection" color="#d4dada" fontcolor="black"]
 
         secrets -> source [label="analyze"]
         secrets -> iac [label="analyze"]
     }
 }
-```
+    ```
 
 ???+ required "Static Application Security Testing (SAST)"
     Analyze code for application security violations such as [XML External Entity Processing](https://owasp.org/www-community/vulnerabilities/XML_External_Entity_(XXE)_Processing), [SQL Injection](https://owasp.org/www-community/attacks/SQL_Injection), and [Cross Site Scripting](https://owasp.org/www-community/attacks/xss/). Any findings that exceed the configured threshold will immediately fail the build and stop any forward progress in the pipeline. Examples of tools to perform static application security testing include but are not limited to [Amazon CodeGuru](https://aws.amazon.com/codeguru/), [SonarQube](https://www.sonarqube.org/), and [Checkmarx](https://checkmarx.com/).
@@ -242,18 +242,18 @@ digraph G {
         node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
         edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
 
-        source[label="Application Source Code" color="#d4dada"] 
-        sast[label="SAST" color="#d4dada" fontcolor="black"] 
+        source[label="Application Source Code" color="#d4dada"]
+        sast[label="SAST" color="#d4dada" fontcolor="black"]
 
         sast -> source [label="analyze"]
     }
 }
-```
+    ```
 
 ???+ required "Package and Store Artifact(s)"
     While the *Build Code* action will package most of the relevant artifacts, there may be additional steps to automate for packaging the code artifacts. Artifacts should only be built and packaged once and then deployed to various environments to validate the artifact. Artfiacts should never be rebuilt during subsequent deploy stages. Once packaged, automation is run in this action to store the artifacts in an artifact repository for future deployments. Examples of artifact repositories include but are not limited to [AWS CodeArtifact](https://aws.amazon.com/codeartifact/), [Amazon ECR](https://aws.amazon.com/ecr/), [Nexus](https://www.sonatype.com/products/nexus-repository), and [JFrog Artifactory](https://jfrog.com/artifactory/).
 
-    Packages should be signed with a digital-signature to allow deployment processes to confirm the code being deployed is from a trusted publisher and has not been altered. [AWS Signer](https://docs.aws.amazon.com/signer/index.html) can be used to signe code to be run by AWS Lambda. 
+    Packages should be signed with a digital-signature to allow deployment processes to confirm the code being deployed is from a trusted publisher and has not been altered. [AWS Signer](https://docs.aws.amazon.com/signer/index.html) can be used to signe code to be run by AWS Lambda.
 
     ```graphviz dot artifact.png
 digraph G {
@@ -268,8 +268,8 @@ digraph G {
         node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
         edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
 
-        source[label="Application Source Code" color="#d4dada"] 
-        artifact[label="Packaged Artifact" color="#d4dada" fontcolor="black"] 
+        source[label="Application Source Code" color="#d4dada"]
+        artifact[label="Packaged Artifact" color="#d4dada" fontcolor="black"]
 
         source -> artifact [label="package"]
     }
@@ -278,7 +278,7 @@ digraph G {
 
     artifact -> repo [label="store" fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
 }
-```
+    ```
 
 ???+ required "Software Composition Analysis (SCA)"
     Run software composition analysis (SCA) tools to find vulnerabilities to package repositories related to open source use, licensing, and security vulnerabilities. SCA tools also launch workflows to fix these vulnerabilities. Any findings that exceed the configured threshold will immediately fail the build and stop any forward progress in the pipeline. These tools also require a software bill of materials (SBOM) exist in the source code. Examples of bill of materials include but are not limited to Java `pom.xml`, JavaScript `yarn.lock`, and Ruby `Gemfile.lock`. Example SCA tools include but are not limited to [Dependabot](https://github.com/dependabot), [Snyk](https://snyk.io/product/open-source-security-management/), and [Blackduck](https://www.blackducksoftware.com/).
@@ -293,13 +293,13 @@ digraph G {
         node [fontname="Helvetica,Arial,sans-serif" shape=box style=filled fontcolor="black" width=2]
         edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
 
-        artifact[label="Packaged Artifact" color="#d4dada"] 
-        sca[label="SCA" color="#d4dada" fontcolor="black"] 
+        artifact[label="Packaged Artifact" color="#d4dada"]
+        sca[label="SCA" color="#d4dada" fontcolor="black"]
 
         sca -> artifact [label="analyze"]
     }
 }
-```
+    ```
 
 ???+ required "Software Bill of Materials (SBOM)"
     Generate a software bill of materials (SBOM) report detailing all the dependencies used. Examples of SBOM formats include [SPDX](https://spdx.dev/wp-content/uploads/sites/41/2020/08/SPDX-specification-2-2.pdf) and [CycloneDX](https://cyclonedx.org/)
@@ -331,13 +331,13 @@ digraph G {
         label=<<b>Environment</b>>
         fontname="Helvetica,Arial,sans-serif"
         graph[color="black" style="dashed" fontcolor="black"]
-    
+
         env[label="" style="invis"]
     }
 
     iac -> env [label="launch" fontcolor="black" color="black"]
 }
-```
+    ```
 
 ???+ recommended "Database Deploy"
     Apply changes to the beta database using the *Database Source Code*. Changes should be made in a manner that [ensures rollback safety](https://aws.amazon.com/builders-library/ensuring-rollback-safety-during-deployments/). Best practice is to connect to the beta database through [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) and [IAM database authentication for RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html) rather than long lived database credentials. If database credentials must be used, then they should be loaded from a secret manager such as [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/). Changes to the database should be incremental, only applying the changes since the prior deployment. Examples of tools that apply incremental database changes include but are not limited to [Liquibase](https://www.liquibase.org/).
@@ -365,12 +365,12 @@ digraph G {
         label=<<b>Environment</b>>
         fontname="Helvetica,Arial,sans-serif"
         graph[color="black" style="dashed" fontcolor="black"]
-    
+
         db[label="Database" color="#d4dada" fontcolor="black"]
     }
     db_source -> db [label="deploy" fontcolor="black" color="black"]
 }
-```
+    ```
 
 ???+ recommended "Deploy Software"
     Deploy software to the beta environment. Software is not deployed from source but rather the artifact that was packaged and stored in the *Build Stage* will be used for the deployment. Software to be deployed should include digital signatures to verify that the software came from a trusted source and that no changes were made to the software. Software deployments should be performed through *Infrastructure Source Code*. Access to the beta environment should be handled via [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) rather than long lived credentials from IAM users. Examples of tools to deploy software include but are not limited to [AWS CodeDeploy](https://aws.amazon.com/codedeploy/).
@@ -394,14 +394,14 @@ digraph G {
         label=<<b>Environment</b>>
         fontname="Helvetica,Arial,sans-serif"
         graph[color="black" style="dashed" fontcolor="black"]
-    
+
         software[label="Application" color="#d4dada" fontcolor="black"]
     }
     repo[label="Artifact Repository" color="#d4dada" fontcolor="black"]
     repo -> iac[label="get artifact" fontcolor="black" color="black"]
     iac -> software [label="deploy" fontcolor="black" color="black"]
 }
-```
+    ```
 
 ???+ required "Integration Tests"
     Run automated tests that verify if the application satisifes business requirements. These tests require the application to be running in the beta environment. Integration tests may come in the form of behavior-driven tests, automated acceptance tests, or automated tests linked to requirements and/or stories in a tracking system. Examples of tools to define integration tests include but are not limited to [Cucumber](https://cucumber.io) and [SoapUI](https://www.soapui.org).
@@ -425,12 +425,12 @@ digraph G {
         label=<<b>Environment</b>>
         fontname="Helvetica,Arial,sans-serif"
         graph[color="black" style="dashed" fontcolor="black"]
-    
+
         app[label="Application" color="#d4dada" fontcolor="black"]
     }
     test_source -> app [label="test" fontcolor="black" color="black"]
 }
-```
+    ```
 
 ???+ required "Acceptance Tests"
     Run automated testing from the users’ perspective in the beta environment. These tests verify the user workflow, including when performed through a UI. These test are the slowest to run and hardest to maintain and therefore it is recommended to only have a few end-to-end tests that cover the most important application workflows. Examples of tools to define end-to-end tests include but are not limited to [Cypress](https://cypress.io) and [Selenium](https://selenium.dev).
@@ -454,12 +454,12 @@ digraph G {
         label=<<b>Environment</b>>
         fontname="Helvetica,Arial,sans-serif"
         graph[color="black" style="dashed" fontcolor="black"]
-    
+
         app[label="Application" color="#d4dada" fontcolor="black"]
     }
     test_source -> app [label="test" fontcolor="black" color="black"]
 }
-```
+    ```
 
 ## Test (Gamma)
 
@@ -487,13 +487,13 @@ digraph G {
         label=<<b>Environment</b>>
         fontname="Helvetica,Arial,sans-serif"
         graph[color="black" style="dashed" fontcolor="black"]
-    
+
         env[label="" style="invis"]
     }
 
     iac -> env [label="launch" fontcolor="black" color="black"]
 }
-```
+    ```
 
 ???+ recommended "Database Deploy"
     Apply changes to the gamma database using the *Database Source Code*. Changes should be made in a manner that [ensures rollback safety](https://aws.amazon.com/builders-library/ensuring-rollback-safety-during-deployments/). Best practice is to connect to the gamma database through [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) and [IAM database authentication for RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html) rather than long lived database credentials. If database credentials must be used, then they should be loaded from a secret manager such as [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/). Changes to the database should be incremental, only applying the changes since the prior deployment. Examples of tools that apply incremental database changes include but are not limited to [Liquibase](https://www.liquibase.org/).
@@ -517,12 +517,12 @@ digraph G {
         label=<<b>Environment</b>>
         fontname="Helvetica,Arial,sans-serif"
         graph[color="black" style="dashed" fontcolor="black"]
-    
+
         db[label="Database" color="#d4dada" fontcolor="black"]
     }
     db_source -> db [label="deploy" fontcolor="black" color="black"]
 }
-```
+    ```
 
 ???+ required "Deploy Software"
     Deploy software to the gamma environment. Software is not deployed from source but rather the artifact that was packaged and stored in the *Build Stage* will be used for the deployment. Software to be deployed should include digital signatures to verify that the software came from a trusted source and that no changes were made to the software. Software deployments should be performed through *Infrastructure Source Code*. Access to the gamma environment should be handled via [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) rather than long lived credentials from IAM users. Examples of tools to deploy software include but are not limited to [AWS CodeDeploy](https://aws.amazon.com/codedeploy/).
@@ -546,14 +546,14 @@ digraph G {
         label=<<b>Environment</b>>
         fontname="Helvetica,Arial,sans-serif"
         graph[color="black" style="dashed" fontcolor="black"]
-    
+
         software[label="Application" color="#d4dada" fontcolor="black"]
     }
     repo[label="Artifact Repository" color="#d4dada" fontcolor="black"]
     repo -> iac[label="get artifact" fontcolor="black" color="black"]
     iac -> software [label="deploy" fontcolor="black" color="black"]
 }
-```
+    ```
 
 ???+ required "Application Monitoring & Logging"
     Monitor deployments across regions and fail when threshold breached. The thresholds for metric alarms should be defined in the *Infrastructure Source Code* and deployed along with the rest of the infrastructure in an environment. Ideally, deployments should be automatically failed and rolled back when error thresholds are breached. Examples of automated rollback include [AWS CloudFormation monitor & rollback](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-rollback-triggers.html), [AWS CodeDeploy rollback](https://docs.aws.amazon.com/codedeploy/latest/userguide/deployments-rollback-and-redeploy.html) and [Flagger](https://flagger.app/).
@@ -578,7 +578,7 @@ digraph G {
         fontname="Helvetica,Arial,sans-serif"
         graph[color="black" style="dashed" fontcolor="black"]
         edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    
+
         app[label="Application" color="#d4dada" fontcolor="black"]
         logs[label="Logs" color="#d4dada" fontcolor="black"]
         metrics[label="Metrics" color="#d4dada" fontcolor="black"]
@@ -589,7 +589,7 @@ digraph G {
     metrics -> iac [label="monitor" fontcolor="black" color="black"]
     iac -> app [label="rollback" fontcolor="black" color="black"]
 }
-```
+    ```
 
 ???+ required "Synthetic Tests"
     Tests that run continuously in the background in a given environment to generate traffic and verify the system is healthy. These tests serve two purposes: 1/ Ensure there is always adequate traffic in the environment to trigger alarms if a deployment is unhealthy 2/ Test specific workflows and assert that the system is functioning correctly. Examples of tools that can be used for synthetic tests include but are not limited to [Amazon CloudWatch Synthetics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html) and [Datadog Synthetic Monitoring](https://docs.datadoghq.com/synthetics/).
@@ -614,7 +614,7 @@ digraph G {
         fontname="Helvetica,Arial,sans-serif"
         graph[color="black" style="dashed" fontcolor="black"]
         edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    
+
         app[label="Application" color="#d4dada" fontcolor="black"]
         synthetic[label="Synthetic Tests" color="#d4dada" fontcolor="black"]
         metrics[label="Metrics" color="#d4dada" fontcolor="black"]
@@ -624,7 +624,7 @@ digraph G {
     metrics -> iac [label="monitor" fontcolor="black" color="black"]
     iac -> app [label="rollback" fontcolor="black" color="black"]
 }
-```
+    ```
 
 ???+ recommended "Performance Tests"
     Run longer-running automated capacity tests against environments that simulate production capacity. Measure metrics such as the transaction success rates, response time and throughput. Determine if application meets performance requirements and compare metrics to past performance to look for performance degredation. Examples of tools that can be used for performance tests include but are not limited to [JMeter](https://jmeter.apache.org) and [Gatling](https://gatling.io).
@@ -649,7 +649,7 @@ digraph G {
         fontname="Helvetica,Arial,sans-serif"
         graph[color="black" style="dashed" fontcolor="black"]
         edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    
+
         app[label="Application" color="#d4dada" fontcolor="black"]
         metrics[label="Metrics" color="#d4dada" fontcolor="black"]
         app -> metrics
@@ -657,7 +657,7 @@ digraph G {
     tests -> app [label="execute tests" fontcolor="black" color="black"]
     metrics -> tests [label="monitor" fontcolor="black" color="black"]
 }
-```
+    ```
 
 ???+ recommended "Resilience Tests"
     Inject failures into environments to identify areas of the application that are susceptible to failure. Tests are defined as code and applied to the environment while the system is under load. The success rate, response time and throughput are measured during the periods when the failures are injected and compared to periods without the failures. Any significant deviation should fail the pipeline. Examples of tools that can be used for chaos/resilience testing include but are not limited to [AWS Fault Injection Simulator](https://aws.amazon.com/fis/) and [ChaosToolkit](https://chaostoolkit.org/).
@@ -682,7 +682,7 @@ digraph G {
         fontname="Helvetica,Arial,sans-serif"
         graph[color="black" style="dashed" fontcolor="black"]
         edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    
+
         app[label="Application" color="#d4dada" fontcolor="black"]
         metrics[label="Metrics" color="#d4dada" fontcolor="black"]
         app -> metrics
@@ -690,14 +690,14 @@ digraph G {
     tests -> app [label="inject faults" fontcolor="black" color="black"]
     metrics -> tests [label="monitor" fontcolor="black" color="black"]
 }
-```
+    ```
 
 ???+ recommended "Dynamic Application Security Testing (DAST)"
     Perform testing of web applications and APIs by running automated scans against it to identify vulnerabilities through techniques such as cross-site scripting (XSS) and SQL injection(SQLi).  Examples of tools that can be used for dynamic application security testing include but are not limited to [OWASP ZAP](https://owasp.org/www-project-zap) and [StackHawk](https://www.stackhawk.com/).
 
 ## Prod
 
-???+ required "Optional Approval"
+???+ required "Manual Approval"
     As part of a automated workflow, obtain authorized human approval before deploying to the production environment.
 
 ???+ required "Database Deploy"
@@ -722,16 +722,16 @@ digraph G {
         label=<<b>Environment</b>>
         fontname="Helvetica,Arial,sans-serif"
         graph[color="black" style="dashed" fontcolor="black"]
-    
+
         db[label="Database" color="#d4dada" fontcolor="black"]
     }
     db_source -> db [label="deploy" fontcolor="black" color="black"]
 }
-```
+    ```
 
 ???+ required "Progressive Deployment"
-    Deployments should be made progressively in waves to limit the impact of failures. A common approach is to deploy changes to a subset of AWS regions and allow sufficient bake time to monitor performance and behavior before proceeding with additional waves of AWS regions. 
-    
+    Deployments should be made progressively in waves to limit the impact of failures. A common approach is to deploy changes to a subset of AWS regions and allow sufficient bake time to monitor performance and behavior before proceeding with additional waves of AWS regions.
+
     Software should be deployed using one of several progressive deployment models: Blue/Green, Canary, Rolling Changes, or All At Once. Software deployments should be performed through *Infrastructure Source Code*. Access to the production environment should be handled via [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) rather than long lived credentials from IAM users. Examples of tools to deploy software include but are not limited to [AWS CodeDeploy](https://aws.amazon.com/codedeploy/). Ideally, deployments should be automatically failed and rolled back when error thresholds are breached. Examples of automated rollback include [AWS CloudFormation monitor & rollback](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-rollback-triggers.html), [AWS CodeDeploy rollback](https://docs.aws.amazon.com/codedeploy/latest/userguide/deployments-rollback-and-redeploy.html) and [Flagger](https://flagger.app/).
     ```graphviz dot progdep.png
 digraph G {
@@ -754,7 +754,7 @@ digraph G {
         fontname="Helvetica,Arial,sans-serif"
         graph[color="black" style="dashed" fontcolor="black"]
         edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    
+
         app[label="Application" color="#d4dada" fontcolor="black"]
         metrics[label="Metrics" color="#d4dada" fontcolor="black"]
         app -> metrics
@@ -762,7 +762,7 @@ digraph G {
     metrics -> iac [label="monitor" fontcolor="black" color="black"]
     iac -> app [label="rollback" fontcolor="black" color="black"]
 }
-```
+    ```
 
 ???+ recommended "Synthetic Tests"
     Tests that run continuously in the background in a givent environment to generate traffic and verify the system is healthy. These tests serve two purposes: 1/ Ensure there is always adequate traffic in the environment to trigger alarms if a deployment is unhealthy 2/ Test specific workflows and assert that the system is functioning correctly. Examples of tools that can be used for synthetic tests include but are not limited to [Amazon CloudWatch Synthetics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html) and [Datadog Synthetic Monitoring](https://docs.datadoghq.com/synthetics/).
@@ -788,7 +788,7 @@ digraph G {
         fontname="Helvetica,Arial,sans-serif"
         graph[color="black" style="dashed" fontcolor="black"]
         edge [fontname="Helvetica,Arial,sans-serif" color="black" fontcolor="black"]
-    
+
         app[label="Application" color="#d4dada" fontcolor="black"]
         synthetic[label="Synthetic Tests" color="#d4dada" fontcolor="black"]
         metrics[label="Metrics" color="#d4dada" fontcolor="black"]
@@ -798,4 +798,4 @@ digraph G {
     metrics -> iac [label="monitor" fontcolor="black" color="black"]
     iac -> app [label="rollback" fontcolor="black" color="black"]
 }
-```
+    ```

@@ -58,7 +58,7 @@ digraph G {
             graph[penwidth=2 color="slategray"]
             node [shape=box style=filled fontcolor="black" width=2]
 
-            launch_beta[label="Launch Env" color="#ff9900"] 
+            launch_beta[label="Launch Env" color="#ff9900"]
             db_deploy_beta[label="DB Deploy" color="#ff9900"]
             software_deploy_beta[label="Deploy Software" color="#ff9900"]
             int_test_beta[label="Integration Tests" color="#ff9900"]
@@ -70,7 +70,7 @@ digraph G {
             graph[penwidth=2 color="slategray"]
             node [shape=box style=filled fontcolor="black" width=3]
 
-            launch_gamma[label="Launch Env" color="#ff9900"] 
+            launch_gamma[label="Launch Env" color="#ff9900"]
             db_deploy_gamma[label="DB Deploy" color="#ff9900"]
             software_deploy_gamma[label="Deploy Software" color="#ff9900"]
             app_monitor_gamma[label="Application Monitoring & Logging" color="#ff9900"]
@@ -83,7 +83,7 @@ digraph G {
             graph[penwidth=2 color="slategray"]
             node [shape=box style=filled fontcolor="black" width=3]
 
-            approval[label="Optional Approval" color="#ff9900"]
+            approval[label="Manual Approval" color="#ff9900"]
             db_deploy_prod[label="DB Deploy" color="#ff9900"]
             blue_green_deployment[label="Blue/Green Deployment" color="#ff9900"]
             synthetic_prod[label="Synthetic Tests" color="#ff9900"]
@@ -98,9 +98,17 @@ digraph G {
 }
 ```
 
+???+ danger "Disclaimer"
+    This reference implementation is intended to serve as an example of how to accomplish the guidance in the reference architecture using [CDK Pipelines](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.pipelines-readme.html). The reference implementation has intentionally not followed the following [AWS Well-Architected](https://aws.amazon.com/architecture/well-architected/) best practices to make it accessible by a wider range of customers. Be sure to address these before using parts of this code for any workloads in your own environment:
+
+    * [ ] **cdk bootstrap with AdministratorAccess** - the default policy used for `cdk bootstrap` is `AdministratorAccess` but should be replaced with a more appropriate policy with least priviledge in your account.
+    * [ ] **TLS on HTTP endpoint** - the listener for the sample application uses HTTP instead of HTTPS to avoid having to create new ACM certificates and Route53 hosted zones. This should be replaced in your account with an `HTTPS` listener.
+
 ## Source
 
 ???+ required "Application Source Code"
+    The application source code can be found in the [src/main/java](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/cdk-application-pipeline/src/main/java) directory. It is intended to serve only as a reference and should be replaced by your own application source code.
+
     This reference implementation includes a [Spring Boot](https://spring.io/projects/spring-boot) application that exposes a REST API and uses a database for persistence. The API is implemented in `FruitController.java`:
 
     <!--codeinclude-->
@@ -115,20 +123,26 @@ digraph G {
     <!--/codeinclude-->
 
 ???+ required "Test Source Code"
+    The test source code can be found in the [src/test/java](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/cdk-application-pipeline/src/test/java) directory. It is intended to serve only as a reference and should be replaced by your own test source code.
+
     The reference implementation includes source code for unit, integration and end-to-end testing. Unit and integration tests can be found in `src/test/java`. For example, `FruitControllerTest.java` performs unit tests of each API path with the [JUnit](https://junit.org/) testing library:
 
     <!--codeinclude-->
     [](../../examples/cdk-application-pipeline/src/test/java/com/amazonaws/dpri/fruits/FruitControllerTest.java) block:shouldReturnList
     <!--/codeinclude-->
 
-    Acceptance tests are preformed with with [SoapUI](https://www.soapui.org/) and are defined in `fruit-api-soapui-project.xml`. They are executed by [Maven](https://maven.apache.org/) using plugins in `pom.xml`. 
+    Acceptance tests are preformed with with [SoapUI](https://www.soapui.org/) and are defined in `fruit-api-soapui-project.xml`. They are executed by [Maven](https://maven.apache.org/) using plugins in `pom.xml`.
 
 ???+ required "Infrastructure Source Code"
-    Code that defines both the deployment of the pipeline and the deployment of the application are stored in `infrastructure/` folder and uses [AWS Cloud Development Kit](https://aws.amazon.com/cdk/).
+    The infrastructure source code can be found in the [infrastructure](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/cdk-application-pipeline/infrastructure) directory. It is intended to serve as a reference but much of the code can also be reused in your own CDK applications.
+
+    Infrastructure source code defines both the deployment of the pipeline and the deployment of the application are stored in `infrastructure/` folder and uses [AWS Cloud Development Kit](https://aws.amazon.com/cdk/).
 
     <!--codeinclude-->
     [](../../examples/cdk-application-pipeline/infrastructure/src/deployment/index.ts) inside_block:constructor
     <!--/codeinclude-->
+
+    Notice that the infrastructure code is written in [Typescript](https://www.typescriptlang.org/) which is different from the Application Source Code (Java). This was done intentionally to demonstrate that CDK allows defining infrastructure code in whatever language is most appropriate for the team that owns the use of CDK in the organization.
 
 ???+ required "Static Assets"
     There are no static assets used by the sample application.
@@ -138,22 +152,22 @@ digraph G {
 
     ```xml
     <dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.liquibase</groupId> 
-			<artifactId>liquibase-core</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
     </dependencies>
     ```
 
@@ -165,6 +179,8 @@ digraph G {
     <!--/codeinclude-->
 
 ???+ required "Database Source Code"
+    The database source code can be found in the [src/main/resources/db](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/cdk-application-pipeline/src/main/resources/db) directory. It is intended to serve only as a reference and should be replaced by your own database source code.
+
     The code that manages the schema and initial data for the application is defined using [Liquibase](https://www.liquibase.org/) in `src/main/resources/db/changelog/db.changelog-master.yml`:
 
     <!--codeinclude-->
@@ -210,7 +226,7 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
         RESOURCE_LEAKS = 'ResourceLeaks',
         SECURITY_ISSUES = 'SecurityIssues',
     }
-    export class CodeGuruReviewFilter { 
+    export class CodeGuruReviewFilter {
         // Limit which recommendation categories to include
         recommendationCategories!: CodeGuruReviewRecommendationCategory[];
 
@@ -235,7 +251,7 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     ```
 
 
-    This adds an action to CodePipeline for 
+    This adds an action to CodePipeline for
 
     ![](assets/codeguru-review.png)
 
@@ -270,7 +286,7 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     <!--/codeinclude-->
 
 ???+ required "Software Bill of Materials (SBOM)"
-    Trivy generates an SBOM in the form of a [CycloneDX](https://cyclonedx.org/) JSON report. The SBOM is saved as a CodePipeline asset.
+    Trivy generates an SBOM in the form of a [CycloneDX](https://cyclonedx.org/) JSON report. The SBOM is saved as a CodePipeline asset.  Trivy supports additional SBOM formats such as [SPDX](https://spdx.dev/wp-content/uploads/sites/41/2020/08/SPDX-specification-2-2.pdf), and [SARIF](https://docs.oasis-open.org/sarif/sarif/v2.0/sarif-v2.0.html).
 
 ## Test (Beta)
 
@@ -294,7 +310,6 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     [](../../examples/cdk-application-pipeline/src/main/resources/db/changelog/db.changelog-master.yaml)
     <!--/codeinclude-->
 
-
 ???+ required "Deploy Software"
     The *Launch Environment* action above creates a new [Amazon ECS Task Definition](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html) for the new docker image and then updates the Amazon ECS Service to use the new Task Definition.
 
@@ -302,57 +317,57 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     Integration tests are preformed during the *Build Source* action. They are defined with with [SoapUI](https://www.soapui.org/) in `fruit-api-soapui-project.xml`. They are executed by [Maven](https://maven.apache.org/) in the `integration-test` phase using plugins in `pom.xml`.  Spring Boot is configure to start a local instance of the application with an H2 database during the `pre-integration-test` phase and then to terminate on the `post-integration-test` phase.  The results of the unit tests are uploaded to [AWS Code Build Test Reports](https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html) to track over time.
 
     ```xml
-        <plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<executions>
-					<execution>
-					  <id>pre-integration-test</id>
-					  <goals>
-						<goal>start</goal>
-					  </goals>
-					</execution>
-					<execution>
-					  <id>post-integration-test</id>
-					  <goals>
-						<goal>stop</goal>
-					  </goals>
-					</execution>
-				  </executions>
-			</plugin>
-			<plugin>
-				<groupId>com.smartbear.soapui</groupId>
-				<artifactId>soapui-maven-plugin</artifactId>
-				<version>5.7.0</version>
-				<configuration>
-					<junitReport>true</junitReport>
-					<outputFolder>target/soapui-reports</outputFolder>
-					<endpoint>${soapui.endpoint}</endpoint>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>integration-test</phase>
-						<goals>
-							<goal>test</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>pre-integration-test</id>
+                    <goals>
+                        <goal>start</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>post-integration-test</id>
+                    <goals>
+                        <goal>stop</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>com.smartbear.soapui</groupId>
+            <artifactId>soapui-maven-plugin</artifactId>
+            <version>5.7.0</version>
+            <configuration>
+                <junitReport>true</junitReport>
+                <outputFolder>target/soapui-reports</outputFolder>
+                <endpoint>${soapui.endpoint}</endpoint>
+            </configuration>
+            <executions>
+                <execution>
+                    <phase>integration-test</phase>
+                    <goals>
+                        <goal>test</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
     ```
 
 ???+ required "Acceptance Tests"
     Acceptance tests are preformed after the *Launch Environment* and *Deploy Software* actions:
 
     ![](assets/deploy-beta.png)
-    
-    The tests are defined with with [SoapUI](https://www.soapui.org/) in `fruit-api-soapui-project.xml`. They are executed by [Maven](https://maven.apache.org/) with the endpoint overridden to the URL from the CloudFormation output. A CDK construct called `SoapUITest` was created to create the CodeBuild Project to run SoapUI. 
+
+    The tests are defined with with [SoapUI](https://www.soapui.org/) in `fruit-api-soapui-project.xml`. They are executed by [Maven](https://maven.apache.org/) with the endpoint overridden to the URL from the CloudFormation output. A CDK construct called `SoapUITest` was created to create the CodeBuild Project to run SoapUI.
 
     <!--codeinclude-->
     [](../../examples/cdk-application-pipeline/infrastructure/src/soapui-test/index.ts) inside_block:constructor
     <!--/codeinclude-->
-    
+
     The results of the unit tests are uploaded to [AWS Code Build Test Reports](https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html) to track over time.
 
 ## Test (Gamma)
@@ -399,13 +414,13 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
 
 ???+ recommended "Resilience Tests"
     `Not Implemented`
-    
+
 ???+ recommended "Dynamic Application Security Testing (DAST)"
     `Not Implemented`
 
 ## Prod
 
-???+ required "Optional Approval"
+???+ required "Manual Approval"
     A manual approval step is added to the end of the `Gamma` stage. The step is added at the end to keep the environment in a stable state while manual testing is performed. Once the step is approved, the pipeline continues execution to the next stage.
 
     ```typescript
@@ -422,6 +437,18 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
                 new ManualApprovalStep('PromoteFromGamma'),
             );
         });
+    ```
+
+    When a manual approval step is used, [IAM permissions](https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals-iam-permissions.html) should be used restrict which principals can approve actions and stages to enforce least priviledge.
+
+    ```json
+        {
+            "Effect": "Allow",
+            "Action": [
+                "codepipeline:PutApprovalResult"
+            ],
+            "Resource": "arn:aws:codepipeline:us-east-2:80398EXAMPLE:MyFirstPipeline/MyApprovalStage/MyApprovalAction"
+        }
     ```
 
 ???+ required "Database Deploy"
@@ -505,8 +532,6 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     <!--codeinclude-->
     [](../../examples/cdk-application-pipeline/infrastructure/src/pipeline.ts) block:PipelineEnvironment
     <!--/codeinclude-->
-    
-
 
 ???+ required "Synthetic Tests"
     [Amazon CloudWatch Synthetics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html) is used to continuously deliver traffic to the application and assert that requests are successful and responses are received within a given threshold. The canary is defined via CDK:
@@ -514,3 +539,16 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     <!--codeinclude-->
     [](../../examples/cdk-application-pipeline/infrastructure/src/deployment/synthetic.ts) inside_block:constructor
     <!--/codeinclude-->
+
+## Frequently Asked Questions
+
+???+ faq "What [operating models](https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/operating-model.html) does this reference implementation support?"
+
+    This reference implementation can accomodate any operation model with minor updates:
+
+    * [Fully Separated](https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/fully-separated-operating-model.html) - Restrict the role that CDK uses for CloudFormation execution to only create resources from approved product portfolios in [AWS Service Catalog](https://aws.amazon.com/servicecatalog/). Ownership of creating the products in Service Catalog is owned by the **Platform Engineering** team and operational support of Service Catalog is owned by the **Platform Operations** team. The **Platform Engineering** team should publish CDK constructs internally that provision AWS resources through Service Catalog. Update the CDK app in the `infrastructure/` directory to use CDK constructs provided by the `Platform Engineering` team. Use a [CODEOWNERS](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) file to require all changes to the `infrastructure/` directory be approved by the **Application Operations** team. Additionally, restrict permissions to the **Manual Approval** action to only allow members of the **Application Operations** to approve.
+    * [Separated AEO and IEO with Centralized Governance](https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/separated-aeo-and-ieo-with-centralized-governance.html) - Restrict the role that CDK uses for CloudFormation execution to only create resources from approved product portfolios in [AWS Service Catalog](https://aws.amazon.com/servicecatalog/). Ownership of creating the products in Service Catalog is owned by the **Platform Engineering** team and operational support of Service Catalog is owned by the **Platform Engineering** team. The **Platform Engineering** team should publish CDK constructs internally that provision AWS resources through Service Catalog. Update the CDK app in the `infrastructure/` directory to use CDK constructs provided by the `Platform Engineering` team.
+    * [Separated AEO and IEO with Deentralized Governance](https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/separated-aeo-and-ieo-with-decentralized-governance.html) - The **Platform Engineering** team should publish CDK constructs internally that provision AWS resources in manner that achieve organizational compliance. Update the CDK app in the `infrastructure/` directory to use CDK constructs provided by the `Platform Engineering` team.
+
+???+ faq "Where is manual testing performed in this pipeline?"
+    Ideally, all testing is accomplished through automation in the **Integration Tests** and **Acceptance Tests** actions. If an organization relies on people manually executing tests then these tests would be performed in the **Gamma Stage**. The **Manual Approval** action would be required and the approval would be granted by a Quality Assurance team member once the manual testing completes successfully.

@@ -69,6 +69,7 @@ async function main() {
 async function promptAccount(message: string, initialProfile?: string): Promise<Account> {
   const profile = await promptProfile(message, initialProfile);
   const accountId = await getAccountId(profile);
+
   return {
     profile,
     accountId,
@@ -87,6 +88,7 @@ async function promptProfile(message: string, initialProfile?: string): Promise<
     initial,
     choices: profiles.map(k => ({ title: k, value: k })),
   }) as unknown as string;
+
   return profile;
 }
 
@@ -94,6 +96,7 @@ async function getAccountId(profile: string): Promise<string> {
   const client = new STS({
     credentials: fromNodeProviderChain({ profile }),
   });
+
   return (await client.getCallerIdentity({})).Account!;
 }
 
@@ -101,6 +104,7 @@ async function getRegion(profile: string): Promise<string> {
   const client = new STS({
     credentials: fromNodeProviderChain({ profile }),
   });
+
   return client.config.region();
 }
 

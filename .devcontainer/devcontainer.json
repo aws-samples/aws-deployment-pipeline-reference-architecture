@@ -1,5 +1,3 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.140.1/containers/python-3
 {
 	"name": "dpra",
 	"build": {
@@ -8,18 +6,14 @@
 	},
 
 	"mounts": [
-		// Expose local docker socket for docker-in-docker
 		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
-		// Expose local .aws profiles and credentials
 		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/home/vscode/.aws,type=bind",
-		// Expose local SSH credentials
 		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,type=bind"
 
 	],
 	"runArgs": [ "--net=host", "--privileged" ],
 
-	// Set *default* container specific settings.json values on container create.
-	"settings": { 
+	"settings": {
 		"terminal.integrated.shell.linux": "/bin/bash",
 		"python.pythonPath": "/usr/bin/python3",
 		"python.linting.enabled": true,
@@ -28,7 +22,6 @@
 		"python.linting.pylintPath": "/usr/local/bin/pylint"
 	},
 
-	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"ms-azuretools.vscode-docker",
 		"ms-python.python",
@@ -36,12 +29,7 @@
 		"geeklearningio.graphviz-markdown-preview"
 	],
 
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [8000],
-
-	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "pip install -r requirements.txt",
-
-	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode"
 }

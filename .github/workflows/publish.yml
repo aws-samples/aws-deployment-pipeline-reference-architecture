@@ -31,6 +31,10 @@ jobs:
         run: sudo apt-get install -y graphviz
       - name: Install dependencies
         run: pip install -r requirements.txt
+      - name: Install markdownlint-cli
+        run: npm install -g markdownlint-cli
+      - name: Lint Markdown
+        run: markdownlint docs
       - name: Build content
         run: mkdocs build --verbose --site-dir site
         env:

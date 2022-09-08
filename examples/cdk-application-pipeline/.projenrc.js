@@ -46,4 +46,10 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   // packageName: undefined,  /* The "name" in package.json. */
 });
+project.eslint.addRules({
+  'padding-line-between-statements': [
+    'error',
+    { blankLine: 'always', prev: '*', next: 'return' },
+  ],
+});
 project.synth();

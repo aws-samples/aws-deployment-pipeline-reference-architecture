@@ -1,6 +1,6 @@
 # Account Fleet Management Pipeline
 
-Enterprises develop and deploy shared services that can be consumed by many teams in an organization. A shared services deployment pipeline may provision one or more services. For example, you may design a shared services deployment pipeline to launch an AWS Organization including provisioning multiple AWS accounts with guardrails. As part of this provisioning, certain AWS services and configuration may be enabled such as AWS Control Tower, AWS Organizations, AWS Service Catalog, AWS Security Hub, Amazon GuardDuty, Amazon Macie, and others. The automated provisioning of these services and configurations are run as part of these shared services deployment pipelines. 
+Enterprises develop and deploy shared services that can be consumed by many teams in an organization. A shared services deployment pipeline may provision one or more services. For example, you may design a shared services deployment pipeline to launch an AWS Organization including provisioning multiple AWS accounts with guardrails. As part of this provisioning, certain AWS services and configuration may be enabled such as AWS Control Tower, AWS Organizations, AWS Service Catalog, AWS Security Hub, Amazon GuardDuty, Amazon Macie, and others. The automated provisioning of these services and configurations are run as part of these shared services deployment pipelines.
 
 ```mermaid
 
@@ -22,7 +22,7 @@ flowchart
 
 ## Alpha
 
-All actions run In this stage are also run on developers’ local environments prior to code commit and peer review. 
+All actions run In this stage are also run on developers’ local environments prior to code commit and peer review.
 
 * *Policy as Code* - Run preventative automated checks are run to ensure that the code and environments conform to organization/team policy. For example, these checks might alert when code defines volumes or buckets as not encrypted, services not enabled, or endpoints not protected. When policies are violated, AWS recommends the build fails so that developers can fix the errors. (e.g., CloudFormation Guard, OPA, and IAM Access Analyzer)
 * *Secrets Detection & Repo Cleansing* - Identify secrets such as usernames, passwords, and access keys. When secrets are discovered, the build fails and all secrets in the source code repo history are purged. (e.g., Amazon CodeGuru Secrets Detection, git-secrets)
@@ -40,4 +40,4 @@ All actions run In this stage are also run on developers’ local environments p
 ## Prod
 
 * *Approval* - Optional action as part of an automated workflow, obtain authorized human approval before completing deployment.
-* *Generate Service Catalog Product* - Provide shared services through a service catalog so that teams can obtain the software through self-service means in a controlled manner. IAM policies ensure only the necessary access is applied to principals.  
+* *Generate Service Catalog Product* - Provide shared services through a service catalog so that teams can obtain the software through self-service means in a controlled manner. IAM policies ensure only the necessary access is applied to principals.
