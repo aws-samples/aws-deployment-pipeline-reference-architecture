@@ -2,12 +2,6 @@
 
 Enterprises develop and deploy shared services that can be consumed by many teams in an organization. A shared services deployment pipeline may provision one or more services. For example, you may design a shared services deployment pipeline to launch an AWS Organization including provisioning multiple AWS accounts with guardrails. As part of this provisioning, certain AWS services and configuration may be enabled such as AWS Control Tower, AWS Organizations, AWS Service Catalog, AWS Security Hub, Amazon GuardDuty, Amazon Macie, and others. The automated provisioning of these services and configurations are run as part of these shared services deployment pipelines.
 
-```mermaid
-
-flowchart
-    todo
-```
-
 ## Source
 
 * Test source code

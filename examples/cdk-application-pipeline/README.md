@@ -47,6 +47,8 @@ git clone https://git-codecommit.us-west-2.amazonaws.com/v1/repos/fruit-api
 
 ## Local Development
 
+Setup [pre-commit](https://pre-commit.com/): `brew install pre-commit && pre-commit install`
+
 To test changes to the CDK code, run:
 
 ```bash

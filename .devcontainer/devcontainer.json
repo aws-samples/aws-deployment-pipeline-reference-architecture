@@ -25,8 +25,7 @@
 	"extensions": [
 		"ms-azuretools.vscode-docker",
 		"ms-python.python",
-		"bierner.markdown-mermaid",
-		"geeklearningio.graphviz-markdown-preview"
+		"hediet.vscode-drawio"
 	],
 
 	"forwardPorts": [8000],

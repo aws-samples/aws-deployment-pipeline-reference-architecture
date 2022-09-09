@@ -2,12 +2,6 @@
 
 The compute image pipeline applies infrastructure as code to create compute images that can be used by application/service deployment pipelines to launch environments from code. As part of an image baking deployment pipeline, run image scanning and infrastructure analysis to identify vulnerable configuration code (e.g., container manifests) or vulnerable runtime images (e.g. EC2 instances and containers). Use static analysis and fully-managed services for preventative and detective controls. On AWS, the output artifacts are often Amazon Machine Images (AMIs) or Container Images published to a container registry.
 
-```mermaid
-
-flowchart
-    todo
-```
-
 ## Source
 
 * Test source code

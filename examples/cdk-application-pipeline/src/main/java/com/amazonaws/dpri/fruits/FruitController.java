@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class FruitController {
+public final class FruitController {
+    /**
+     * Repository to use for persistence.
+     */
     private final FruitRepository repository;
 
-    FruitController(FruitRepository repository) {
-        this.repository = repository;
+    FruitController(final FruitRepository newRepository) {
+        this.repository = newRepository;
     }
 
     @GetMapping("/api/fruits")
@@ -29,18 +32,20 @@ public class FruitController {
     }
 
     @PostMapping("/api/fruits")
-    Fruit newFruit(@RequestBody Fruit fruit) {
+    Fruit newFruit(@RequestBody final Fruit fruit) {
         return repository.save(fruit);
     }
 
     @GetMapping("/api/fruits/{id}")
-    Fruit one(@PathVariable Long id) {
+    Fruit one(@PathVariable final Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new FruitNotFoundException(id));
     }
 
     @PutMapping("/api/fruits/{id}")
-    Fruit replaceFruit(@RequestBody Fruit newFruit, @PathVariable Long id) {
+    Fruit replaceFruit(
+        @RequestBody final Fruit newFruit,
+        @PathVariable final Long id) {
         return repository.findById(id)
                 .map(fruit -> {
                     fruit.setName(newFruit.getName());
@@ -53,7 +58,7 @@ public class FruitController {
     }
 
     @DeleteMapping("/api/fruits/{id}")
-    void deleteFruit(@PathVariable Long id) {
+    void deleteFruit(@PathVariable final Long id) {
         repository.deleteById(id);
     }
 
@@ -65,14 +70,14 @@ class FruitNotFoundAdvice {
     @ResponseBody
     @ExceptionHandler(FruitNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String fruitNotFoundHandler(FruitNotFoundException ex) {
+    String fruitNotFoundHandler(final FruitNotFoundException ex) {
         return ex.getMessage();
     }
 
 }
 
 class FruitNotFoundException extends RuntimeException {
-    FruitNotFoundException(Long id) {
+    FruitNotFoundException(final Long id) {
         super("Unable to find fruit " + id);
     }
 }

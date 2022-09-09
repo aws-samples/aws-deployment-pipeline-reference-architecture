@@ -110,6 +110,10 @@
   mask-image: var(--dpra-icon--required);
 }
 
+[data-md-color-scheme="slate"] details img {
+  background-color: #fff;
+}
+
 .md-typeset .admonition.recommended,
 .md-typeset details.recommended {
   border-color: var(--aws-brand-color-stone);

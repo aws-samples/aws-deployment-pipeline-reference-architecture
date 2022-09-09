@@ -2,107 +2,26 @@
 
 This presents a reference implementation of the [Application Pipeline](..) reference architecture. The pipeline is built with [AWS CodePipeline](https://aws.amazon.com/codepipeline/) and uses [AWS CodeBuild](https://aws.amazon.com/codebuild/) for building the software and performing testing tasks. All the infrastructure for this reference implementation is defined with [AWS Cloud Development Kit](https://aws.amazon.com/cdk/). The pipelines are defined using the [CDK Pipelines](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.pipelines-readme.html) L3 constructs. The source code for this reference implementation is available in [GitHub](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/cdk-application-pipeline) for running in your own local account.
 
-```graphviz dot pipeline.png
-digraph G {
-    rankdir=LR
-    compound=true
-
-    fontname="Helvetica,Arial,sans-serif"
-    node [fontname="Helvetica,Arial,sans-serif"]
-    edge [fontname="Helvetica,Arial,sans-serif"]
-
-    subgraph cluster_build_service {
-        label=<<b>Build Service</b>>
-        node [shape=box style=filled fontcolor="black" width=2]
-        graph[penwidth=2 color="slategray"]
-
-        rankdir="LR"
-    }
-
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        penwidth=4
-        color="dodgerblue"
-        node [shape=box style=filled color="slategray" fontcolor="black" width=2]
-        edge [color="slategray"]
-
-        subgraph cluster_source {
-            label=<<b>Source</b>>
-            graph[penwidth=2 color="slategray"]
-
-            app_src[label="Application Source" color="#ff9900"]
-            test_src[label="Test Source" color="#ff9900"]
-            infrastructure_src[label="Infrastructure Source" color="#ff9900"]
-            static_assets[label="Static Assets" color="#ff9900"]
-            libs[label="Dependency Manifests" color="#ff9900"]
-            config[label="Configuration" color="#ff9900"]
-            db_src[label="Database Source" color="#ff9900"]
-        }
-        subgraph cluster_build {
-            label=<<b>Build Stage</b>>
-            graph[penwidth=2 color="slategray"]
-            node [shape=box style=filled fontcolor="black" width=2]
-
-            build_code[label="Build Code" color="#ff9900"]
-            code_quality[label="Code Quality" color="#ff9900"]
-            sast[label="SAST" color="#ff9900"]
-            unit_tests[label="Unit Tests" color="#ff9900"]
-            secrets_detection[label="Secrets Detection" color="#ff9900"]
-            package_artifacts[label="Package Artifacts" color="#ff9900"]
-            sca[label="SCA" color="#ff9900"]
-            sbom[label="SBOM" color="#ff9900"]
-        }
-
-        subgraph cluster_beta {
-            label=<<b>Test (Beta) Stage</b>>
-            graph[penwidth=2 color="slategray"]
-            node [shape=box style=filled fontcolor="black" width=2]
-
-            launch_beta[label="Launch Env" color="#ff9900"]
-            db_deploy_beta[label="DB Deploy" color="#ff9900"]
-            software_deploy_beta[label="Deploy Software" color="#ff9900"]
-            int_test_beta[label="Integration Tests" color="#ff9900"]
-            e2e_test_beta[label="Acceptance Tests" color="#ff9900"]
-        }
-
-        subgraph cluster_gamma {
-            label=<<b>Test (Gamma) Stage</b>>
-            graph[penwidth=2 color="slategray"]
-            node [shape=box style=filled fontcolor="black" width=3]
-
-            launch_gamma[label="Launch Env" color="#ff9900"]
-            db_deploy_gamma[label="DB Deploy" color="#ff9900"]
-            software_deploy_gamma[label="Deploy Software" color="#ff9900"]
-            app_monitor_gamma[label="Application Monitoring & Logging" color="#ff9900"]
-            synthetic_gamma[label="Synthetic Tests" color="#ff9900"]
-            cap_test_gamma[label="Performance Tests" color="#ff9900"]
-        }
-
-        subgraph cluster_prod {
-            label=<<b>Prod Stage</b>>
-            graph[penwidth=2 color="slategray"]
-            node [shape=box style=filled fontcolor="black" width=3]
-
-            approval[label="Manual Approval" color="#ff9900"]
-            db_deploy_prod[label="DB Deploy" color="#ff9900"]
-            blue_green_deployment[label="Blue/Green Deployment" color="#ff9900"]
-            synthetic_prod[label="Synthetic Tests" color="#ff9900"]
-        }
-
-        app_src -> build_code [ltail=cluster_source,lhead=cluster_build,penwidth=3,weight=10]
-        build_code -> launch_beta [ltail=cluster_build,lhead=cluster_beta,penwidth=3,weight=10]
-        launch_beta -> launch_gamma [ltail=cluster_beta,lhead=cluster_gamma,penwidth=3,weight=10]
-        launch_gamma -> approval [ltail=cluster_gamma,lhead=cluster_prod,penwidth=3,weight=10]
-    }
-
-}
-```
+![Architecture](ri-cdk-pipeline-architecture.drawio)
 
 ???+ danger "Disclaimer"
     This reference implementation is intended to serve as an example of how to accomplish the guidance in the reference architecture using [CDK Pipelines](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.pipelines-readme.html). The reference implementation has intentionally not followed the following [AWS Well-Architected](https://aws.amazon.com/architecture/well-architected/) best practices to make it accessible by a wider range of customers. Be sure to address these before using parts of this code for any workloads in your own environment:
 
     * [ ] **cdk bootstrap with AdministratorAccess** - the default policy used for `cdk bootstrap` is `AdministratorAccess` but should be replaced with a more appropriate policy with least priviledge in your account.
     * [ ] **TLS on HTTP endpoint** - the listener for the sample application uses HTTP instead of HTTPS to avoid having to create new ACM certificates and Route53 hosted zones. This should be replaced in your account with an `HTTPS` listener.
+
+## Developer Workspace
+
+Developers need fast-feedback for potential issues with their code. Automation should run in their developer workspace to give them feedback before the deployment pipeline runs.
+
+???+ required "Pre-Commit Hooks"
+    Pre-Commit hooks are scripts that are executed on the developer's workstation when they try to create a new commit. These hooks have an opportunity to inspect the state of the code before the commit occurs and abort the commit if tests fail. An example of pre-commit hooks are [Git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks#_git_hooks).  Examples of tools to configure and store pre-commit hooks as code include but are not limited to [husky](https://github.com/typicode/husky) and [pre-commit](https://pre-commit.com/#install).
+
+    The following `.pre-commit-config.yaml` is added to the repository that will build the code with [Maven](https://maven.apache.org/), run unit tests with [JUnit](https://junit.org), check for code quality with [Checkstyle](https://github.com/checkstyle/checkstyle), run static application security testing with [PMD](https://pmd.github.io/latest/index.html) and check for secrets in the code wwith [gitleaks](https://github.com/zricethezav/gitleaks).
+
+    <!--codeinclude-->
+    [](../../examples/cdk-application-pipeline/.pre-commit-config.yaml)
+    <!--/codeinclude-->
 
 ## Source
 
@@ -186,7 +105,6 @@ digraph G {
     <!--codeinclude-->
     [](../../examples/cdk-application-pipeline/src/main/resources/db/changelog/db.changelog-master.yaml)
     <!--/codeinclude-->
-
 ## Build
 
 Actions in this stage all run in less than 10 minutes so that developers can take action on fast feedback before moving on to their next task. Each of the actions below are defined as code with [AWS Cloud Development Kit](https://aws.amazon.com/cdk/).

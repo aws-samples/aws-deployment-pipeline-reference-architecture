@@ -18,33 +18,33 @@ import java.util.Optional;
 @WebMvcTest
 public class FruitControllerTest {
 
-  @Autowired
-  private MockMvc mockMvc;
+    @Autowired
+	private MockMvc mockMvc;
 
-  @MockBean
-  private FruitRepository repository;
+    @MockBean
+    private FruitRepository repository;
 
-  @Test
-  public void shouldReturnList() throws Exception {
-    when(repository.findAll()).thenReturn(Arrays.asList(new Fruit("Mango"), new Fruit("Dragonfruit")));
+    @Test
+	public void shouldReturnList() throws Exception {
+        when(repository.findAll()).thenReturn(Arrays.asList(new Fruit("Mango"), new Fruit("Dragonfruit")));
 
-    this.mockMvc.perform(get("/api/fruits")).andDo(print()).andExpect(status().isOk())
-        .andExpect(content().json("[{\"name\": \"Mango\"}, {\"name\": \"Dragonfruit\"}]"));
-  }
+		this.mockMvc.perform(get("/api/fruits")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().json("[{\"name\": \"Mango\"}, {\"name\": \"Dragonfruit\"}]"));
+	}
 
-  @Test
-  public void shouldReturnOne() throws Exception {
-    when(repository.findById(99l)).thenReturn(Optional.of(new Fruit("Mango")));
+    @Test
+	public void shouldReturnOne() throws Exception {
+        when(repository.findById(99l)).thenReturn(Optional.of(new Fruit("Mango")));
 
-    this.mockMvc.perform(get("/api/fruits/99")).andDo(print()).andExpect(status().isOk())
-        .andExpect(content().json("{\"name\": \"Mango\"}"));
-  }
+		this.mockMvc.perform(get("/api/fruits/99")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().json("{\"name\": \"Mango\"}"));
+	}
 
-  @Test
-  public void shouldReturn404() throws Exception {
-    when(repository.findById(99l)).thenReturn(Optional.empty());
+    @Test
+	public void shouldReturn404() throws Exception {
+        when(repository.findById(99l)).thenReturn(Optional.empty());
 
-    this.mockMvc.perform(get("/api/fruits/99")).andDo(print()).andExpect(status().isNotFound());
-  }
+		this.mockMvc.perform(get("/api/fruits/99")).andDo(print()).andExpect(status().isNotFound());
+	}
 
 }

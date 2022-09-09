@@ -20,14 +20,23 @@ markdownlint:
   - npm install -g markdownlint-cli
   - markdownlint docs
 
+.install_dependencies:
+  before_script:
+  - apt-get update && apt-get install -y graphviz=2.42.2-5 wget curl libgbm-dev libasound2 xvfb
+  - Xvfb :5 -screen 0 1920x1080x8 &
+  - export DISPLAY=':5.0'
+  - curl -s https://api.github.com/repos/jgraph/drawio-desktop/releases/latest | grep browser_download_url | grep '\.deb' | cut -d '"' -f 4 | wget -i -
+  - apt -f install -y ./drawio-amd64-*.deb
+  - pip install -r requirements.txt
+
 test:
   stage: test
   variables:
     ENABLE_PDF_EXPORT: 1
   image: python:3.9-bullseye
+  extends:
+  - .install_dependencies
   script:
-  - apt-get update && apt-get install -y graphviz=2.42.2-5
-  - pip install -r requirements.txt
   - mkdocs build --verbose --site-dir test
   artifacts:
     paths:
@@ -40,9 +49,9 @@ pages:
   variables:
     ENABLE_PDF_EXPORT: 1
   image: python:3.9-bullseye
+  extends:
+  - .install_dependencies
   script:
-  - apt-get update && apt-get install -y graphviz=2.42.2-5
-  - pip install -r requirements.txt
   - mkdocs build --verbose --site-dir public
   artifacts:
     paths:

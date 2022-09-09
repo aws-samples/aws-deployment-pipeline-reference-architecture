@@ -4,125 +4,7 @@ Applications are the most common use case for a deployment pipeline. This pipeli
 
 This pipeline encourages trunk based development in which developers frequently avoid long-lived branches and regulary commit their changes to the trunk. Therefore this pipeline only executes for commits to the trunk. Every commit to the trunk has a change to go to production if all steps of the pipeline complete successfully.
 
-```graphviz dot pipeline.png
-digraph G {
-    rankdir=LR
-    compound=true
-
-    fontname="Helvetica,Arial,sans-serif"
-    node [fontname="Helvetica,Arial,sans-serif"]
-    edge [fontname="Helvetica,Arial,sans-serif"]
-
-    subgraph cluster_legend {
-        label=<<b>Legend</b>>
-        graph[color="black" style="dashed"]
-        node [shape=box style=filled fontcolor="black" width=2]
-        legend_required[label="Required" color="#ff9900"]
-        legend_recommended[label="Recommended" color="#d4dada"]
-    }
-
-    subgraph cluster_build_service {
-        label=<<b>Build Service</b>>
-        node [shape=box style=filled fontcolor="black" width=2]
-        graph[penwidth=2 color="slategray"]
-
-        rankdir="LR"
-        build_code[label="Build Code" color="#ff9900"]
-        code_quality[label="Code Quality" color="#ff9900"]
-        sast[label="SAST" color="#ff9900"]
-        unit_tests[label="Unit Tests" color="#ff9900"]
-        secrets_detection[label="Secrets Detection" color="#ff9900"]
-
-        edge [style=invis]
-        build_code -> code_quality -> sast
-        unit_tests -> secrets_detection -> sast
-    }
-
-    sast -> legend_required [style=invis]
-
-    subgraph cluster_pipeline {
-        label=<<b>Pipeline</b>>
-        penwidth=4
-        color="dodgerblue"
-        node [shape=box style=filled color="slategray" fontcolor="black" width=2]
-        edge [color="slategray"]
-
-        subgraph cluster_source {
-            label=<<b>Source</b>>
-            graph[penwidth=2 color="slategray"]
-
-            app_src[label="Application Source" color="#ff9900"]
-            test_src[label="Test Source" color="#ff9900"]
-            infrastructure_src[label="Infrastructure Source" color="#ff9900"]
-            static_assets[label="Static Assets" color="#ff9900"]
-            libs[label="Dependency Manifests" color="#ff9900"]
-            config[label="Configuration" color="#ff9900"]
-            db_src[label="Database Source" color="#d4dada"]
-        }
-        subgraph cluster_build {
-            label=<<b>Build Stage</b>>
-            graph[penwidth=2 color="slategray"]
-            node [shape=box style=filled fontcolor="black" width=2]
-
-            call_build_service[label="Build Service" color="#ff9900"]
-            package_artifacts[label="Package Artifacts" color="#ff9900"]
-            sca[label="SCA" color="#ff9900"]
-            sbom[label="SBOM" color="#ff9900"]
-        }
-
-        subgraph cluster_beta {
-            label=<<b>Test (Beta) Stage</b>>
-            graph[penwidth=2 color="slategray"]
-            node [shape=box style=filled fontcolor="black" width=2]
-
-            launch_beta[label="Launch Env" color="#d4dada"]
-            db_deploy_beta[label="DB Deploy" color="#d4dada"]
-            software_deploy_beta[label="Deploy Software" color="#d4dada"]
-            int_test_beta[label="Integration Tests" color="#ff9900"]
-            e2e_test_beta[label="Acceptance Tests" color="#ff9900"]
-        }
-
-        subgraph cluster_gamma {
-            label=<<b>Test (Gamma) Stage</b>>
-            graph[penwidth=2 color="slategray"]
-            node [shape=box style=filled fontcolor="black" width=3]
-
-            launch_gamma[label="Launch Env" color="#ff9900"]
-            db_deploy_gamma[label="DB Deploy" color="#ff9900"]
-            software_deploy_gamma[label="Deploy Software" color="#ff9900"]
-            app_monitor_gamma[label="Application Monitoring & Logging" color="#ff9900"]
-            synthetic_gamma[label="Synthetic Tests" color="#ff9900"]
-            cap_test_gamma[label="Performance Tests" color="#d4dada"]
-            chaos_gamma[label="Resilience Tests" color="#d4dada"]
-            dast_gamma[label="DAST" color="#d4dada"]
-        }
-
-        subgraph cluster_prod {
-            label=<<b>Prod Stage</b>>
-            graph[penwidth=2 color="slategray"]
-            node [shape=box style=filled fontcolor="black" width=3]
-
-            approval[label="Manual Approval" color="#d4dada"]
-            db_deploy_prod[label="DB Deploy" color="#ff9900"]
-            blue_green_deployment[label="Progressive Deployment" color="#ff9900"]
-            synthetic_prod[label="Synthetic Tests" color="#ff9900"]
-        }
-
-        app_src -> call_build_service [ltail=cluster_source,lhead=cluster_build,penwidth=3,weight=10]
-        call_build_service -> launch_beta [ltail=cluster_build,lhead=cluster_beta,penwidth=3,weight=10]
-        launch_beta -> launch_gamma [ltail=cluster_beta,lhead=cluster_gamma,penwidth=3,weight=10]
-        launch_gamma -> approval [ltail=cluster_gamma,lhead=cluster_prod,penwidth=3,weight=10]
-    }
-
-    call_build_service -> code_quality [lhead=cluster_build_service]
-    build_code -> approval [lhead=cluster_pipeline,ltail=cluster_build_service,style=invis]
-    ide[shape=box label="IDE" labelloc="t" image="docs/assets/person-icon.png"]
-    ide -> build_code [lhead=cluster_build_service,weight=10]
-    ide -> app_src [lhead=cluster_source]
-
-
-}
-```
+![Architecture](architecture.drawio)
 
 The expected outcome of this pipeline is to be able to safely release software changes to customers within a couple hours. Deployment pipelines should publish the following metrics:
 
@@ -132,6 +14,16 @@ The expected outcome of this pipeline is to be able to safely release software c
 * `Mean time to recover (MTTR)` – the average amount of time between the start of a failed pipeline and the start of the next successful pipeline.
 
 Each stage below will include a required and recommended actions. The actions will include guidance on what steps out to be perfomed in each action. References will be made to real-life examples of tools to help better define the actions involved in each stage. The use of these examples is not an endorsement of any specific tool.
+
+## Developer Workspace
+
+Developers need fast-feedback for potential issues with their code. Automation should run in their developer workspace to give them feedback before the deployment pipeline runs.
+
+???+ required "Pre-Commit Hooks"
+    Pre-Commit hooks are scripts that are executed on the developer's workstation when they try to create a new commit. These hooks have an opportunity to inspect the state of the code before the commit occurs and abort the commit if tests fail. An example of pre-commit hooks are [Git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks#_git_hooks).  Examples of tools to configure and store pre-commit hooks as code include but are not limited to [husky](https://github.com/typicode/husky) and [pre-commit](https://pre-commit.com/#install).
+
+???+ recommended "IDE Plugins"
+    Warn developers of potential issues with their source code in their IDE using plugins and extensions including but not limited to [Visual Studio Code - Python Extension](https://code.visualstudio.com/docs/python/linting) and [IntelliJ IDEA - JavaScript linters](https://www.jetbrains.com/help/idea/linters.html).
 
 ## Source
 
@@ -159,16 +51,6 @@ The source stage pulls in various types of code from a distributed version contr
     Code that defines the schema and reference data of the database used by the *Application Source Code*. Examples of database source code include but are not limited to [Liquibase](https://www.liquibase.org/). If the *Application Source Code* uses a private database that no other application accesses, then the database source code is **required** to be stored in the same repository as the *Application Source Code*. This allows the *Application Source Code* and *Database Source Code* to be updated on the same lifecycle. However, if the database is shared by multiple applications then the *Database Source Code* should be maintained in a separate repository and managed by separate pipeline. It should be noted that this is undesireable as it introduces coupling between applications.
 
 All the above source code is versioned and securely accessed through role based access control with source code repositories including but not limited to [AWS CodeCommit](https://aws.amazon.com/codecommit/), [GitHub](https://github.com), [GitLab](https://gitlab.com), and [Bitbucket](https://bitbucket.org).
-
-## Pre-Commit hooks
-
-Pre-Commit hooks are scripts that are executed on the developer's workstation when they try to create a new commit. These hooks have an opportunity to inspect the state of the code before the commit occurs and abort the commit if tests fail. An example of pre-commit hooks are [Git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks#_git_hooks).
-
-???+ required "Secrets Detection"
-    Identify secrets such as usernames, passwords, and access keys in code and other files before they are published to a repository by using pre-commit hooks. When discovering secrets, the code push should fail immediately. Examples of secret detection tools include but are not limited to [GitGuardian](https://www.gitguardian.com/) and [gitleaks](https://github.com/zricethezav/gitleaks). Examples of tools to configure and store pre-commit hooks as code include but are not limited to [husky](https://github.com/typicode/husky) and [pre-commit](https://pre-commit.com/#install).
-
-???+ recommended "IDE Plugins"
-    Warn developers of potential issues with their source code in their IDE using plugins and extensions including but not limited to [Visual Studio Code - Python Extension](https://code.visualstudio.com/docs/python/linting) and [IntelliJ IDEA - JavaScript linters](https://www.jetbrains.com/help/idea/linters.html).
 
 ## Build
 
