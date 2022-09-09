@@ -1,8 +1,8 @@
-mkdocs
-mkdocs-material
-mkdocs-graphviz
-mkdocs-with-pdf
-mkdocs-codeinclude-plugin
-mkdocs-drawio-exporter
+mkdocs==1.3.0
+mkdocs-material==8.3.8
+mkdocs-graphviz==1.4.4
+mkdocs-with-pdf==0.9.3
+mkdocs-codeinclude-plugin==0.2.0
+mkdocs-drawio-exporter==0.8.0
 pre-commit
 Markdown==3.3.7
