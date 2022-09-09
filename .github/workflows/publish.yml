@@ -29,7 +29,7 @@ jobs:
           python-version: 3.x
       - name: Install Drawio
         run: |
-          sudo apt-get install -y graphviz=2.42.2-5 wget curl libgbm-dev libasound2 xvfb
+          sudo apt-get install -y graphviz wget curl libgbm-dev libasound2 xvfb
           curl -s https://api.github.com/repos/jgraph/drawio-desktop/releases/latest | grep browser_download_url | grep '\.deb' | cut -d '"' -f 4 | wget -i -
           sudo apt -f install -y ./drawio-amd64-*.deb
       - name: Install dependencies
