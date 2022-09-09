@@ -66,7 +66,7 @@ plugins:
   - with-pdf:
       author: AWS Professional Services
       copyright: Copyright © Amazon Web Services, Inc. and/or its affiliates. All rights reserved.
-      cover_subtitle: "July 2022"
+      cover_subtitle: "September 2022"
       enabled_if_env: ENABLE_PDF_EXPORT
       ordered_chapter_level: 1
 
