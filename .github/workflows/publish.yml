@@ -27,8 +27,11 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: 3.x
-      - name: Install Graphviz
-        run: sudo apt-get install -y graphviz
+      - name: Install Drawio
+        run: |
+          sudo apt-get install -y graphviz=2.42.2-5 wget curl libgbm-dev libasound2 xvfb
+          curl -s https://api.github.com/repos/jgraph/drawio-desktop/releases/latest | grep browser_download_url | grep '\.deb' | cut -d '"' -f 4 | wget -i -
+          sudo apt -f install -y ./drawio-amd64-*.deb
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Install markdownlint-cli
@@ -36,7 +39,10 @@ jobs:
       - name: Lint Markdown
         run: markdownlint docs
       - name: Build content
-        run: mkdocs build --verbose --site-dir site
+        run: |
+          Xvfb :5 -screen 0 1920x1080x8 &
+          export DISPLAY=':5.0'
+          mkdocs build --verbose --site-dir site
         env:
           ENABLE_PDF_EXPORT: 1
       - name: Setup Pages
