@@ -15,7 +15,7 @@ The expected outcome of this pipeline is to be able to safely release software c
 
 Each stage below will include a required and recommended actions. The actions will include guidance on what steps out to be perfomed in each action. References will be made to real-life examples of tools to help better define the actions involved in each stage. The use of these examples is not an endorsement of any specific tool.
 
-## Developer Workspace
+## Local Development
 
 Developers need fast-feedback for potential issues with their code. Automation should run in their developer workspace to give them feedback before the deployment pipeline runs.
 
@@ -45,7 +45,7 @@ The source stage pulls in various types of code from a distributed version contr
     References to third-party code that is used by the *Application Source Code*. This could be libraries created by the same team, a separate team within the same organization, or from an external entity.
 
 ???+ required "Static Configuration"
-    Files (e.g. JSON, XML, YAML or HCL) used to configure the behavior of the *Application Source Code*. Any configuration that is [environment](index.md#environment) specific should *not* be included in source and should be handled via [Dynamic Configuration Deployment Pipelines](../dynamic-configuration-deployment-pipeline).
+    Files (e.g. JSON, XML, YAML or HCL) used to configure the behavior of the *Application Source Code*. Any configuration that is [environment](index.md#environment) specific should *not* be included in source and should be handled via Dynamic Configuration Deployment Pipelines.
 
 ???+ recommended "Database Source Code"
     Code that defines the schema and reference data of the database used by the *Application Source Code*. Examples of database source code include but are not limited to [Liquibase](https://www.liquibase.org/). If the *Application Source Code* uses a private database that no other application accesses, then the database source code is **required** to be stored in the same repository as the *Application Source Code*. This allows the *Application Source Code* and *Database Source Code* to be updated on the same lifecycle. However, if the database is shared by multiple applications then the *Database Source Code* should be maintained in a separate repository and managed by separate pipeline. It should be noted that this is undesireable as it introduces coupling between applications.

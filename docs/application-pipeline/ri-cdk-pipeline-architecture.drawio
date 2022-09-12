@@ -1,151 +1,151 @@
 <mxfile host="65bd71144e">
     <diagram id="wQqJdAkL07R6x1p4S5oJ" name="Page-1">
-        <mxGraphModel dx="1469" dy="984" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="661" dy="443" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="2" value="" style="fillColor=#FFFFFF;strokeColor=none;dashed=0;verticalAlign=top;fontStyle=0;fontColor=#232F3D;" vertex="1" parent="1">
+                <mxCell id="2" value="" style="fillColor=#FFFFFF;strokeColor=none;dashed=0;verticalAlign=top;fontStyle=0;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="70" y="110" width="950" height="650" as="geometry"/>
                 </mxCell>
-                <mxCell id="4" value="Deployment Pipeline" style="fillColor=none;strokeColor=#FF9900;verticalAlign=top;fontStyle=1;fontColor=#232F3D;strokeWidth=2;shadow=0;" vertex="1" parent="1">
+                <mxCell id="4" value="Deployment Pipeline" style="fillColor=none;strokeColor=#FF9900;verticalAlign=top;fontStyle=1;fontColor=#232F3D;strokeWidth=2;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="250" y="140" width="730" height="490" as="geometry"/>
                 </mxCell>
-                <mxCell id="6" value="Legend" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D4DADA;fontColor=#232F3D;verticalAlign=top;shadow=0;glass=0;" vertex="1" parent="1">
+                <mxCell id="6" value="Legend" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D4DADA;fontColor=#232F3D;verticalAlign=top;shadow=0;glass=0;" parent="1" vertex="1">
                     <mxGeometry x="860" y="650" width="120" height="100" as="geometry"/>
                 </mxCell>
-                <mxCell id="11" value="Implemented" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="11" value="Implemented" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="867.5" y="675" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="12" value="Not Implemented" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d4dada;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="12" value="Not Implemented" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d4dada;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="867.5" y="710" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="13" value="Source Stage" style="fillColor=#FFFFFF;strokeColor=#D4DADA;verticalAlign=top;fontStyle=0;fontColor=#232F3D;shadow=0;" vertex="1" parent="1">
+                <mxCell id="13" value="Source Stage" style="fillColor=#FFFFFF;strokeColor=#D4DADA;verticalAlign=top;fontStyle=0;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="270" y="200" width="130" height="410" as="geometry"/>
                 </mxCell>
-                <mxCell id="14" value="Build Stage" style="fillColor=#FFFFFF;strokeColor=#D4DADA;verticalAlign=top;fontStyle=0;fontColor=#232F3D;shadow=0;" vertex="1" parent="1">
+                <mxCell id="14" value="Build Stage" style="fillColor=#FFFFFF;strokeColor=#D4DADA;verticalAlign=top;fontStyle=0;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="410" y="200" width="130" height="410" as="geometry"/>
                 </mxCell>
-                <mxCell id="15" value="Test (Beta) Stage" style="fillColor=#FFFFFF;strokeColor=#D4DADA;verticalAlign=top;fontStyle=0;fontColor=#232F3D;shadow=0;" vertex="1" parent="1">
+                <mxCell id="15" value="Test (Beta) Stage" style="fillColor=#FFFFFF;strokeColor=#D4DADA;verticalAlign=top;fontStyle=0;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="550" y="200" width="130" height="410" as="geometry"/>
                 </mxCell>
-                <mxCell id="16" value="Test (Gamma) Stage" style="fillColor=#FFFFFF;strokeColor=#D4DADA;verticalAlign=top;fontStyle=0;fontColor=#232F3D;shadow=0;" vertex="1" parent="1">
+                <mxCell id="16" value="Test (Gamma) Stage" style="fillColor=#FFFFFF;strokeColor=#D4DADA;verticalAlign=top;fontStyle=0;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="690" y="200" width="130" height="410" as="geometry"/>
                 </mxCell>
-                <mxCell id="17" value="Prod Stage" style="fillColor=#FFFFFF;strokeColor=#D4DADA;verticalAlign=top;fontStyle=0;fontColor=#232F3D;shadow=0;glass=0;sketch=0;" vertex="1" parent="1">
+                <mxCell id="17" value="Prod Stage" style="fillColor=#FFFFFF;strokeColor=#D4DADA;verticalAlign=top;fontStyle=0;fontColor=#232F3D;shadow=0;glass=0;sketch=0;" parent="1" vertex="1">
                     <mxGeometry x="830" y="200" width="130" height="410" as="geometry"/>
                 </mxCell>
-                <mxCell id="18" value="Build Code" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="18" value="Build Code" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="422.5" y="235" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="19" value="Unit Tests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="19" value="Unit Tests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="422.5" y="276" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="20" value="Secrets Detection" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="20" value="Secrets Detection" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="422.5" y="357" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="21" value="Code Quality&lt;span style=&quot;font-family: monospace; font-size: 0px;&quot;&gt;%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20value%3D%22Secrets%20Detection%22%20style%3D%22rounded%3D0%3BwhiteSpace%3Dwrap%3Bhtml%3D1%3BfillColor%3D%23ff9900%3BstrokeColor%3D%23000000%3BfontColor%3D%23000000%3B%22%20vertex%3D%221%22%20parent%3D%221%22%3E%3CmxGeometry%20x%3D%22110%22%20y%3D%22320%22%20width%3D%22110%22%20height%3D%2240%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="21" value="Code Quality&lt;span style=&quot;font-family: monospace; font-size: 0px;&quot;&gt;%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20value%3D%22Secrets%20Detection%22%20style%3D%22rounded%3D0%3BwhiteSpace%3Dwrap%3Bhtml%3D1%3BfillColor%3D%23ff9900%3BstrokeColor%3D%23000000%3BfontColor%3D%23000000%3B%22%20vertex%3D%221%22%20parent%3D%221%22%3E%3CmxGeometry%20x%3D%22110%22%20y%3D%22320%22%20width%3D%22110%22%20height%3D%2240%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="422.5" y="316" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="22" value="SAST" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="22" value="SAST" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="422.5" y="398" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="23" value="Package Artifacts" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="23" value="Package Artifacts" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="422.5" y="439" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="24" value="SCA" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="24" value="SCA" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="422.5" y="479" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="25" value="SBOM" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="25" value="SBOM" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="422.5" y="520" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="26" value="Application Source" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="26" value="Application Source" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="282.5" y="235" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="27" value="Test Source" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="27" value="Test Source" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="282.5" y="276" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="28" value="Static Assets" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="28" value="Static Assets" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="282.5" y="357" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="29" value="Infrastructure Source" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="29" value="Infrastructure Source" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="282.5" y="316" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="30" value="Dependency Manifests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="30" value="Dependency Manifests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="282.5" y="398" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="31" value="Configuration" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="31" value="Configuration" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="282.5" y="439" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="32" value="Database Source" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="32" value="Database Source" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="282.5" y="479" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="33" value="Launch Environment" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="33" value="Launch Environment" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="562.5" y="235" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="34" value="Integration Tests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="34" value="Integration Tests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="562.5" y="357" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="35" value="Acceptance Tests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="35" value="Acceptance Tests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="562.5" y="398" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="36" value="Database Deploy" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="36" value="Database Deploy" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="562.5" y="276" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="37" value="Deploy Software" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="37" value="Deploy Software" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="562.5" y="316" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="38" value="Launch Environment" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="38" value="Launch Environment" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="702.5" y="235" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="39" value="Database Deploy" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="39" value="Database Deploy" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="702.5" y="276" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="40" value="Monitoring &amp;amp; Logging" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="40" value="Monitoring &amp;amp; Logging" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="702.5" y="357" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="41" value="Deploy Software" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="41" value="Deploy Software" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="702.5" y="316" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="42" value="Synthetic Tests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="42" value="Synthetic Tests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="702.5" y="398" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="43" value="Performance Tests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="43" value="Performance Tests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="702.5" y="438.5" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="44" value="Resilience Tests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D4DADA;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="44" value="Resilience Tests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D4DADA;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="702.5" y="479.5" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="45" value="DAST" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D4DADA;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="45" value="DAST" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D4DADA;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="702.5" y="519.5" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="46" value="Manual Approval" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="46" value="Manual Approval" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="842.5" y="235" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="47" value="Database Deploy" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="47" value="Database Deploy" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="842.5" y="276" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="48" value="Synthetic Tests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="48" value="Synthetic Tests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="842.5" y="357" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="49" value="Progressive Deployment" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=1;" vertex="1" parent="1">
+                <mxCell id="49" value="Progressive Deployment" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#232F3D;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="842.5" y="316" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="50" value="Developer Workspace" style="fillColor=#FFFFFF;strokeColor=#D4DADA;verticalAlign=top;fontStyle=0;fontColor=#333333;shadow=0;" vertex="1" parent="1">
+                <mxCell id="50" value="Local Development" style="fillColor=#FFFFFF;strokeColor=#D4DADA;verticalAlign=top;fontStyle=0;fontColor=#333333;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="100" y="200" width="130" height="410" as="geometry"/>
                 </mxCell>
-                <mxCell id="51" value="Build Code" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#000000;shadow=1;" vertex="1" parent="1">
+                <mxCell id="51" value="Build Code" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#000000;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="112.5" y="235" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="52" value="Unit Tests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#000000;shadow=1;" vertex="1" parent="1">
+                <mxCell id="52" value="Unit Tests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#000000;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="112.5" y="275" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="53" value="Secrets Detection" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#000000;shadow=1;" vertex="1" parent="1">
+                <mxCell id="53" value="Secrets Detection" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#000000;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="112.5" y="355" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="54" value="Code Quality&lt;span style=&quot;color: rgba(0 , 0 , 0 , 0) ; font-family: monospace ; font-size: 0px&quot;&gt;%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20value%3D%22Secrets%20Detection%22%20style%3D%22rounded%3D0%3BwhiteSpace%3Dwrap%3Bhtml%3D1%3BfillColor%3D%23ff9900%3BstrokeColor%3D%23000000%3BfontColor%3D%23000000%3B%22%20vertex%3D%221%22%20parent%3D%221%22%3E%3CmxGeometry%20x%3D%22110%22%20y%3D%22320%22%20width%3D%22110%22%20height%3D%2240%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#000000;shadow=1;" vertex="1" parent="1">
+                <mxCell id="54" value="Code Quality&lt;span style=&quot;color: rgba(0 , 0 , 0 , 0) ; font-family: monospace ; font-size: 0px&quot;&gt;%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20value%3D%22Secrets%20Detection%22%20style%3D%22rounded%3D0%3BwhiteSpace%3Dwrap%3Bhtml%3D1%3BfillColor%3D%23ff9900%3BstrokeColor%3D%23000000%3BfontColor%3D%23000000%3B%22%20vertex%3D%221%22%20parent%3D%221%22%3E%3CmxGeometry%20x%3D%22110%22%20y%3D%22320%22%20width%3D%22110%22%20height%3D%2240%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#000000;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="112.5" y="315" width="105" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="55" value="SAST" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#000000;shadow=1;" vertex="1" parent="1">
+                <mxCell id="55" value="SAST" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff9900;strokeColor=none;fontColor=#000000;shadow=0;" parent="1" vertex="1">
                     <mxGeometry x="112.5" y="395" width="105" height="30" as="geometry"/>
                 </mxCell>
             </root>
