@@ -2,6 +2,7 @@ site_name: Deployment Pipeline Reference Architecture
 repo_name: "aws-deployment-pipeline-reference-architecture"
 repo_url: "https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture"
 docs_dir: "docs"
+edit_uri: "edit/main/docs/"
 copyright: Copyright © Amazon Web Services, Inc. and/or its affiliates. All rights reserved.
 theme:
   name: material
