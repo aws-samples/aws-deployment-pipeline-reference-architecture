@@ -1,6 +1,10 @@
 # Overview
 
-This repository contains the source for the [DPRA content](https://pipelines.devops.aws.dev).
+The **Deployment Pipeline Reference Architecture (DPRA)** describes best practices for building deployment pipelines. A deployment pipeline automates the building, testing and deploying of software into AWS environments. With DPRA, developers can increase the speed, stability, and security of software systems through the use of deployment pipelines.
+
+Each type of deployment pipeline also includes one or more reference implementations with source code that defines a functional pipeline based on the reference architecture.
+
+To learn more, visit [https://pipelines.devops.aws.dev](https://pipelines.devops.aws.dev)
 
 ## Local Development
 
