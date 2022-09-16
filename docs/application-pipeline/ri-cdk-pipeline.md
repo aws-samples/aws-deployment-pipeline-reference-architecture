@@ -10,6 +10,8 @@ This presents a reference implementation of the [Application Pipeline](..) refer
     * [ ] **cdk bootstrap with AdministratorAccess** - the default policy used for `cdk bootstrap` is `AdministratorAccess` but should be replaced with a more appropriate policy with least priviledge in your account.
     * [ ] **TLS on HTTP endpoint** - the listener for the sample application uses HTTP instead of HTTPS to avoid having to create new ACM certificates and Route53 hosted zones. This should be replaced in your account with an `HTTPS` listener.
 
+![Pipeline](assets/ri-cdk-pipeline.png)
+
 ## Local Development
 
 Developers need fast-feedback for potential issues with their code. Automation should run in their developer workspace to give them feedback before the deployment pipeline runs.
@@ -209,6 +211,8 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
 ## Test (Beta)
 
 ???+ required "Launch Environment"
+    ![Deployment](assets/ri-cdk-pipeline-deployment.png)
+
     The infrastructure for each environment is defined in [AWS Cloud Development Kit](https://aws.amazon.com/cdk/):
 
     <!--codeinclude-->
@@ -291,6 +295,8 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
 ## Test (Gamma)
 
 ???+ required "Launch Environment"
+    ![Deployment](assets/ri-cdk-pipeline-deployment.png)
+
     The infrastructure for each environment is defined in [AWS Cloud Development Kit](https://aws.amazon.com/cdk/):
 
     <!--codeinclude-->
