@@ -13,7 +13,7 @@ The easiest approach is to use the preconfigured [development container](https:/
 Alternatively, you can install these required dependencies manually:
 
 ```bash
-brew install graphviz
+brew install graphviz drawio
 pip install -r requirements.txt
 ```
 
