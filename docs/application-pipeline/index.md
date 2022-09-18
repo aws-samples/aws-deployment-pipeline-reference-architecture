@@ -575,7 +575,7 @@ digraph G {
     ```
 
 ???+ recommended "Dynamic Application Security Testing (DAST)"
-    Perform testing of web applications and APIs by running automated scans against it to identify vulnerabilities through techniques such as cross-site scripting (XSS) and SQL injection(SQLi).  Examples of tools that can be used for dynamic application security testing include but are not limited to [OWASP ZAP](https://owasp.org/www-project-zap) and [StackHawk](https://www.stackhawk.com/).
+    Perform testing of web applications and APIs by running automated scans against it to identify vulnerabilities through techniques such as cross-site scripting (XSS) and SQL injection(SQLi).  Examples of tools that can be used for dynamic application security testing include but are not limited to [OWASP ZAP](https://owasp.org/www-project-zap) and [StackHawk](https://www.stackhawk.com/). See [AWS Guidance on Penetration Testing](https://aws.amazon.com/security/penetration-testing/) for info on penetration testing in an AWS environment.
 
 ## Prod
 
