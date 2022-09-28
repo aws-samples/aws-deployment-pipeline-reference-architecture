@@ -28,7 +28,11 @@
 		"hediet.vscode-drawio"
 	],
 
+	"containerEnv": {
+		"DISPLAY": ":5.0"
+	},
+
 	"forwardPorts": [8000],
-	"postCreateCommand": "pip install -r requirements.txt",
+	"postCreateCommand": "nohup bash -c 'Xvfb :5 -screen 0 1920x1080x8 &' > /dev/null",
 	"remoteUser": "vscode"
 }

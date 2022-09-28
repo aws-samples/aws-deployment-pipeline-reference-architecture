@@ -1,7 +1,16 @@
 FROM python:3.9-bullseye
 
 RUN apt-get update \
-    && apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common less vim graphviz
+    && apt-get install -y apt-transport-https ca-certificates wget curl \
+                          gnupg2 software-properties-common less vim graphviz \
+                          libgbm-dev libasound2 xvfb
+RUN curl -s https://api.github.com/repos/jgraph/drawio-desktop/releases/latest \
+    | grep browser_download_url | grep '\.deb' | cut -d '"' -f 4 | wget -i - \
+    && apt -f install -y ./drawio-amd64-*.deb \
+    && rm -f ./drawio-amd64-*.deb
+
+COPY requirements.txt /tmp/
+RUN pip install -r /tmp/requirements.txt
 
 ARG USERNAME=vscode
 ARG USER_UID=1000
