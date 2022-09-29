@@ -152,6 +152,26 @@
   width: auto;
 }
 
+.md-pdf {
+  display: flex;
+  flex-grow: 0.01;
+  overflow: hidden;
+  transition: opacity .25s;
+  text-align: right;
+}
+
+.md-pdf__icon {
+  display: inline-block;
+  height: 2.4rem;
+  vertical-align: middle;
+  width: 2rem;
+}
+
+.md-pdf__icon svg {
+  margin-left: .6rem;
+  margin-top: .6rem;
+}
+
 @media print {
   .md-typeset .required > .admonition-title::before,
   .md-typeset .required > summary::before {

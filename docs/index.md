@@ -6,22 +6,6 @@ The Deployment Pipeline Reference Architecture (DPRA) for AWS [workloads](#workl
 
 Customers and third-party vendors can use the DPRA to create implementations - reference or otherwise - using their own set of services and tools. We have included reference implementations that use AWS and third-party tools. When an AWS service/tool is available, we list it; when there are no AWS services/tools, we list third-party tools. There are many third-party tools that can run on AWS so the ones we chose should only be seen as examples for illustrative purposes. Choose the best tool that meets the needs of your organization.
 
-Modern deployment pipelines create the following business outcomes:
-
-* **Automation** - Everything necessary to build, test, deploy, and run an application should be defined as code - code for pipelines, accounts, networking, infrastructure, applications/services, configuration, data, security, compliance, governance, auditing, and documentation – any aspect inside and outside software systems.
-
-* **Consistency** - The source code should only be built and packaged once. The packaged artifact should then be staged in a registry with appropriate metadata and ready for deployment to any [environment](#environment). Build artifacts only once and then promote them through the pipeline. The output of the pipeline should be versioned and able to be traced back to the source it was built from and from the business requirements that defined it.
-
-* **Small Batches** - The pipeline should be constructed in such a way as to encourage the delivery of software early and often. This is accomplished by removing toil from the software delivery process through automation and fast feedback. Likewise, the pipeline should discourage the use of long-lived branches and encourage trunk-based development. Developers should be able to merge their changes to the trunk and deploy through the pipeline daily.
-
-* **Orchestration** - As part of a deployment pipeline, every merged code change has a fully-automated build, test, publish, deploy, and release process run across all [environments](#environment). Each stage automatically transitions to the next stage of the pipeline upon success, or stops on failure. In some circumstances human approvals are necessary while organizations mature their automation practices. These approvals most often show up when automation is unable to assess the risk or specific context for approval. If used, human approvals should be used before production deployments only and should be reduced to a button-click interface that triggers an automated pipeline process to continue. A single pipeline should orchestrate the deployment to all [environments](#environment) rather than creating pipelines for each [environment](#environment).
-
-* **Fast Feedback** - Automatically notify engineers as soon as possible of build, test, quality, and security errors from deployment pipelines through the most effective means such as chat or email.
-
-* **Always Deployable** - When an error occurs in the mainline of a deployment pipeline, the top priority is to fix the build and ensure deployment obtains and remains in a healthy state before introducing any further changes. The pipeline should be the authoritative source for deciding if and when changes are ready to be released into production.
-
-* **Measured** - Provide real-time metrics for code quality, speed (deployment frequency and deployment lead time), security (security control automation %, mean time to resolve security errors), and reliability (change failures and time to restore service). View metrics through a real-time dashboard. When instrumentation is not yet possible, create a [Likert](https://en.wikipedia.org/wiki/Likert_scale)-based questionnaire to determine these metrics across teams.
-
 The DPRA covers the following deployment pipelines in detail:
 
 <div class="cardwrapper">
@@ -44,6 +28,22 @@ The DPRA covers the following deployment pipelines in detail:
         </p>
     </a>
 </div>
+
+Modern deployment pipelines create the following business outcomes:
+
+* **Automation** - Everything necessary to build, test, deploy, and run an application should be defined as code - code for pipelines, accounts, networking, infrastructure, applications/services, configuration, data, security, compliance, governance, auditing, and documentation – any aspect inside and outside software systems.
+
+* **Consistency** - The source code should only be built and packaged once. The packaged artifact should then be staged in a registry with appropriate metadata and ready for deployment to any [environment](#environment). Build artifacts only once and then promote them through the pipeline. The output of the pipeline should be versioned and able to be traced back to the source it was built from and from the business requirements that defined it.
+
+* **Small Batches** - The pipeline should be constructed in such a way as to encourage the delivery of software early and often. This is accomplished by removing toil from the software delivery process through automation and fast feedback. Likewise, the pipeline should discourage the use of long-lived branches and encourage trunk-based development. Developers should be able to merge their changes to the trunk and deploy through the pipeline daily.
+
+* **Orchestration** - As part of a deployment pipeline, every merged code change has a fully-automated build, test, publish, deploy, and release process run across all [environments](#environment). Each stage automatically transitions to the next stage of the pipeline upon success, or stops on failure. In some circumstances human approvals are necessary while organizations mature their automation practices. These approvals most often show up when automation is unable to assess the risk or specific context for approval. If used, human approvals should be used before production deployments only and should be reduced to a button-click interface that triggers an automated pipeline process to continue. A single pipeline should orchestrate the deployment to all [environments](#environment) rather than creating pipelines for each [environment](#environment).
+
+* **Fast Feedback** - Automatically notify engineers as soon as possible of build, test, quality, and security errors from deployment pipelines through the most effective means such as chat or email.
+
+* **Always Deployable** - When an error occurs in the mainline of a deployment pipeline, the top priority is to fix the build and ensure deployment obtains and remains in a healthy state before introducing any further changes. The pipeline should be the authoritative source for deciding if and when changes are ready to be released into production.
+
+* **Measured** - Provide real-time metrics for code quality, speed (deployment frequency and deployment lead time), security (security control automation %, mean time to resolve security errors), and reliability (change failures and time to restore service). View metrics through a real-time dashboard. When instrumentation is not yet possible, create a [Likert](https://en.wikipedia.org/wiki/Likert_scale)-based questionnaire to determine these metrics across teams.
 
 ## Definitions
 

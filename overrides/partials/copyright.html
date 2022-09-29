@@ -33,13 +33,14 @@
         Material for MkDocs
       </a>
     {% endif %}
-  </div>
+</div>
+
 <a
   href="{{base_url}}/pdf/document.pdf"
   title="Download PDF"
-  data-md-component="source"
+  class="md-pdf"
 >
-  <div class="md-source__icon md-icon">
+  <div class="md-pdf__icon md-icon">
     {% set icon = "fontawesome/solid/file-pdf" %}
     {% include ".icons/" ~ icon ~ ".svg" %}
   </div>
