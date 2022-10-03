@@ -48,14 +48,50 @@ pages:
   stage: deploy
   variables:
     ENABLE_PDF_EXPORT: 1
+
   image: python:3.9-bullseye
   extends:
   - .install_dependencies
   script:
-  - mkdocs build --verbose --site-dir public
+  - mkdocs build --verbose --site-dir $BUILD_PATH
   artifacts:
     paths:
     - public
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      variables:
+        BUILD_PATH: public
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+      variables:
+        BUILD_PATH: public/mr-$CI_MERGE_REQUEST_IID
 
+preview-environment:
+  stage: deploy
+  dependencies:
+    - pages
+
+  environment:
+    name: mr-$CI_MERGE_REQUEST_IID
+    url: "https://$CI_PROJECT_NAMESPACE.pages.aws.dev/$CI_PROJECT_NAME/mr-$CI_MERGE_REQUEST_IID"
+    auto_stop_in: 30 days
+
+  script:
+  - echo "https://$CI_PROJECT_NAMESPACE.pages.aws.dev/$CI_PROJECT_NAME/mr-$CI_MERGE_REQUEST_IID"
+
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+
+production-environment:
+  stage: deploy
+  dependencies:
+    - pages
+
+  environment:
+    name: production-gitlab
+    url: "https://$CI_PROJECT_NAMESPACE.pages.aws.dev/$CI_PROJECT_NAME"
+
+  script:
+  - echo "https://$CI_PROJECT_NAMESPACE.pages.aws.dev/$CI_PROJECT_NAME"
+
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
