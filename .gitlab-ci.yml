@@ -6,15 +6,15 @@
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 stages:
-- test
+- build
 - deploy
 sast:
-  stage: test
+  stage: build
 include:
 - template: Security/SAST.gitlab-ci.yml
 
 markdownlint:
-  stage: test
+  stage: build
   image: node:18.8-bullseye
   script:
   - npm install -g markdownlint-cli
@@ -29,69 +29,70 @@ markdownlint:
   - apt -f install -y ./drawio-amd64-*.deb
   - pip install -r requirements.txt
 
-test:
-  stage: test
+mkdocs:
+  stage: build
   variables:
     ENABLE_PDF_EXPORT: 1
   image: python:3.9-bullseye
   extends:
   - .install_dependencies
   script:
-  - mkdocs build --verbose --site-dir test
+  - mkdocs build --verbose --site-dir site
   artifacts:
     paths:
-    - test
-  rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+    - site
 
 pages:
   stage: deploy
-  variables:
-    ENABLE_PDF_EXPORT: 1
 
-  image: python:3.9-bullseye
-  extends:
-  - .install_dependencies
+  needs:
+  - job: mkdocs
+    artifacts: true
+
   script:
-  - mkdocs build --verbose --site-dir $BUILD_PATH
+  - mkdir -p $DEPLOY_PATH
+  - cp -a site/* $DEPLOY_PATH/
+
   artifacts:
     paths:
     - public
+
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
       variables:
-        BUILD_PATH: public/mr-$CI_MERGE_REQUEST_IID
+        DEPLOY_PATH: public/mr-$CI_MERGE_REQUEST_IID
+
     - if: $CI_PIPELINE_SOURCE  == 'push' && $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
       variables:
-        BUILD_PATH: public
+        DEPLOY_PATH: public
 
 preview-environment:
   stage: deploy
-  dependencies:
+  needs:
     - pages
 
   environment:
     name: mr-$CI_MERGE_REQUEST_IID
-    url: "https://$CI_PROJECT_NAMESPACE.pages.aws.dev/$CI_PROJECT_NAME/mr-$CI_MERGE_REQUEST_IID"
+    url: "$CI_PROJECT_URL/mr-$CI_MERGE_REQUEST_IID"
     auto_stop_in: 30 days
 
   script:
-  - echo "https://$CI_PROJECT_NAMESPACE.pages.aws.dev/$CI_PROJECT_NAME/mr-$CI_MERGE_REQUEST_IID"
+  - echo "$CI_PROJECT_URL/mr-$CI_MERGE_REQUEST_IID"
 
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 production-environment:
   stage: deploy
-  dependencies:
+  needs:
     - pages
 
   environment:
     name: production-gitlab
-    url: "https://$CI_PROJECT_NAMESPACE.pages.aws.dev/$CI_PROJECT_NAME"
+    url: $CI_PROJECT_URL
 
   script:
-  - echo "https://$CI_PROJECT_NAMESPACE.pages.aws.dev/$CI_PROJECT_NAME"
+  - echo "$CI_PAGES_URL"
 
   rules:
     - if: $CI_PIPELINE_SOURCE  == 'push' && $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
