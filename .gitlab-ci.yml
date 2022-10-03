@@ -61,7 +61,7 @@ pages:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
       variables:
         BUILD_PATH: public/mr-$CI_MERGE_REQUEST_IID
-    - if: CI_PIPELINE_SOURCE  == 'push' && $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE  == 'push' && $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
       variables:
         BUILD_PATH: public
 
@@ -94,4 +94,4 @@ production-environment:
   - echo "https://$CI_PROJECT_NAMESPACE.pages.aws.dev/$CI_PROJECT_NAME"
 
   rules:
-    - if: CI_PIPELINE_SOURCE  == 'push' && $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE  == 'push' && $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
