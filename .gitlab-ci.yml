@@ -45,10 +45,6 @@ mkdocs:
 pages:
   stage: deploy
 
-  needs:
-  - job: mkdocs
-    artifacts: true
-
   script:
   - mkdir -p $DEPLOY_PATH
   - cp -a site/* $DEPLOY_PATH/
@@ -73,11 +69,11 @@ preview-environment:
 
   environment:
     name: mr-$CI_MERGE_REQUEST_IID
-    url: "$CI_PROJECT_URL/mr-$CI_MERGE_REQUEST_IID"
+    url: "$CI_PAGES_URL/mr-$CI_MERGE_REQUEST_IID"
     auto_stop_in: 30 days
 
   script:
-  - echo "$CI_PROJECT_URL/mr-$CI_MERGE_REQUEST_IID"
+  - echo "$CI_PAGES_URL/mr-$CI_MERGE_REQUEST_IID"
 
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
@@ -89,7 +85,7 @@ production-environment:
 
   environment:
     name: production-gitlab
-    url: $CI_PROJECT_URL
+    url: $CI_PAGES_URL
 
   script:
   - echo "$CI_PAGES_URL"
