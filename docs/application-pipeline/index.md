@@ -135,7 +135,7 @@ digraph G {
 ???+ required "Package and Store Artifact(s)"
     While the *Build Code* action will package most of the relevant artifacts, there may be additional steps to automate for packaging the code artifacts. Artifacts should only be built and packaged once and then deployed to various environments to validate the artifact. Artifacts should never be rebuilt during subsequent deploy stages. Once packaged, automation is run in this action to store the artifacts in an artifact repository for future deployments. Examples of artifact repositories include but are not limited to [AWS CodeArtifact](https://aws.amazon.com/codeartifact/), [Amazon ECR](https://aws.amazon.com/ecr/), [Nexus](https://www.sonatype.com/products/nexus-repository), and [JFrog Artifactory](https://jfrog.com/artifactory/).
 
-    Packages should be signed with a digital-signature to allow deployment processes to confirm the code being deployed is from a trusted publisher and has not been altered. [AWS Signer](https://docs.aws.amazon.com/signer/index.html) can be used to signe code to be run by AWS Lambda.
+    Packages should be signed with a digital-signature to allow deployment processes to confirm the code being deployed is from a trusted publisher and has not been altered. [AWS Signer](https://docs.aws.amazon.com/signer/index.html) can be used to cryptographically sign code for AWS Lambda applications and AWS-supported IoT devices.
 
     ```graphviz dot artifact.png
 digraph G {
