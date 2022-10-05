@@ -70,6 +70,10 @@ plugins:
       cover_subtitle: "September 2022"
       enabled_if_env: ENABLE_PDF_EXPORT
       ordered_chapter_level: 1
+  - social:
+      cards_color:
+        text: "#ff9900"
+        fill: "#d4dada"
 
 extra_javascript:
   - https://cdn.jsdelivr.net/gh/rod2ik/cdn@main/mkdocs/javascripts/mkdocs-graphviz.js
