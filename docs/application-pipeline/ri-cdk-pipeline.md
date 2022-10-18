@@ -7,7 +7,7 @@ This presents a reference implementation of the [Application Pipeline](..) refer
 ???+ danger "Disclaimer"
     This reference implementation is intended to serve as an example of how to accomplish the guidance in the reference architecture using [CDK Pipelines](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.pipelines-readme.html). The reference implementation has intentionally not followed the following [AWS Well-Architected](https://aws.amazon.com/architecture/well-architected/) best practices to make it accessible by a wider range of customers. Be sure to address these before using parts of this code for any workloads in your own environment:
 
-    * [ ] **cdk bootstrap with AdministratorAccess** - the default policy used for `cdk bootstrap` is `AdministratorAccess` but should be replaced with a more appropriate policy with least priviledge in your account.
+    * [ ] **cdk bootstrap with AdministratorAccess** - the default policy used for `cdk bootstrap` is `AdministratorAccess` but should be replaced with a more appropriate policy with least privilege in your account.
     * [ ] **TLS on HTTP endpoint** - the listener for the sample application uses HTTP instead of HTTPS to avoid having to create new ACM certificates and Route53 hosted zones. This should be replaced in your account with an `HTTPS` listener.
 
 ![Pipeline](assets/ri-cdk-pipeline.png)
@@ -19,7 +19,7 @@ Developers need fast-feedback for potential issues with their code. Automation s
 ???+ required "Pre-Commit Hooks"
     Pre-Commit hooks are scripts that are executed on the developer's workstation when they try to create a new commit. These hooks have an opportunity to inspect the state of the code before the commit occurs and abort the commit if tests fail. An example of pre-commit hooks are [Git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks#_git_hooks).  Examples of tools to configure and store pre-commit hooks as code include but are not limited to [husky](https://github.com/typicode/husky) and [pre-commit](https://pre-commit.com/#install).
 
-    The following `.pre-commit-config.yaml` is added to the repository that will build the code with [Maven](https://maven.apache.org/), run unit tests with [JUnit](https://junit.org), check for code quality with [Checkstyle](https://github.com/checkstyle/checkstyle), run static application security testing with [PMD](https://pmd.github.io/latest/index.html) and check for secrets in the code wwith [gitleaks](https://github.com/zricethezav/gitleaks).
+    The following `.pre-commit-config.yaml` is added to the repository that will build the code with [Maven](https://maven.apache.org/), run unit tests with [JUnit](https://junit.org), check for code quality with [Checkstyle](https://github.com/checkstyle/checkstyle), run static application security testing with [PMD](https://pmd.github.io/latest/index.html) and check for secrets in the code with [gitleaks](https://github.com/zricethezav/gitleaks).
 
     <!--codeinclude-->
     [](../../examples/cdk-application-pipeline/.pre-commit-config.yaml)
@@ -170,8 +170,6 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     }
     ```
 
-
-    This adds an action to CodePipeline for
 
     ![](assets/codeguru-review.png)
 
@@ -363,7 +361,7 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
         });
     ```
 
-    When a manual approval step is used, [IAM permissions](https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals-iam-permissions.html) should be used restrict which principals can approve actions and stages to enforce least priviledge.
+    When a manual approval step is used, [IAM permissions](https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals-iam-permissions.html) should be used to restrict which principals can approve actions and stages to enforce least privilege.
 
     ```json
         {
@@ -389,7 +387,7 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
 
     Implementation of this type deployment presents challenges due to the following limitations:
 
-    * [aws/aws-cdk #1559](https://github.com/aws/aws-cdk/issues/1559) - Lack of support for Blue/Green ECS Deployment in CDK. This was dependend on [aws-cloudformation/cloudformation-coverage-roadmap #37](https://github.com/aws-cloudformation/cloudformation-coverage-roadmap/issues/37) and [aws-cloudformation/cloudformation-coverage-roadmap #483)(https://github.com/aws-cloudformation/cloudformation-coverage-roadmap/issues/483) which have been fixed.
+    * [aws/aws-cdk #1559](https://github.com/aws/aws-cdk/issues/1559) - Lack of support for Blue/Green ECS Deployment in CDK. This was dependent on [aws-cloudformation/cloudformation-coverage-roadmap #37](https://github.com/aws-cloudformation/cloudformation-coverage-roadmap/issues/37) and [aws-cloudformation/cloudformation-coverage-roadmap #483)(https://github.com/aws-cloudformation/cloudformation-coverage-roadmap/issues/483) which have been fixed.
     * [aws/aws-cdk #19163](https://github.com/aws/aws-cdk/issues/19163) - CDK Pipelines aren't intended to be used with CodeDeploy actions.
     * [AWS CloudFormation User Guide](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/blue-green.html#blue-green-considerations) - The use of `AWS::CodeDeploy::BlueGreen` hooks and `AWS::CodeDeployBlueGreen` restricts the types of changes that can be made. Additionally, you can't use auto-rollback capabilities of CodeDeploy.
     * [aws/aws-cdk #5170](https://github.com/aws/aws-cdk/issues/5170) - CDK doesn't support defining CloudFormation rollback triggers. This rules out CloudFormation based blue/green deployments.
