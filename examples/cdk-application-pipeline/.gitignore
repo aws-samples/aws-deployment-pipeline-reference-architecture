@@ -30,7 +30,6 @@ jspm_packages/
 .yarn-integrity
 .cache
 target/
-.vscode/
 !/.projenrc.js
 /test-reports/
 junit.xml

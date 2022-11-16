@@ -10,7 +10,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     workflows: false,
   },
   pullRequestTemplate: false,
-  gitignore: ['target/', '.vscode/'],
+  gitignore: ['target/'],
   context: {
     deployMode: 'pipeline',
   },

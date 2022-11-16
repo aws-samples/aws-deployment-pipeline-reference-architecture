@@ -1,0 +1,14 @@
+{
+    "remote.portsAttributes": {
+        "8080": {
+            "label": "SpringBoot Application",
+        }
+    },
+    "remote.SSH.defaultForwardedPorts": [
+        {
+            "localPort": 8080,
+            "name": "SpringBoot Application Port",
+            "remotePort": 8080
+        }
+    ],
+}

@@ -1,0 +1,40 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "mvn: debug",
+            "type": "shell",
+            "command": "mvn spring-boot:run -Dspring-boot.run.jvmArguments=\"-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005\"",
+            "group": "build",
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "."
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".",
+                    "endsPattern": "Listening for transport dt_socket at address"
+                }
+            }
+        },
+        {
+            "label": "mvn: run",
+            "type": "shell",
+            "command": "mvn spring-boot:run",
+            "group": "build"
+        },
+        {
+            "label": "mvn: build",
+            "type": "shell",
+            "command": "mvn package",
+            "group": "build"
+        },
+        {
+            "label": "mvn: test",
+            "type": "shell",
+            "command": "mvn test",
+            "group": "test"
+        }
+    ]
+}
