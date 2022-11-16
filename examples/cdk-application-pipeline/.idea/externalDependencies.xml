@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalDependencies">
+    <plugin id="Docker" />
+    <plugin id="JavaScript" />
+    <plugin id="JavaScriptDebugger" />
+    <plugin id="com.intellij.java" />
+    <plugin id="com.intellij.spring" />
+    <plugin id="com.intellij.spring.boot" />
+    <plugin id="com.intellij.spring.data" />
+    <plugin id="com.intellij.spring.mvc" />
+    <plugin id="org.jetbrains.idea.maven" />
+  </component>
+</project>

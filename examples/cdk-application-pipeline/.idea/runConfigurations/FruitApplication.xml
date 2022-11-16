@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="FruitApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+        <option name="ACTIVE_PROFILES" />
+        <module name="fruit-api" />
+        <option name="SPRING_BOOT_MAIN_CLASS" value="com.amazonaws.dpri.fruits.FruitApplication" />
+        <extension name="coverage">
+            <pattern>
+                <option name="PATTERN" value="com.amazonaws.dpri.fruits.*" />
+                <option name="ENABLED" value="true" />
+            </pattern>
+        </extension>
+        <method v="2">
+            <option name="Make" enabled="true" />
+        </method>
+    </configuration>
+</component>
