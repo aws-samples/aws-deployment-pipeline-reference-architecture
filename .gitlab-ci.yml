@@ -51,8 +51,8 @@ pages:
   stage: deploy
 
   script:
-  - mkdir -p pages
-  - cp -a site/* pages/
+  - mkdir -p public
+  - cp -a site/* public/
   - echo "$CI_PAGES_URL"
 
   artifacts:
