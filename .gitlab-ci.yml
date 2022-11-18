@@ -70,15 +70,17 @@ pages:preview:
   stage: deploy
 
   script:
-  - echo "$CI_PROJECT_URL/-/jobs/$CI_JOB_ID/artifacts/site/index.html"
+  - echo "PREVIEW_URL=${CI_SERVER_PROTOCOL}://${CI_PROJECT_ROOT_NAMESPACE}.${CI_PAGES_DOMAIN}/-/${CI_PROJECT_PATH#${CI_PROJECT_ROOT_NAMESPACE}/}/-/jobs/$CI_JOB_ID/artifacts/site/index.html" > deploy.env
 
   artifacts:
     paths:
     - site
+    reports:
+      dotenv: deploy.env
 
   environment:
     name: mr-$CI_MERGE_REQUEST_IID
-    url: "$CI_PROJECT_URL/-/jobs/$CI_JOB_ID/artifacts/site/index.html"
+    url: $PREVIEW_URL
     auto_stop_in: 30 days
 
   rules:
