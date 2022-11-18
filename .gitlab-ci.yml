@@ -51,6 +51,7 @@ pages:
   stage: deploy
 
   script:
+  - mkdir -p pages
   - cp -a site/* pages/
   - echo "$CI_PAGES_URL"
 
