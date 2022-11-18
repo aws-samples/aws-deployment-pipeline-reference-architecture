@@ -43,55 +43,42 @@ mkdocs:
     - site
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+      variables:
+        USE_DIRECTORY_URLS: 'false'
     - if: $CI_PIPELINE_SOURCE  == 'push' && $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
 
 pages:
   stage: deploy
 
   script:
-  - mkdir -p $DEPLOY_PATH
-  - cp -a site/* $DEPLOY_PATH/
+  - cp -a site/* pages/
+  - echo "$CI_PAGES_URL"
 
   artifacts:
     paths:
     - public
 
+  environment:
+    name: production-gitlab
+    url: $CI_PAGES_URL
+
   rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-      variables:
-        DEPLOY_PATH: public/mr-$CI_MERGE_REQUEST_IID
-
     - if: $CI_PIPELINE_SOURCE  == 'push' && $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-      variables:
-        DEPLOY_PATH: public/main
 
-preview-environment:
+pages:preview:
   stage: deploy
-  needs:
-    - pages
+
+  script:
+  - echo "$CI_PROJECT_URL/-/jobs/$CI_JOB_ID/artifacts/site/index.html"
+
+  artifacts:
+    paths:
+    - site
 
   environment:
     name: mr-$CI_MERGE_REQUEST_IID
-    url: "$CI_PAGES_URL/mr-$CI_MERGE_REQUEST_IID"
+    url: "$CI_PROJECT_URL/-/jobs/$CI_JOB_ID/artifacts/site/index.html"
     auto_stop_in: 30 days
-
-  script:
-  - echo "$CI_PAGES_URL/mr-$CI_MERGE_REQUEST_IID"
 
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-
-production-environment:
-  stage: deploy
-  needs:
-    - pages
-
-  environment:
-    name: production-gitlab
-    url: $CI_PAGES_URL/main
-
-  script:
-  - echo "$CI_PAGES_URL/main"
-
-  rules:
-    - if: $CI_PIPELINE_SOURCE  == 'push' && $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
