@@ -63,7 +63,7 @@ pages:
 
     - if: $CI_PIPELINE_SOURCE  == 'push' && $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
       variables:
-        DEPLOY_PATH: public
+        DEPLOY_PATH: public/main
 
 preview-environment:
   stage: deploy
@@ -88,10 +88,10 @@ production-environment:
 
   environment:
     name: production-gitlab
-    url: $CI_PAGES_URL
+    url: $CI_PAGES_URL/main
 
   script:
-  - echo "$CI_PAGES_URL"
+  - echo "$CI_PAGES_URL/main"
 
   rules:
     - if: $CI_PIPELINE_SOURCE  == 'push' && $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
