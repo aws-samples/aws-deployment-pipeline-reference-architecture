@@ -5,8 +5,8 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>2.7.5</version>
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.amazonaws.dpri</groupId>
 	<artifactId>fruit-api</artifactId>
@@ -37,6 +37,16 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
+			<artifactId>snakeyaml</artifactId>
+			<groupId>org.yaml</groupId>
+			<version>1.32</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.6.12</version>
+		</dependency>
+		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
 		</dependency>
@@ -65,25 +75,25 @@
 	</dependencies>
 
 	<build>
-        <finalName>${project.artifactId}</finalName>
+		<finalName>${project.artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<executions>
 					<execution>
-					  <id>pre-integration-test</id>
-					  <goals>
-						<goal>start</goal>
-					  </goals>
+						<id>pre-integration-test</id>
+						<goals>
+							<goal>start</goal>
+						</goals>
 					</execution>
 					<execution>
-					  <id>post-integration-test</id>
-					  <goals>
-						<goal>stop</goal>
-					  </goals>
+						<id>post-integration-test</id>
+						<goals>
+							<goal>stop</goal>
+						</goals>
 					</execution>
-				  </executions>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>com.smartbear.soapui</groupId>
