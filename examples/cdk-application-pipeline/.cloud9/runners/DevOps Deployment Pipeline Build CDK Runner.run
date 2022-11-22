@@ -1,0 +1,13 @@
+{
+  "script": [
+    "for directory in /projects/* ; do",
+    "  if [ -d \"$directory/.cloud9/runners\" ]; then",
+    "    REPOSITORY_DIR=$directory",
+    "  fi",
+    "done",
+    "cd $REPOSITORY_DIR",
+    "npm install",
+    "cdk synth"
+  ],
+  "info" : "This will build the CDK Application"
+}

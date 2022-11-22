@@ -1,0 +1,12 @@
+{
+  "script": [
+    "for directory in /projects/* ; do",
+    "  if [ -d \"$directory/.cloud9/runners\" ]; then",
+    "    REPOSITORY_DIR=$directory",
+    "  fi",
+    "done",
+    "cd $REPOSITORY_DIR",
+    "npm test"
+  ],
+  "info" : "This will run unit tests for the CDK Application"
+}
