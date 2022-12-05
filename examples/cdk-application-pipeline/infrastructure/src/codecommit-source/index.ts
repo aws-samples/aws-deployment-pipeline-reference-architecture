@@ -31,7 +31,6 @@ export class CodeCommitSource extends Construct {
       path: '.',
       ignoreMode: IgnoreMode.GIT,
       exclude: gitignore,
-      assetHash: 'initial',
     });
     this.repository = new Repository(this, 'CodeCommitRepo', {
       repositoryName: props.repositoryName,
