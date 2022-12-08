@@ -2,6 +2,8 @@
 /test/
 site/
 .vscode/
+.idea
+*.iml
 acat-output.json
 acat_report/
 jmeter.log
