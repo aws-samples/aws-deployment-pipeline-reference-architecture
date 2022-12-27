@@ -24,45 +24,24 @@ describe('Deployment', () => {
     });
     Aspects.of(stack).add(new AwsSolutionsChecks());
 
-    // Suppress CDK-NAG for public ELB
-    NagSuppressions.addResourceSuppressionsByPath(
-      stack,
-      '/TestStack/Api/LB/SecurityGroup/Resource',
-      [{ id: 'AwsSolutions-EC23', reason: 'Public ELB' }],
-    );
-
     // Suppress CDK-NAG for TaskDefinition role and ecr:GetAuthorizationToken permission
     NagSuppressions.addResourceSuppressionsByPath(
       stack,
-      '/TestStack/Api/TaskDef/ExecutionRole/DefaultPolicy/Resource',
+      `/${stack.stackName}/Api/TaskDef/ExecutionRole/DefaultPolicy/Resource`,
       [{ id: 'AwsSolutions-IAM5', reason: 'Allow ecr:GetAuthorizationToken', appliesTo: ['Resource::*'] }],
-    );
-
-    // Suppress CDK-NAG for S3 AccessLog Bucket
-    NagSuppressions.addResourceSuppressionsByPath(
-      stack,
-      '/TestStack/AccessLogBucket/Resource',
-      [{ id: 'AwsSolutions-S1', reason: 'Dont need access logs for a bucket that is for access logs' }],
-    );
-
-    // Suppress CDK-NAG for ECS Task environment variables for database host/port
-    NagSuppressions.addResourceSuppressionsByPath(
-      stack,
-      '/TestStack/Api/TaskDef/Resource',
-      [{ id: 'AwsSolutions-ECS2', reason: 'Allow environment variables' }],
     );
 
     // Suppress CDK-NAG for secret rotation
     NagSuppressions.addResourceSuppressionsByPath(
       stack,
-      '/TestStack/AuroraSecret/Resource',
+      `/${stack.stackName}/AuroraSecret/Resource`,
       [{ id: 'AwsSolutions-SMG4', reason: 'Dont require secret rotation' }],
     );
 
     // Suppress CDK-NAG for RDS Serverless
     NagSuppressions.addResourceSuppressionsByPath(
       stack,
-      '/TestStack/AuroraCluster/Resource',
+      `/${stack.stackName}/AuroraCluster/Resource`,
       [
         { id: 'AwsSolutions-RDS6', reason: 'IAM authentication not supported on Serverless v1' },
         { id: 'AwsSolutions-RDS10', reason: 'Disable delete protection to simplify cleanup of Reference Implementation' },
@@ -72,45 +51,74 @@ describe('Deployment', () => {
       ],
     );
 
-    // Suppress CDK-NAG for Canary
-    NagSuppressions.addResourceSuppressionsByPath(
-      stack,
-      '/TestStack/SyntheticTest/SyntheticTest/ArtifactsBucket/Resource',
-      [
-        { id: 'AwsSolutions-S1', reason: 'Dont need access logs for canary bucket' },
-        { id: 'AwsSolutions-S2', reason: 'Dont require public access block for canary bucket' },
-        { id: 'AwsSolutions-IAM5', reason: 'Allow resource:*', appliesTo: ['Resource::*'] },
-      ],
-    );
-    NagSuppressions.addResourceSuppressionsByPath(
-      stack,
-      '/TestStack/SyntheticTest/SyntheticTest/ServiceRole/Resource',
-      [{ id: 'AwsSolutions-IAM5', reason: 'Allow resource:*' }],
-    );
-    NagSuppressions.addResourceSuppressionsByPath(
-      stack,
-      '/TestStack/BlueGreenSupport',
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason: 'Allow AWS managed policies',
-          appliesTo: [
-            'Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS',
-            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-          ],
-        },
-      ],
-      true,
-    );
-    NagSuppressions.addResourceSuppressionsByPath(
-      stack,
-      '/TestStack/BlueGreenSupport/DeploymentWait/CodeDeploymentProvider',
-      [
-        { id: 'AwsSolutions-IAM5', reason: 'Allow AWS wildcard on sub-resources' },
-        { id: 'AwsSolutions-L1', reason: 'Allow provider framework older runtime version' },
-      ],
-      true,
-    );
+    NagSuppressions.addResourceSuppressionsByPath(stack, [
+      `/${stack.stackName}/Api/DeploymentGroup/Deployment/DeploymentProvider/framework-onEvent`,
+      `/${stack.stackName}/Api/DeploymentGroup/Deployment/DeploymentProvider/framework-isComplete`,
+      `/${stack.stackName}/Api/DeploymentGroup/Deployment/DeploymentProvider/framework-onTimeout`,
+      `/${stack.stackName}/Api/DeploymentGroup/Deployment/DeploymentProvider/waiter-state-machine`,
+    ], [
+      { id: 'AwsSolutions-IAM5', reason: 'Unrelated to construct under test' },
+      { id: 'AwsSolutions-L1', reason: 'Unrelated to construct under test' },
+    ], true);
+
+    // Ignore findings from access log bucket
+    NagSuppressions.addResourceSuppressionsByPath(stack, [
+      `/${stack.stackName}/Api/AccessLogBucket`,
+    ], [
+      { id: 'AwsSolutions-S1', reason: 'Dont need access logs for access log bucket' },
+      { id: 'AwsSolutions-IAM5', reason: 'Allow resource:*', appliesTo: ['Resource::*'] },
+    ]);
+
+    NagSuppressions.addResourceSuppressionsByPath(stack, [
+      `/${stack.stackName}/Api/Canary/ServiceRole`,
+    ], [{ id: 'AwsSolutions-IAM5', reason: 'Allow resource:*' }]);
+
+    NagSuppressions.addResourceSuppressionsByPath(stack, [
+      `/${stack.stackName}/Api/CanaryArtifactsBucket`,
+    ], [{ id: 'AwsSolutions-S1', reason: 'Dont need access logs for canary bucket' }]);
+
+    NagSuppressions.addResourceSuppressionsByPath(stack, [
+      `/${stack.stackName}/Api/DeploymentGroup/ServiceRole`,
+    ], [
+      { id: 'AwsSolutions-IAM4', reason: 'Allow AWSCodeDeployRoleForECS policy', appliesTo: ['Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS'] },
+    ]);
+
+    NagSuppressions.addResourceSuppressionsByPath(stack, [
+      `/${stack.stackName}/Api/DeploymentGroup/Deployment`,
+    ], [
+      {
+        id: 'AwsSolutions-IAM4',
+        reason: 'Allow AWSLambdaBasicExecutionRole policy',
+        appliesTo: ['Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'],
+      },
+    ], true);
+
+    NagSuppressions.addResourceSuppressionsByPath(stack, [
+      `/${stack.stackName}/Api/TaskDef`,
+    ], [
+      {
+        id: 'AwsSolutions-ECS2',
+        reason: 'Allow environment variables for configuration of values that are not confidential',
+      },
+    ]);
+
+    NagSuppressions.addResourceSuppressionsByPath(stack, [
+      `/${stack.stackName}/Api/LB/SecurityGroup`,
+    ], [
+      {
+        id: 'AwsSolutions-EC23',
+        reason: 'Allow public inbound access on ELB',
+      },
+    ]);
+  });
+
+  expect.addSnapshotSerializer({
+    test: (val) => typeof val === 'string' && val.match(/^dummy.dkr.ecr.us-east.1/) !== null,
+    serialize: () => '"dummy-ecr-image"',
+  });
+  expect.addSnapshotSerializer({
+    test: (val) => typeof val === 'string' && val.match(/^[a-f0-9]+\.zip$/) !== null,
+    serialize: () => '"code.zip"',
   });
 
   test('Snapshot', () => {

@@ -60,7 +60,7 @@ Developers need fast-feedback for potential issues with their code. Automation s
     Infrastructure source code defines both the deployment of the pipeline and the deployment of the application are stored in `infrastructure/` folder and uses [AWS Cloud Development Kit](https://aws.amazon.com/cdk/).
 
     <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/deployment/index.ts) inside_block:constructor
+    [](../../examples/cdk-application-pipeline/infrastructure/src/deployment.ts) inside_block:constructor
     <!--/codeinclude-->
 
     Notice that the infrastructure code is written in [Typescript](https://www.typescriptlang.org/) which is different from the Application Source Code (Java). This was done intentionally to demonstrate that CDK allows defining infrastructure code in whatever language is most appropriate for the team that owns the use of CDK in the organization.
@@ -214,7 +214,7 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     The infrastructure for each environment is defined in [AWS Cloud Development Kit](https://aws.amazon.com/cdk/):
 
     <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/deployment/index.ts) inside_block:constructor
+    [](../../examples/cdk-application-pipeline/infrastructure/src/deployment.ts) inside_block:constructor
     <!--/codeinclude-->
 
     The `DeploymentStack` construct is then instantiated for each environment:
@@ -298,7 +298,7 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     The infrastructure for each environment is defined in [AWS Cloud Development Kit](https://aws.amazon.com/cdk/):
 
     <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/deployment/index.ts) inside_block:constructor
+    [](../../examples/cdk-application-pipeline/infrastructure/src/deployment.ts) inside_block:constructor
     <!--/codeinclude-->
 
     The `DeploymentStack` construct is then instantiated for each environment:
@@ -321,11 +321,20 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     [Amazon ECS](https://aws.amazon.com/ecs/) uses [Amazon CloudWatch Metrics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html) and [Amazon CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html) for observability by default.
 
 ???+ required "Synthetic Tests"
-    [Amazon CloudWatch Synthetics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html) is used to continuously deliver traffic to the application and assert that requests are successful and responses are received within a given threshold. The canary is defined via CDK:
+    [Amazon CloudWatch Synthetics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html) is used to continuously deliver traffic to the application and assert that requests are successful and responses are received within a given threshold. The canary is defined via CDK using the [@cdklabs/cdk-ecs-codedeploy](https://constructs.dev/packages/@cdklabs/cdk-ecs-codedeploy) construct:
 
-    <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/deployment/synthetic.ts) inside_block:constructor
-    <!--/codeinclude-->
+    ```ts
+    const service = new ApplicationLoadBalancedCodeDeployedFargateService(this, 'Api', {
+      ...
+
+      apiCanaryTimeout: Duration.seconds(5),
+      apiTestSteps: [{
+        name: 'getAll',
+        path: '/api/fruits',
+        jmesPath: 'length(@)',
+        expectedValue: 5,
+      }],
+    ```
 
 ???+ required "Performance Tests"
     [Apache JMeter](https://jmeter.apache.org/) is used to run performance tests against the deployed application. The tests are stored in `src/test/jmeter` and added to the pipeline via CDK:
@@ -387,29 +396,65 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
 
     Implementation of this type deployment presents challenges due to the following limitations:
 
-    * [aws/aws-cdk #1559](https://github.com/aws/aws-cdk/issues/1559) - Lack of support for Blue/Green ECS Deployment in CDK. This was dependent on [aws-cloudformation/cloudformation-coverage-roadmap #37](https://github.com/aws-cloudformation/cloudformation-coverage-roadmap/issues/37) and [aws-cloudformation/cloudformation-coverage-roadmap #483)(https://github.com/aws-cloudformation/cloudformation-coverage-roadmap/issues/483) which have been fixed.
     * [aws/aws-cdk #19163](https://github.com/aws/aws-cdk/issues/19163) - CDK Pipelines aren't intended to be used with CodeDeploy actions.
     * [AWS CloudFormation User Guide](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/blue-green.html#blue-green-considerations) - The use of `AWS::CodeDeploy::BlueGreen` hooks and `AWS::CodeDeployBlueGreen` restricts the types of changes that can be made. Additionally, you can't use auto-rollback capabilities of CodeDeploy.
     * [aws/aws-cdk #5170](https://github.com/aws/aws-cdk/issues/5170) - CDK doesn't support defining CloudFormation rollback triggers. This rules out CloudFormation based blue/green deployments.
 
-    The solution was to create an [AWS CloudFormation Custom Resource](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources.html) to handle the creation of a CodeDeploy deployment.
-
-    <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/blue-green-deploy/lambda/index.ts) block:onEvent
-    <!--/codeinclude-->
-
-    The custom resource is then created in CDK:
+    The solution was to use the [@cdklabs/cdk-ecs-codedeploy](https://constructs.dev/packages/@cdklabs/cdk-ecs-codedeploy) construct from the Construct Hub which addresses [aws/aws-cdk #1559](https://github.com/aws/aws-cdk/issues/1559) - Lack of support for Blue/Green ECS Deployment in CDK. 
 
     ```typescript
-    const deployment = new BlueGreenEcsDeployment(this, 'DeploymentWait', {
-      deploymentGroup: deploymentGroup,
-      taskDefinition: service.taskDefinition,
-      timeout: Duration.minutes(60),
+    const service = new ApplicationLoadBalancedCodeDeployedFargateService(this, 'Api', {
+      cluster,
+      capacityProviderStrategies: [
+        {
+          capacityProvider: 'FARGATE_SPOT',
+          weight: 1,
+        },
+      ],
+      minHealthyPercent: 50,
+      maxHealthyPercent: 200,
+      desiredCount: 3,
+      cpu: 512,
+      memoryLimitMiB: 1024,
+      taskImageOptions: {
+        image,
+        containerName: 'api',
+        containerPort: 8080,
+        family: appName,
+        logDriver: AwsLogDriver.awsLogs({
+          logGroup: appLogGroup,
+          streamPrefix: 'service',
+        }),
+        secrets: {
+          SPRING_DATASOURCE_USERNAME: Secret.fromSecretsManager( dbSecret, 'username' ),
+          SPRING_DATASOURCE_PASSWORD: Secret.fromSecretsManager( dbSecret, 'password' ),
+        },
+        environment: {
+          SPRING_DATASOURCE_URL: `jdbc:mysql://${db.clusterEndpoint.hostname}:${db.clusterEndpoint.port}/${dbName}`,
+        },
+      },
+      deregistrationDelay: Duration.seconds(5),
+      responseTimeAlarmThreshold: Duration.seconds(3),
+      healthCheck: {
+        healthyThresholdCount: 2,
+        unhealthyThresholdCount: 2,
+        interval: Duration.seconds(60),
+        path: '/actuator/health',
+      },
+      deploymentConfig,
+      terminationWaitTime: Duration.minutes(5),
+      apiCanaryTimeout: Duration.seconds(5),
+      apiTestSteps: [{
+        name: 'getAll',
+        path: '/api/fruits',
+        jmesPath: 'length(@)',
+        expectedValue: 5,
+      }],
     });
 
-    new CfnOutput(this, 'DeploymentId', {
-      value: deployment.deploymentId,
-    }).overrideLogicalId('DeploymentId');
+    this.apiUrl = new CfnOutput(this, 'endpointUrl', {
+      value: `http://${service.listener.loadBalancer.loadBalancerDnsName}`,
+    });
     ```
 
     Deployments are made incrementally across regions using the [CDK Pipeline - Wave](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.pipelines.Wave.html) construct. Each wave contains a list of regions to deploy to in parallel. One wave must fully complete before the next wave starts. The diagram below shows how each wave deploys to 2 regions at a time.
@@ -456,11 +501,20 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     <!--/codeinclude-->
 
 ???+ required "Synthetic Tests"
-    [Amazon CloudWatch Synthetics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html) is used to continuously deliver traffic to the application and assert that requests are successful and responses are received within a given threshold. The canary is defined via CDK:
+    [Amazon CloudWatch Synthetics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html) is used to continuously deliver traffic to the application and assert that requests are successful and responses are received within a given threshold. The canary is defined via CDK using the [@cdklabs/cdk-ecs-codedeploy](https://constructs.dev/packages/@cdklabs/cdk-ecs-codedeploy) construct:
 
-    <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/deployment/synthetic.ts) inside_block:constructor
-    <!--/codeinclude-->
+    ```ts
+    const service = new ApplicationLoadBalancedCodeDeployedFargateService(this, 'Api', {
+      ...
+
+      apiCanaryTimeout: Duration.seconds(5),
+      apiTestSteps: [{
+        name: 'getAll',
+        path: '/api/fruits',
+        jmesPath: 'length(@)',
+        expectedValue: 5,
+      }],
+    ```
 
 ## Frequently Asked Questions
 

@@ -24,12 +24,12 @@ This reference implementation contains the following significant components:
 This reference implementation is intended to be used in your own accounts. By deploying the CDK application in your toolchain account, a new AWS CodeCommit repository will be created and will be seeded with this reference implementation. You'll need to perform the following steps:
 
 1. Install prerequisite software: [Node.js](https://nodejs.org/en/)
-2. Install dependencies: `npx yarn install`
+2. Install dependencies: `npm install`
 3. Create 4 AWS Accounts: toolchain, beta, gamma, production
 4. Bootstrap the accounts:
 
 ```bash
-npm run bootstrap --exec
+./infrastructure/src/bootstrap.ts
 ```
 
 5. Deploy the pipeline to the toolchain account:
@@ -53,12 +53,6 @@ To test changes to the CDK code, run:
 
 ```bash
 npm test
-```
-
-To deploy the application directly to an AWS account outside a pipeline, run:
-
-```bash
-cdk deploy -c deployMode=local
 ```
 
 To run the Java application locally, run:

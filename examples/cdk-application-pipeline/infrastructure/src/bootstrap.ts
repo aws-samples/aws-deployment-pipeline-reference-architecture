@@ -1,3 +1,5 @@
+#!/usr/bin/env ts-node 
+
 import * as child from 'child_process';
 import { STS } from '@aws-sdk/client-sts';
 import { fromNodeProviderChain } from '@aws-sdk/credential-providers';

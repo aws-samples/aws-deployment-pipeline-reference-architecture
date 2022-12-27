@@ -1,6 +1,7 @@
 package com.amazonaws.dpri.fruits;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,46 +16,54 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * API controller for fruits.
+ */
 @RestController
 public final class FruitController {
     /**
-     * Repository to use for persistence.
+     * JPA repository for fruits.
      */
     private final FruitRepository repository;
 
-    FruitController(final FruitRepository newRepository) {
-        this.repository = newRepository;
+    FruitController(final FruitRepository r) {
+        this.repository = r;
     }
 
     @GetMapping("/api/fruits")
-    List<Fruit> all() {
-        return repository.findAll();
+    List<FruitDTO> all() {
+        return repository.findAll()
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/api/fruits")
-    Fruit newFruit(@RequestBody final Fruit fruit) {
-        return repository.save(fruit);
+    FruitDTO newFruit(@RequestBody final FruitDTO fruit) {
+        return convertToDto(repository.save(convertToEntity(fruit)));
     }
 
     @GetMapping("/api/fruits/{id}")
-    Fruit one(@PathVariable final Long id) {
+    FruitDTO one(@PathVariable final Long id) {
         return repository.findById(id)
+                .map(this::convertToDto)
                 .orElseThrow(() -> new FruitNotFoundException(id));
     }
 
     @PutMapping("/api/fruits/{id}")
-    Fruit replaceFruit(
-        @RequestBody final Fruit newFruit,
-        @PathVariable final Long id) {
-        return repository.findById(id)
+    FruitDTO replaceFruit(
+            @RequestBody final FruitDTO newFruit,
+            @PathVariable final Long id) {
+        Fruit entity = repository.findById(id)
                 .map(fruit -> {
                     fruit.setName(newFruit.getName());
                     return repository.save(fruit);
                 })
                 .orElseGet(() -> {
                     newFruit.setId(id);
-                    return repository.save(newFruit);
+                    return repository.save(convertToEntity(newFruit));
                 });
+        return convertToDto(entity);
     }
 
     @DeleteMapping("/api/fruits/{id}")
@@ -62,6 +71,19 @@ public final class FruitController {
         repository.deleteById(id);
     }
 
+    FruitDTO convertToDto(final Fruit fruit) {
+        FruitDTO dto = new FruitDTO();
+        dto.setId(fruit.getId());
+        dto.setName(fruit.getName());
+        return dto;
+    }
+
+    Fruit convertToEntity(final FruitDTO fruit) {
+        Fruit entity = new Fruit();
+        entity.setId(fruit.getId());
+        entity.setName(fruit.getName());
+        return entity;
+    }
 }
 
 @ControllerAdvice

@@ -6,60 +6,63 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * Entity for persisting fruits.
+ */
 @Entity
-public final class Fruit {
+public class Fruit {
   /**
-   * Id for fruit.
+   * Unique ID for this fruit.
    */
   private @Id @GeneratedValue Long id;
+
   /**
-   * Name for fruit.
+   * Name for this fruit.
    */
   private String name;
 
   Fruit() {
   }
 
-  Fruit(final String newName) {
-    this.name = newName;
+  Fruit(final String n) {
+    this.name = n;
   }
 
   /**
-   * Get the fruit id.
-   *
-   * @return fruit id
+   * Get the current ID.
+   * @return id
    */
   public Long getId() {
     return this.id;
   }
 
   /**
-   * Get the fruit name.
-   *
-   * @return fruit name
+   * Get the current name.
+   * @return name
    */
   public String getName() {
     return this.name;
   }
 
   /**
-   * Set the fruit id.
-   *
-   * @param newId to set
+   * Set a new id.
+   * @param newId
    */
   public void setId(final Long newId) {
     this.id = newId;
   }
 
   /**
-   * Set the fruit name.
-   *
-   * @param newName to set
+   * Set a new name.
+   * @param newName
    */
   public void setName(final String newName) {
     this.name = newName;
   }
 
+  /**
+   * Fruits are equal if they have the same id and name.
+   */
   @Override
   public boolean equals(final Object o) {
 
@@ -74,6 +77,9 @@ public final class Fruit {
         && Objects.equals(this.name, fruit.name);
   }
 
+  /**
+   * Hash based on current id and name.
+   */
   @Override
   public int hashCode() {
     return Objects.hash(this.id, this.name);

@@ -15,6 +15,7 @@ export class TrivyScan extends CodeBuildStep {
       '--exit-code',
       '1',
       '--no-progress',
+      '--ignore-unfixed',
       '--format',
       'cyclonedx',
       '--output',
