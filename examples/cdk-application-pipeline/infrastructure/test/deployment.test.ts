@@ -121,11 +121,6 @@ describe('Deployment', () => {
     serialize: () => '"code.zip"',
   });
 
-  expect.addSnapshotSerializer({
-    test: (val) => typeof val === 'string' && val.match(/^dummy.dkr.ecr.us-east.1/) !== null,
-    serialize: () => '"dummy-ecr-image"',
-  });
-
   test('Snapshot', () => {
     const template = Template.fromStack(stack);
     expect(template.toJSON()).toMatchSnapshot();
