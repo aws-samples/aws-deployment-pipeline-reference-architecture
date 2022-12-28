@@ -1,16 +1,18 @@
-# AWS CDK Pipeline
+# Amazon CodeCatalyst Pipeline
 
-This presents a reference implementation of the [Application Pipeline](..) reference architecture. The pipeline is built with [AWS CodePipeline](https://aws.amazon.com/codepipeline/) and uses [AWS CodeBuild](https://aws.amazon.com/codebuild/) for building the software and performing testing tasks. All the infrastructure for this reference implementation is defined with [AWS Cloud Development Kit](https://aws.amazon.com/cdk/). The pipelines are defined using the [CDK Pipelines](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.pipelines-readme.html) L3 constructs. The source code for this reference implementation is available in [GitHub](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/cdk-application-pipeline) for running in your own local account.
+This presents a reference implementation of the [Application Pipeline](..) reference architecture. The pipeline is created with [Amazon CodeCatalyst](https://aws.amazon.com/codecatalyst/) for building the software and performing testing tasks. All the infrastructure for this reference implementation is defined with [AWS Cloud Development Kit](https://aws.amazon.com/cdk/). The source code for this reference implementation is available in [GitHub](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/codecatalyst-application-pipeline) for review.
 
-![Architecture](ri-cdk-pipeline-architecture.drawio)
+This reference implementation has been contributed to Amazon CodeCatalyst as [blueprint](https://docs.aws.amazon.com/codecatalyst/latest/userguide/concepts.html#templates-concept) named `DevOps deployment pipeline`. You can try out this reference implementation in your own CodeCatalyst space by creating a new project from the blueprint.
+
+![Architecture](ri-codecatalyst-pipeline-architecture.drawio)
 
 ???+ danger "Disclaimer"
-    This reference implementation is intended to serve as an example of how to accomplish the guidance in the reference architecture using [CDK Pipelines](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.pipelines-readme.html). The reference implementation has intentionally not followed the following [AWS Well-Architected](https://aws.amazon.com/architecture/well-architected/) best practices to make it accessible by a wider range of customers. Be sure to address these before using parts of this code for any workloads in your own environment:
+    This reference implementation is intended to serve as an example of how to accomplish the guidance in the reference architecture using [Amazon CodeCatalyst](https://aws.amazon.com/codecatalyst/). The reference implementation has intentionally not followed the following [AWS Well-Architected](https://aws.amazon.com/architecture/well-architected/) best practices to make it accessible by a wider range of customers. Be sure to address these before using parts of this code for any workloads in your own environment:
 
     * [ ] **cdk bootstrap with AdministratorAccess** - the default policy used for `cdk bootstrap` is `AdministratorAccess` but should be replaced with a more appropriate policy with least privilege in your account.
     * [ ] **TLS on HTTP endpoint** - the listener for the sample application uses HTTP instead of HTTPS to avoid having to create new ACM certificates and Route53 hosted zones. This should be replaced in your account with an `HTTPS` listener.
 
-![Pipeline](assets/ri-cdk-pipeline.png)
+![Pipeline](assets/ri-codecatalyst-pipeline.png)
 
 ## Local Development
 
@@ -22,45 +24,41 @@ Developers need fast-feedback for potential issues with their code. Automation s
     The following `.pre-commit-config.yaml` is added to the repository that will build the code with [Maven](https://maven.apache.org/), run unit tests with [JUnit](https://junit.org), check for code quality with [Checkstyle](https://github.com/checkstyle/checkstyle), run static application security testing with [PMD](https://pmd.github.io/latest/index.html) and check for secrets in the code with [gitleaks](https://github.com/zricethezav/gitleaks).
 
     <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/.pre-commit-config.yaml)
+    [](../../examples/codecatalyst-application-pipeline/.pre-commit-config.yaml)
     <!--/codeinclude-->
 
 ## Source
 
 ???+ required "Application Source Code"
-    The application source code can be found in the [src/main/java](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/cdk-application-pipeline/src/main/java) directory. It is intended to serve only as a reference and should be replaced by your own application source code.
+    The application source code can be found in the [src/main/java](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/codecatalyst-application-pipeline/src/main/java) directory. It is intended to serve only as a reference and should be replaced by your own application source code.
 
     This reference implementation includes a [Spring Boot](https://spring.io/projects/spring-boot) application that exposes a REST API and uses a database for persistence. The API is implemented in `FruitController.java`:
 
     <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/src/main/java/com/amazonaws/dpri/fruits/FruitController.java) block:FruitController
+    [](../../examples/codecatalyst-application-pipeline/src/main/java/com/amazonaws/dpri/fruits/FruitController.java) block:FruitController
     <!--/codeinclude-->
 
 
-    The application source code is stored in [AWS CodeCommit](https://aws.amazon.com/codecommit/) repository that is created and initialized from the CDK application in the `CodeCommitSource` construct:
-
-    <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/codecommit-source/index.ts) inside_block:constructor
-    <!--/codeinclude-->
+    The application source code is stored in [Amazon CodeCatalyst](https://aws.amazon.com/codecatalyst/) repository that is created and initialized from the blueprint.
 
 ???+ required "Test Source Code"
-    The test source code can be found in the [src/test/java](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/cdk-application-pipeline/src/test/java) directory. It is intended to serve only as a reference and should be replaced by your own test source code.
+    The test source code can be found in the [src/test/java](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/codecatalyst-application-pipeline/src/test/java) directory. It is intended to serve only as a reference and should be replaced by your own test source code.
 
     The reference implementation includes source code for unit, integration and end-to-end testing. Unit and integration tests can be found in `src/test/java`. For example, `FruitControllerTest.java` performs unit tests of each API path with the [JUnit](https://junit.org/) testing library:
 
     <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/src/test/java/com/amazonaws/dpri/fruits/FruitControllerTest.java) block:shouldReturnList
+    [](../../examples/codecatalyst-application-pipeline/src/test/java/com/amazonaws/dpri/fruits/FruitControllerTest.java) block:shouldReturnList
     <!--/codeinclude-->
 
     Acceptance tests are preformed with [SoapUI](https://www.soapui.org/) and are defined in `fruit-api-soapui-project.xml`. They are executed by [Maven](https://maven.apache.org/) using plugins in `pom.xml`.
 
 ???+ required "Infrastructure Source Code"
-    The infrastructure source code can be found in the [infrastructure](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/cdk-application-pipeline/infrastructure) directory. It is intended to serve as a reference but much of the code can also be reused in your own CDK applications.
+    The infrastructure source code can be found in the [infrastructure](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/codecatalyst-application-pipeline/infrastructure) directory. It is intended to serve as a reference but much of the code can also be reused in your own CDK applications.
 
-    Infrastructure source code defines both the deployment of the pipeline and the deployment of the application are stored in `infrastructure/` folder and uses [AWS Cloud Development Kit](https://aws.amazon.com/cdk/).
+    Infrastructure source code defines the deployment of the application are stored in `infrastructure/` folder and uses [AWS Cloud Development Kit](https://aws.amazon.com/cdk/).
 
     <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/deployment.ts) inside_block:constructor
+    [](../../examples/codecatalyst-application-pipeline/infrastructure/src/deployment.ts) inside_block:constructor
     <!--/codeinclude-->
 
     Notice that the infrastructure code is written in [Typescript](https://www.typescriptlang.org/) which is different from the Application Source Code (Java). This was done intentionally to demonstrate that CDK allows defining infrastructure code in whatever language is most appropriate for the team that owns the use of CDK in the organization.
@@ -96,16 +94,16 @@ Developers need fast-feedback for potential issues with their code. Automation s
     Static configuration for the application is defined in `src/main/resources/application.yml`:
 
     <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/src/main/resources/application.yml)
+    [](../../examples/codecatalyst-application-pipeline/src/main/resources/application.yml)
     <!--/codeinclude-->
 
 ???+ required "Database Source Code"
-    The database source code can be found in the [src/main/resources/db](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/cdk-application-pipeline/src/main/resources/db) directory. It is intended to serve only as a reference and should be replaced by your own database source code.
+    The database source code can be found in the [src/main/resources/db](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/codecatalyst-application-pipeline/src/main/resources/db) directory. It is intended to serve only as a reference and should be replaced by your own database source code.
 
     The code that manages the schema and initial data for the application is defined using [Liquibase](https://www.liquibase.org/) in `src/main/resources/db/changelog/db.changelog-master.yml`:
 
     <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/src/main/resources/db/changelog/db.changelog-master.yaml)
+    [](../../examples/codecatalyst-application-pipeline/src/main/resources/db/changelog/db.changelog-master.yaml)
     <!--/codeinclude-->
 
 ## Build
@@ -113,129 +111,180 @@ Developers need fast-feedback for potential issues with their code. Automation s
 Actions in this stage all run in less than 10 minutes so that developers can take action on fast feedback before moving on to their next task. Each of the actions below are defined as code with [AWS Cloud Development Kit](https://aws.amazon.com/cdk/).
 
 ???+ required "Build Code"
-    The Java source code is compiled, unit tested and packaged by [Maven](https://maven.apache.org/). A step is added to the pipeline through a CDK construct called `MavenBuild`:
+    The Java source code is compiled, unit tested and packaged by [Maven](https://maven.apache.org/). An action is added to the workflow to build and package the source code:
 
-    <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/maven-build/index.ts) inside_block:constructor
-    <!--/codeinclude-->
+    ```yaml
+      Package:
+        Identifier: aws/build@v1
+        Inputs:
+          Sources:
+            - WorkflowSource
+        Outputs:
+          AutoDiscoverReports:
+            Enabled: true
+            ReportNamePrefix: build
+            SuccessCriteria:
+              PassRate: 100
+          Artifacts:
+            - Name: package
+              Files:
+                - "**/*"
+        Configuration:
+          Steps:
+            - Run: mvn verify --batch-mode --no-transfer-progress
+    ```
 
 ???+ required "Unit Tests"
     The unit tests are run by [Maven](https://maven.apache.org/) at the same time the `Build Code` action occurs. The results of the unit tests are uploaded to [AWS Code Build Test Reports](https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html) to track over time.
 
-    ![](assets/unit-test-report.png)
+    ![](assets/codecatalyst-unit-test-report.png)
 
 ???+ required "Code Quality"
-    A CDK construct was created to require that [Amazon CodeGuru](https://aws.amazon.com/codeguru/) performed a review on the most recent changes and that the recommendations don't exceed the severity thresholds. If no review was found or if the severity thresholds were exceeded, the pipeline fails. The construct is added to the pipeline with:
+    Code quality is enforced through the [PMD](https://maven.apache.org/plugins/maven-pmd-plugin/) and [Checkstyle](https://maven.apache.org/plugins/maven-checkstyle-plugin/) Maven plugins:
 
-    <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/pipeline.ts) block:CodeGuruReviewCheck
-    <!--/codeinclude-->
-
-    The `Filter` attribute can be customized to control what categories of recommendations are considered and what the thresholds are:
-
-    ```typescript
-    export enum CodeGuruReviewRecommendationCategory {
-        AWS_BEST_PRACTICES = 'AWSBestPractices',
-        AWS_CLOUDFORMATION_ISSUES = 'AWSCloudFormationIssues',
-        CODE_INCONSISTENCIES = 'CodeInconsistencies',
-        CODE_MAINTENANCE_ISSUES = 'CodeMaintenanceIssues',
-        CONCURRENCY_ISSUES = 'ConcurrencyIssues',
-        DUPLICATE_CODE = 'DuplicateCode',
-        INPUT_VALIDATIONS = 'InputValidations',
-        JAVA_BEST_PRACTICES = 'JavaBestPractices',
-        PYTHON_BEST_PRACTICES = 'PythonBestPractices',
-        RESOURCE_LEAKS = 'ResourceLeaks',
-        SECURITY_ISSUES = 'SecurityIssues',
-    }
-    export class CodeGuruReviewFilter {
-        // Limit which recommendation categories to include
-        recommendationCategories!: CodeGuruReviewRecommendationCategory[];
-
-        // Fail if more that this # of lines of code were suppressed aws-codeguru-reviewer.yml
-        maxSuppressedLinesOfCodeCount?: number;
-
-        // Fail if more than this # of CRITICAL recommendations were found
-        maxCriticalRecommendations?: number;
-
-        // Fail if more than this # of HIGH recommendations were found
-        maxHighRecommendations?: number;
-
-        // Fail if more than this # of MEDIUM recommendations were found
-        maxMediumRecommendations?: number;
-
-        // Fail if more than this # of INFO recommendations were found
-        maxInfoRecommendations?: number;
-
-        // Fail if more than this # of LOW recommendations were found
-        maxLowRecommendations?: number;
-    }
+    ```xml
+        <plugin>
+            <artifactId>maven-pmd-plugin</artifactId>
+            <configuration>
+                <printFailingErrors></printFailingErrors>
+            </configuration>
+            <executions>
+                <execution>
+                    <phase>test</phase>
+                    <goals>
+                        <goal>check</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <configuration>
+                <printFailingErrors></printFailingErrors>
+            </configuration>
+            <executions>
+                <execution>
+                    <phase>test</phase>
+                    <goals>
+                        <goal>check</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
     ```
 
-
-    ![](assets/codeguru-review.png)
-
-    Additionally, [cdk-nag](https://github.com/cdklabs/cdk-nag) is run against both the pipeline stack and the deployment stack to identify any security issues with the resources being created. The pipeline will fail if any are detected. The following code demonstrates how cdk-nag is called as a part of the build stage. The code also demonstrates how to suppress findings.
+    Additionally, [cdk-nag](https://github.com/cdklabs/cdk-nag) is run against the deployment stack to identify any security issues with the resources being created. The pipeline will fail if any are detected. The following code demonstrates how cdk-nag is called as a part of the build stage. The code also demonstrates how to suppress findings.
 
     <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/test/deployment.test.ts) inside_block:beforeEach
+    [](../../examples/codecatalyst-application-pipeline/infrastructure/test/deployment.test.ts) inside_block:beforeEach
     <!--/codeinclude-->
 
 ???+ required "Secrets Detection"
-    The same CDK construct that was created for *Code Quality* above is also used for secrets detection with [Amazon CodeGuru](https://aws.amazon.com/codeguru/).
+    [Trivy](https://aquasecurity.github.io/trivy) is used to scan the source for secrets. The [Trivy GitHub Action](https://github.com/marketplace/actions/aqua-security-trivy) is used in the Amazon CodeCatalyst workflow to perform the scan:
+
+    ```yaml
+    SCA:
+        Identifier: aws/github-actions-runner@v1
+        Inputs:
+          Sources:
+            - WorkflowSource
+        Configuration:
+          Steps:
+            - name: Trivy Vulnerability Scanner
+              uses: aquasecurity/trivy-action@master
+              with:
+                scan-type: fs
+                ignore-unfixed: true
+                format: cyclonedx
+                output: sbom.json
+                severity: CRITICAL,HIGH
+                security-checks: vuln,config,secret
+    ```
 
 ???+ required "Static Application Security Testing (SAST)"
-    The same CDK construct that was created for *Code Quality* above is also used for SAST with [Amazon CodeGuru](https://aws.amazon.com/codeguru/).
+    The [SpotBugs](https://spotbugs.github.io/) Maven plugin is used along with the [Find Security Bugs](https://find-sec-bugs.github.io/) plugin to identify OWASP Top 10 and CWE vulnerabilities in the application source code.
 
 ???+ required "Package and Store Artifact(s)"
     [AWS Cloud Development Kit](https://aws.amazon.com/cdk/) handles the packaging and storing of assets during the `Synth` action and `Assets` stage. The `Synth` action generates the CloudFormation templates to be deployed into the subsequent environments along with staging up the files necessary to create a docker image. The `Assets` stage then performs the docker build step to create a new image and push the image to [Amazon ECR](https://aws.amazon.com/ecr/) repositories in each environment account.
 
-    ![](assets/build-package.png)
+    ![](assets/codecatalyst-build-package.png)
 
 ???+ required "Software Composition Analysis (SCA)"
     [Trivy](https://aquasecurity.github.io/trivy) is used to scan the source for vulnerabilities in its dependencies. The `pom.xml` and `Dockerfile` files are scanned for configuration issues or vulnerabilities in any dependencies. The scanning is accomplished by a CDK construct that creates a CodeBuild job to run `trivy`:
 
-    <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/pipeline.ts) block:TrivyScan
-    <!--/codeinclude-->
+    ```yaml
+    SCA:
+        Identifier: aws/github-actions-runner@v1
+        Inputs:
+          Sources:
+            - WorkflowSource
+        Configuration:
+          Steps:
+            - name: Trivy Vulnerability Scanner
+              uses: aquasecurity/trivy-action@master
+              with:
+                scan-type: fs
+                ignore-unfixed: true
+                format: cyclonedx
+                output: sbom.json
+                severity: CRITICAL,HIGH
+                security-checks: vuln,config,secret
+    ```
 
     Trivy is also used within the `Dockerfile` to scan the image after it is built. The `docker build` will fail if Trivy finds any vulnerabilities in the final image:
 
     <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/Dockerfile)
+    [](../../examples/codecatalyst-application-pipeline/Dockerfile)
     <!--/codeinclude-->
 
 ???+ required "Software Bill of Materials (SBOM)"
-    Trivy generates an SBOM in the form of a [CycloneDX](https://cyclonedx.org/) JSON report. The SBOM is saved as a CodePipeline asset.  Trivy supports additional SBOM formats such as [SPDX](https://spdx.dev/wp-content/uploads/sites/41/2020/08/SPDX-specification-2-2.pdf), and [SARIF](https://docs.oasis-open.org/sarif/sarif/v2.0/sarif-v2.0.html).
+    Trivy generates an SBOM in the form of a [CycloneDX](https://cyclonedx.org/) JSON report. The SBOM is saved as a CodeCatalyst asset.  Trivy supports additional SBOM formats such as [SPDX](https://spdx.dev/wp-content/uploads/sites/41/2020/08/SPDX-specification-2-2.pdf), and [SARIF](https://docs.oasis-open.org/sarif/sarif/v2.0/sarif-v2.0.html).
 
 ## Test (Beta)
 
 ???+ required "Launch Environment"
-    ![Deployment](assets/ri-cdk-pipeline-deployment.png)
+    ![Deployment](assets/ri-codecatalyst-pipeline-deployment.png)
 
     The infrastructure for each environment is defined in [AWS Cloud Development Kit](https://aws.amazon.com/cdk/):
 
     <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/deployment.ts) inside_block:constructor
+    [](../../examples/codecatalyst-application-pipeline/infrastructure/src/deployment.ts) inside_block:constructor
     <!--/codeinclude-->
 
-    The `DeploymentStack` construct is then instantiated for each environment:
+    The CDK deployment is then performed for each environment:
 
-    <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/pipeline.ts) block:Beta
-    <!--/codeinclude-->
+    ```yaml
+    Deploy:
+        Identifier: aws/cdk-deploy@v1
+        DependsOn:
+          - Build
+        Inputs:
+          Artifacts:
+            - package
+        Environment:
+          Name: Beta
+          Connections:
+            - Name: beta
+              Role: codecatalyst
+        Configuration:
+          StackName: fruit-api
+          Region: us-west-2
+          Context: '{"deploymentConfigurationName":"CodeDeployDefault.ECSCanary10Percent5Minutes"}'
+          CfnOutputVariables: '["endpointUrl"]'
+    ```
 
 ???+ required "Database Deploy"
     Spring Boot is configured to run [Liquibase](https://www.liquibase.org/) on startup. This reads the configuration in `src/main/resources/db/changelog/db.changelog-master.yml` to define the tables and initial data for the database:
 
     <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/src/main/resources/db/changelog/db.changelog-master.yaml)
+    [](../../examples/codecatalyst-application-pipeline/src/main/resources/db/changelog/db.changelog-master.yaml)
     <!--/codeinclude-->
 
 ???+ required "Deploy Software"
     The *Launch Environment* action above creates a new [Amazon ECS Task Definition](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html) for the new docker image and then updates the Amazon ECS Service to use the new Task Definition.
 
 ???+ required "Integration Tests"
-    Integration tests are preformed during the *Build Source* action. They are defined with [SoapUI](https://www.soapui.org/) in `fruit-api-soapui-project.xml`. They are executed by [Maven](https://maven.apache.org/) in the `integration-test` phase using plugins in `pom.xml`.  Spring Boot is configure to start a local instance of the application with an H2 database during the `pre-integration-test` phase and then to terminate on the `post-integration-test` phase.  The results of the unit tests are uploaded to [AWS Code Build Test Reports](https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html) to track over time.
+    Integration tests are preformed during the *Build Source* action. They are defined with [SoapUI](https://www.soapui.org/) in `fruit-api-soapui-project.xml`. They are executed by [Maven](https://maven.apache.org/) in the `integration-test` phase using plugins in `pom.xml`.  Spring Boot is configure to start a local instance of the application with an H2 database during the `pre-integration-test` phase and then to terminate on the `post-integration-test` phase.  The results of the unit tests are uploaded to Amazon CodeCatalyst to track over time.
 
     ```xml
     <plugins>
@@ -281,38 +330,73 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
 ???+ required "Acceptance Tests"
     Acceptance tests are preformed after the *Launch Environment* and *Deploy Software* actions:
 
-    ![](assets/deploy-beta.png)
+    ![](assets/codecatalyst-deploy-beta.png)
 
-    The tests are defined with [SoapUI](https://www.soapui.org/) in `fruit-api-soapui-project.xml`. They are executed by [Maven](https://maven.apache.org/) with the endpoint overridden to the URL from the CloudFormation output. A CDK construct called `SoapUITest` was created to create the CodeBuild Project to run SoapUI.
+    The tests are defined with [SoapUI](https://www.soapui.org/) in `fruit-api-soapui-project.xml`. They are executed by [Maven](https://maven.apache.org/) with the endpoint overridden to the URL from the CloudFormation output. An action is added to the CodeCatalyst workflow to run SoapUI:
 
-    <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/soapui-test/index.ts) inside_block:constructor
-    <!--/codeinclude-->
+    ```yaml
+    Test:
+        Identifier: aws/managed-test@v1
+        Inputs:
+          Artifacts:
+            - package
+          Variables:
+            - Name: endpointUrl
+              Value: ${Deploy.endpointUrl}
+        Configuration:
+          Steps:
+            - Run: mvn --batch-mode --no-transfer-progress soapui:test -Dsoapui.endpoint=${endpointUrl}
+            - Run: mvn --batch-mode --no-transfer-progress compile jmeter:jmeter jmeter:results -Djmeter.endpoint=${endpointUrl} -Djmeter.threads=300 -Djmeter.duration=300 -Djmeter.throughput=6000
+        Outputs:
+          AutoDiscoverReports:
+            Enabled: true
+            IncludePaths:
+              - target/soapui-reports/*
+            ReportNamePrefix: Beta
+            SuccessCriteria:
+              PassRate: 100
+    ```
 
-    The results of the unit tests are uploaded to [AWS Code Build Test Reports](https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html) to track over time.
+    The results of the unit tests are uploaded to Amazon CodeCatalyst to track over time.
 
 ## Test (Gamma)
 
 ???+ required "Launch Environment"
-    ![Deployment](assets/ri-cdk-pipeline-deployment.png)
+    ![Deployment](assets/ri-codecatalyst-pipeline-deployment.png)
 
     The infrastructure for each environment is defined in [AWS Cloud Development Kit](https://aws.amazon.com/cdk/):
 
     <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/deployment.ts) inside_block:constructor
+    [](../../examples/codecatalyst-application-pipeline/infrastructure/src/deployment.ts) inside_block:constructor
     <!--/codeinclude-->
 
-    The `DeploymentStack` construct is then instantiated for each environment:
+    The CDK deployment is then performed for each environment:
 
-    <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/pipeline.ts) block:Gamma
-    <!--/codeinclude-->
+    ```yaml
+    Deploy:
+        Identifier: aws/cdk-deploy@v1
+        DependsOn:
+          - Build
+        Inputs:
+          Artifacts:
+            - package
+        Environment:
+          Name: Beta
+          Connections:
+            - Name: beta
+              Role: codecatalyst
+        Configuration:
+          StackName: fruit-api
+          Region: us-west-2
+          Context: '{"deploymentConfigurationName":"CodeDeployDefault.ECSCanary10Percent5Minutes"}'
+          CfnOutputVariables: '["endpointUrl"]'
+    ```
 
 ???+ required "Database Deploy"
     Spring Boot is configured to run [Liquibase](https://www.liquibase.org/) on startup. This reads the configuration in `src/main/resources/db/changelog/db.changelog-master.yml` to define the tables and initial data for the database:
 
     <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/src/main/resources/db/changelog/db.changelog-master.yaml)
+    [](../../examples/codecatalyst-application-pipeline/src/main/resources/db/changelog/db.changelog-master.yaml)
     <!--/codeinclude-->
 
 ???+ required "Deploy Software"
@@ -338,11 +422,30 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     ```
 
 ???+ required "Performance Tests"
-    [Apache JMeter](https://jmeter.apache.org/) is used to run performance tests against the deployed application. The tests are stored in `src/test/jmeter` and added to the pipeline via CDK:
+    [Apache JMeter](https://jmeter.apache.org/) is used to run performance tests against the deployed application. The tests are stored in `src/test/jmeter` and added to the CodeCatalyst workflow:
 
-    <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/pipeline.ts) block:JMeterTest
-    <!--/codeinclude-->
+    ```yaml
+    Test:
+        Identifier: aws/managed-test@v1
+        Inputs:
+          Artifacts:
+            - package
+          Variables:
+            - Name: endpointUrl
+              Value: ${Deploy.endpointUrl}
+        Configuration:
+          Steps:
+            - Run: mvn --batch-mode --no-transfer-progress soapui:test -Dsoapui.endpoint=${endpointUrl}
+            - Run: mvn --batch-mode --no-transfer-progress compile jmeter:jmeter jmeter:results -Djmeter.endpoint=${endpointUrl} -Djmeter.threads=300 -Djmeter.duration=300 -Djmeter.throughput=6000
+        Outputs:
+          AutoDiscoverReports:
+            Enabled: true
+            IncludePaths:
+              - target/soapui-reports/*
+            ReportNamePrefix: Beta
+            SuccessCriteria:
+              PassRate: 100
+    ```
 
 ???+ recommended "Resilience Tests"
     `Not Implemented`
@@ -352,42 +455,14 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
 
 ## Prod
 
-???+ required "Manual Approval"
-    A manual approval step is added to the end of the `Gamma` stage. The step is added at the end to keep the environment in a stable state while manual testing is performed. Once the step is approved, the pipeline continues execution to the next stage.
-
-    ```typescript
-        new PipelineEnvironment(pipeline, Gamma, (deployment, stage) => {
-            stage.addPost(
-                new JMeterTest('Performance Test', {
-                source: source.codePipelineSource,
-                endpoint: deployment.apiUrl,
-                threads: 300,
-                duration: 300,
-                throughput: 6000,
-                cacheBucket,
-                }),
-                new ManualApprovalStep('PromoteFromGamma'),
-            );
-        });
-    ```
-
-    When a manual approval step is used, [IAM permissions](https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals-iam-permissions.html) should be used to restrict which principals can approve actions and stages to enforce least privilege.
-
-    ```json
-        {
-            "Effect": "Allow",
-            "Action": [
-                "codepipeline:PutApprovalResult"
-            ],
-            "Resource": "arn:aws:codepipeline:us-east-2:80398EXAMPLE:MyFirstPipeline/MyApprovalStage/MyApprovalAction"
-        }
-    ```
+???+ recommended "Manual Approval"
+    `Not Implemented`
 
 ???+ required "Database Deploy"
     Spring Boot is configured to run [Liquibase](https://www.liquibase.org/) on startup. This reads the configuration in `src/main/resources/db/changelog/db.changelog-master.yml` to define the tables and initial data for the database:
 
     <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/src/main/resources/db/changelog/db.changelog-master.yaml)
+    [](../../examples/codecatalyst-application-pipeline/src/main/resources/db/changelog/db.changelog-master.yaml)
     <!--/codeinclude-->
 
 ???+ required "Progressive Deployment"
@@ -456,50 +531,12 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     this.apiUrl = new CfnOutput(this, 'endpointUrl', {
       value: `http://${service.listener.loadBalancer.loadBalancerDnsName}`,
     });
+    ```rrideLogicalId('DeploymentId');
     ```
 
-    Deployments are made incrementally across regions using the [CDK Pipeline - Wave](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.pipelines.Wave.html) construct. Each wave contains a list of regions to deploy to in parallel. One wave must fully complete before the next wave starts. The diagram below shows how each wave deploys to 2 regions at a time.
+    Deployments are made incrementally across regions as waves using the [action groups](https://docs.aws.amazon.com/codecatalyst/latest/userguide/workflows-group-actions.html) and the [CDK deploy action](https://docs.aws.amazon.com/codecatalyst/latest/userguide/workflows-group-actions.html). Each wave contains a list of regions to deploy to in parallel. One wave must fully complete before the next wave starts. The diagram below shows how each wave deploys to 2 regions at a time.
 
-    ![](assets/prod-waves.png)
-
-    Environments are configured in CDK with the list of waves:
-
-    ```typescript
-    // BETA environment is 1 wave with 1 region
-    export const Beta: EnvironmentConfig = {
-        name: 'Beta',
-        account: accounts.beta,
-        waves: [
-            ['us-west-2'],
-        ],
-    };
-
-    // GAMMA environment is 1 wave with 2 regions
-    export const Gamma: EnvironmentConfig = {
-        name: 'Gamma',
-        account: accounts.gamma,
-        waves: [
-            ['us-west-2', 'us-east-1'],
-        ],
-    };
-
-    // PROD environment is 3 wave with 2 regions each wave
-    export const Prod: EnvironmentConfig = {
-        name: 'Prod',
-        account: accounts.production,
-        waves: [
-            ['us-west-2', 'us-east-1'],
-            ['eu-central-1', 'eu-west-1'],
-            ['ap-south-1', 'ap-southeast-2'],
-        ],
-    };
-    ```
-
-    A `PipelineEnvironment` class is responsible for loading the `EnvironmentConfig` into CodePipeline stages:
-
-    <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/pipeline.ts) block:PipelineEnvironment
-    <!--/codeinclude-->
+    ![](assets/codecatalyst-prod-waves.png)
 
 ???+ required "Synthetic Tests"
     [Amazon CloudWatch Synthetics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html) is used to continuously deliver traffic to the application and assert that requests are successful and responses are received within a given threshold. The canary is defined via CDK using the [@cdklabs/cdk-ecs-codedeploy](https://constructs.dev/packages/@cdklabs/cdk-ecs-codedeploy) construct:
@@ -526,6 +563,3 @@ Actions in this stage all run in less than 10 minutes so that developers can tak
     * [Fully Separated](https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/fully-separated-operating-model.html) - Restrict the role that CDK uses for CloudFormation execution to only create resources from approved product portfolios in [AWS Service Catalog](https://aws.amazon.com/servicecatalog/). Ownership of creating the products in Service Catalog is owned by the **Platform Engineering** team and operational support of Service Catalog is owned by the **Platform Operations** team. The **Platform Engineering** team should publish CDK constructs internally that provision AWS resources through Service Catalog. Update the CDK app in the `infrastructure/` directory to use CDK constructs provided by the `Platform Engineering` team. Use a [CODEOWNERS](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) file to require all changes to the `infrastructure/` directory be approved by the **Application Operations** team. Additionally, restrict permissions to the **Manual Approval** action to only allow members of the **Application Operations** to approve.
     * [Separated AEO and IEO with Centralized Governance](https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/separated-aeo-and-ieo-with-centralized-governance.html) - Restrict the role that CDK uses for CloudFormation execution to only create resources from approved product portfolios in [AWS Service Catalog](https://aws.amazon.com/servicecatalog/). Ownership of creating the products in Service Catalog is owned by the **Platform Engineering** team and operational support of Service Catalog is owned by the **Platform Engineering** team. The **Platform Engineering** team should publish CDK constructs internally that provision AWS resources through Service Catalog. Update the CDK app in the `infrastructure/` directory to use CDK constructs provided by the `Platform Engineering` team.
     * [Separated AEO and IEO with Decentralized Governance](https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/separated-aeo-and-ieo-with-decentralized-governance.html) - The **Platform Engineering** team should publish CDK constructs internally that provision AWS resources in manner that achieve organizational compliance. Update the CDK app in the `infrastructure/` directory to use CDK constructs provided by the `Platform Engineering` team.
-
-???+ faq "Where is manual testing performed in this pipeline?"
-    Ideally, all testing is accomplished through automation in the **Integration Tests** and **Acceptance Tests** actions. If an organization relies on people manually executing tests then these tests would be performed in the **Gamma Stage**. The **Manual Approval** action would be required and the approval would be granted by a Quality Assurance team member once the manual testing completes successfully.

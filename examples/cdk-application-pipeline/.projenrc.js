@@ -1,4 +1,4 @@
-const { awscdk } = require('projen');
+const { awscdk, javascript } = require('projen');
 const project = new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '2.36.0',
   defaultReleaseBranch: 'main',
@@ -36,6 +36,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
 
   jestOptions: {
     jestVersion: '^27.0',
+    updateSnapshot: javascript.UpdateSnapshot.NEVER,
   },
 
   /* Build dependencies for this module. */

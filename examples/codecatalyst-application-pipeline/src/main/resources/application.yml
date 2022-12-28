@@ -1,0 +1,8 @@
+name: Fruit API
+spring:
+  main:
+    banner-mode: "off"
+
+springdoc:
+  swagger-ui:
+    path: /

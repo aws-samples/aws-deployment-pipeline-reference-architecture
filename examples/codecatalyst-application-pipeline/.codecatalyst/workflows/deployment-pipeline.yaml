@@ -1,0 +1,246 @@
+
+Name: deployment-pipeline
+SchemaVersion: "1.0"
+Triggers:
+  - Type: PUSH
+    Branches:
+      - main
+Actions:
+  Build:
+    Actions:
+      SCA:
+        Identifier: aws/github-actions-runner@v1
+        Inputs:
+          Sources:
+            - WorkflowSource
+        Configuration:
+          Steps:
+            - name: Trivy Vulnerability Scanner
+              uses: aquasecurity/trivy-action@master
+              with:
+                scan-type: fs
+                ignore-unfixed: true
+                format: sarif
+                output: report.sarif
+                security-checks: vuln,config,secret
+        Outputs:
+          Reports:
+            SCA:
+              Format: SARIFSCA
+              IncludePaths:
+                - report.sarif
+              SuccessCriteria:
+                Vulnerabilities:
+                  Severity: HIGH
+                Number: 0
+      Package:
+        Identifier: aws/build@v1
+        Inputs:
+          Sources:
+            - WorkflowSource
+        Outputs:
+          AutoDiscoverReports:
+            Enabled: true
+            ReportNamePrefix: build
+            SuccessCriteria:
+              PassRate: 100
+          Artifacts:
+            - Name: package
+              Files:
+                - "**/*"
+        Configuration:
+          Steps:
+            - Run: mvn verify --batch-mode --no-transfer-progress
+      Synth:
+        Identifier: aws/build@v1
+        Inputs:
+          Sources:
+            - WorkflowSource
+        Outputs:
+          AutoDiscoverReports:
+            Enabled: true
+            ReportNamePrefix: synth
+            IncludePaths:
+              - test-reports/*
+            SuccessCriteria:
+              PassRate: 100
+          Artifacts:
+            - Name: synth
+              Files:
+                - cdk.out/**/*
+        Configuration:
+          Steps:
+            - Run: npm ci
+            - Run: npm test
+            - Run: npm run lint
+            - Run: npm run build
+  Beta:
+    Actions:
+      Deploy:
+        Identifier: aws/cdk-deploy@v1
+        DependsOn:
+          - Build
+        Inputs:
+          Artifacts:
+            - package
+        Environment:
+          Name: Beta
+          Connections:
+            - Name: beta
+              Role: codecatalyst
+        Configuration:
+          StackName: fruit-api
+          Region: us-west-2
+          Context: '{"deploymentConfigurationName":"CodeDeployDefault.ECSCanary10Percent5Minutes"}'
+          CfnOutputVariables: '["endpointUrl"]'
+      Test:
+        Identifier: aws/managed-test@v1
+        Inputs:
+          Artifacts:
+            - package
+          Variables:
+            - Name: endpointUrl
+              Value: ${Deploy.endpointUrl}
+        Configuration:
+          Steps:
+            - Run: mvn --batch-mode --no-transfer-progress soapui:test -Dsoapui.endpoint=${endpointUrl}
+            - Run: mvn --batch-mode --no-transfer-progress compile jmeter:jmeter jmeter:results -Djmeter.endpoint=${endpointUrl} -Djmeter.threads=300 -Djmeter.duration=300 -Djmeter.throughput=6000
+        Outputs:
+          AutoDiscoverReports:
+            Enabled: true
+            IncludePaths:
+              - target/soapui-reports/*
+            ReportNamePrefix: Beta
+            SuccessCriteria:
+              PassRate: 100
+    DependsOn:
+      - Build
+  Gamma-us-west-2:
+    Actions:
+      Deploy:
+        Identifier: aws/cdk-deploy@v1
+        DependsOn:
+          - Beta
+        Inputs:
+          Artifacts:
+            - package
+        Environment:
+          Name: Gamma
+          Connections:
+            - Name: gamma
+              Role: codecatalyst
+        Configuration:
+          StackName: fruit-api
+          Region: us-west-2
+          Context: '{"deploymentConfigurationName":"CodeDeployDefault.ECSCanary10Percent5Minutes"}'
+          CfnOutputVariables: '["endpointUrl"]'
+      Test:
+        Identifier: aws/managed-test@v1
+        Inputs:
+          Artifacts:
+            - package
+          Variables:
+            - Name: endpointUrl
+              Value: ${Deploy.endpointUrl}
+        Configuration:
+          Steps:
+            - Run: mvn --batch-mode --no-transfer-progress soapui:test -Dsoapui.endpoint=${endpointUrl}
+            - Run: mvn --batch-mode --no-transfer-progress compile jmeter:jmeter jmeter:results -Djmeter.endpoint=${endpointUrl} -Djmeter.threads=300 -Djmeter.duration=300 -Djmeter.throughput=6000
+        Outputs:
+          AutoDiscoverReports:
+            Enabled: true
+            IncludePaths:
+              - target/soapui-reports/*
+            ReportNamePrefix: Gamma-us-west-2
+            SuccessCriteria:
+              PassRate: 100
+    DependsOn:
+      - Beta
+  Gamma-us-east-1:
+    Actions:
+      Deploy:
+        Identifier: aws/cdk-deploy@v1
+        DependsOn:
+          - Beta
+        Inputs:
+          Artifacts:
+            - package
+        Environment:
+          Name: Gamma
+          Connections:
+            - Name: gamma
+              Role: codecatalyst
+        Configuration:
+          StackName: fruit-api
+          Region: us-east-1
+          Context: '{"deploymentConfigurationName":"CodeDeployDefault.ECSCanary10Percent5Minutes"}'
+          CfnOutputVariables: '["endpointUrl"]'
+      Test:
+        Identifier: aws/managed-test@v1
+        Inputs:
+          Artifacts:
+            - package
+          Variables:
+            - Name: endpointUrl
+              Value: ${Deploy.endpointUrl}
+        Configuration:
+          Steps:
+            - Run: mvn --batch-mode --no-transfer-progress soapui:test -Dsoapui.endpoint=${endpointUrl}
+            - Run: mvn --batch-mode --no-transfer-progress compile jmeter:jmeter jmeter:results -Djmeter.endpoint=${endpointUrl} -Djmeter.threads=300 -Djmeter.duration=300 -Djmeter.throughput=6000
+        Outputs:
+          AutoDiscoverReports:
+            Enabled: true
+            IncludePaths:
+              - target/soapui-reports/*
+            ReportNamePrefix: Gamma-us-east-1
+            SuccessCriteria:
+              PassRate: 100
+    DependsOn:
+      - Beta
+  Prod-us-west-2:
+    Actions:
+      Deploy:
+        Identifier: aws/cdk-deploy@v1
+        DependsOn:
+          - Gamma-us-west-2
+          - Gamma-us-east-1
+        Inputs:
+          Artifacts:
+            - package
+        Environment:
+          Name: Production
+          Connections:
+            - Name: prod
+              Role: codecatalyst
+        Configuration:
+          StackName: fruit-api
+          Region: us-west-2
+          Context: '{"deploymentConfigurationName":"CodeDeployDefault.ECSCanary10Percent5Minutes"}'
+          CfnOutputVariables: '["endpointUrl"]'
+    DependsOn:
+      - Gamma-us-west-2
+      - Gamma-us-east-1
+  Prod-us-east-1:
+    Actions:
+      Deploy:
+        Identifier: aws/cdk-deploy@v1
+        DependsOn:
+          - Gamma-us-west-2
+          - Gamma-us-east-1
+        Inputs:
+          Artifacts:
+            - package
+        Environment:
+          Name: Production
+          Connections:
+            - Name: prod
+              Role: codecatalyst
+        Configuration:
+          StackName: fruit-api
+          Region: us-east-1
+          Context: '{"deploymentConfigurationName":"CodeDeployDefault.ECSCanary10Percent5Minutes"}'
+          CfnOutputVariables: '["endpointUrl"]'
+    DependsOn:
+      - Gamma-us-west-2
+      - Gamma-us-east-1
+RunMode: SUPERSEDED

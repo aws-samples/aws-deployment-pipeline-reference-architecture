@@ -32,7 +32,8 @@ nav:
   - Application Pipeline:
     - Architecture: 'application-pipeline/index.md'
     - Reference Implementations:
-      - CDK Pipeline: 'application-pipeline/ri-cdk-pipeline.md'
+      - AWS CDK Pipelines: 'application-pipeline/ri-cdk-pipeline.md'
+      - Amazon CodeCatalyst: 'application-pipeline/ri-codecatalyst-pipeline.md'
     - Additional Sources: 'application-pipeline/additional-sources.md'
   # - Compute Image Pipeline:
   #   - Architecture: 'compute-image-pipeline/index.md'

@@ -35,6 +35,11 @@ describe('Pipeline', () => {
     );
   });
 
+  expect.addSnapshotSerializer({
+    test: (val) => typeof val === 'string' && val.match(/^[a-f0-9]+\.zip$/) !== null,
+    serialize: () => '"code.zip"',
+  });
+
   test('Snapshot', () => {
     const template = Template.fromStack(stack);
     expect(template.toJSON()).toMatchSnapshot();

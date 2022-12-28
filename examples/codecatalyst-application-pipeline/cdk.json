@@ -1,0 +1,24 @@
+{
+  "app": "npx ts-node -P tsconfig.json --prefer-ts-exts infrastructure/src/main.ts",
+  "context": {
+    "deployMode": "pipeline",
+    "deploymentConfigurationName": "CodeDeployDefault.ECSCanary10Percent5Minutes"
+  },
+  "output": "cdk.out",
+  "watch": {
+    "include": [
+      "infrastructure/src/**/*.ts",
+      "infrastructure/test/**/*.ts"
+    ],
+    "exclude": [
+      "README.md",
+      "cdk*.json",
+      "**/*.d.ts",
+      "**/*.js",
+      "tsconfig.json",
+      "package*.json",
+      "yarn.lock",
+      "node_modules"
+    ]
+  }
+}

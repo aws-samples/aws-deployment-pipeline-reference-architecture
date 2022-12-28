@@ -1,0 +1,3317 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Deployment Snapshot 1`] = `
+Object {
+  "Outputs": Object {
+    "ApiLoadBalancerDNSB0038DD0": Object {
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "ApiLB8D4BD609",
+          "DNSName",
+        ],
+      },
+    },
+    "ApiServiceURL135D4FCA": Object {
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "http://",
+            Object {
+              "Fn::GetAtt": Array [
+                "ApiLB8D4BD609",
+                "DNSName",
+              ],
+            },
+          ],
+        ],
+      },
+    },
+    "endpointUrl": Object {
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "http://",
+            Object {
+              "Fn::GetAtt": Array [
+                "ApiLB8D4BD609",
+                "DNSName",
+              ],
+            },
+          ],
+        ],
+      },
+    },
+  },
+  "Parameters": Object {
+    "BootstrapVersion": Object {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": Object {
+    "ApiAccessLogBucket47540DA5": Object {
+      "DeletionPolicy": "Retain",
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-S1",
+              "reason": "Dont need access logs for access log bucket",
+            },
+            Object {
+              "applies_to": Array [
+                "Resource::*",
+              ],
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow resource:*",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "ApiAccessLogBucketPolicy66E268A7": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "ApiAccessLogBucket47540DA5",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:SecureTransport": "false",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": Object {
+                "AWS": "*",
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ApiAccessLogBucket47540DA5",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "ApiAccessLogBucket47540DA5",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::127311923021:root",
+                    ],
+                  ],
+                },
+              },
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "ApiAccessLogBucket47540DA5",
+                        "Arn",
+                      ],
+                    },
+                    "/AWSLogs/dummy/*",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": "s3:PutObject",
+              "Condition": Object {
+                "StringEquals": Object {
+                  "s3:x-amz-acl": "bucket-owner-full-control",
+                },
+              },
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "delivery.logs.amazonaws.com",
+              },
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "ApiAccessLogBucket47540DA5",
+                        "Arn",
+                      ],
+                    },
+                    "/AWSLogs/dummy/*",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": "s3:GetBucketAcl",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "delivery.logs.amazonaws.com",
+              },
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "ApiAccessLogBucket47540DA5",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "ApiApplication4BE77DB2": Object {
+      "Properties": Object {
+        "ComputePlatform": "ECS",
+      },
+      "Type": "AWS::CodeDeploy::Application",
+    },
+    "ApiCanary29FBF4E7": Object {
+      "DependsOn": Array [
+        "ApiServiceSecurityGroupfromTestStackApiLBSecurityGroup0540FC958080EEE77C0F",
+        "ApiServiceSecurityGroupB2E30D06",
+        "ApiServiceD5B4A50A",
+      ],
+      "Properties": Object {
+        "ArtifactS3Location": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "s3://",
+              Object {
+                "Ref": "ApiCanaryArtifactsBucket7ED0CDF4",
+              },
+            ],
+          ],
+        },
+        "Code": Object {
+          "Handler": "index.handler",
+          "S3Bucket": "cdk-hnb659fds-assets-dummy-us-east-1",
+          "S3Key": "code.zip",
+        },
+        "ExecutionRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "ApiCanaryServiceRoleB7DBB121",
+            "Arn",
+          ],
+        },
+        "Name": "teststackapicanbbc781",
+        "RunConfig": Object {
+          "EnvironmentVariables": Object {
+            "baseUrl": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "http://",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "ApiLB8D4BD609",
+                      "DNSName",
+                    ],
+                  },
+                ],
+              ],
+            },
+            "testSteps": "[{\\"name\\":\\"getAll\\",\\"path\\":\\"/api/fruits\\",\\"jmesPath\\":\\"length(@)\\",\\"expectedValue\\":5}]",
+            "threadCount": "20",
+          },
+        },
+        "RuntimeVersion": "syn-nodejs-puppeteer-3.8",
+        "Schedule": Object {
+          "DurationInSeconds": "0",
+          "Expression": "rate(5 minutes)",
+        },
+        "StartCanaryAfterCreation": true,
+      },
+      "Type": "AWS::Synthetics::Canary",
+    },
+    "ApiCanaryArtifactsBucket7ED0CDF4": Object {
+      "DeletionPolicy": "Retain",
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-S1",
+              "reason": "Dont need access logs for canary bucket",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "ApiCanaryArtifactsBucketPolicyBC6DB214": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "ApiCanaryArtifactsBucket7ED0CDF4",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:SecureTransport": "false",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": Object {
+                "AWS": "*",
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ApiCanaryArtifactsBucket7ED0CDF4",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "ApiCanaryArtifactsBucket7ED0CDF4",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "ApiCanaryDurationAlarm5501D0DD": Object {
+      "DependsOn": Array [
+        "ApiServiceSecurityGroupfromTestStackApiLBSecurityGroup0540FC958080EEE77C0F",
+        "ApiServiceSecurityGroupB2E30D06",
+        "ApiServiceD5B4A50A",
+      ],
+      "Properties": Object {
+        "ComparisonOperator": "GreaterThanThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "CanaryName",
+            "Value": Object {
+              "Ref": "ApiCanary29FBF4E7",
+            },
+          },
+        ],
+        "EvaluationPeriods": 2,
+        "MetricName": "Duration",
+        "Namespace": "CloudWatchSynthetics",
+        "Period": 300,
+        "Statistic": "Average",
+        "Threshold": 5000,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ApiCanaryServiceRoleB7DBB121": Object {
+      "DependsOn": Array [
+        "ApiServiceSecurityGroupfromTestStackApiLBSecurityGroup0540FC958080EEE77C0F",
+        "ApiServiceSecurityGroupB2E30D06",
+        "ApiServiceD5B4A50A",
+      ],
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow resource:*",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Policies": Array [
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": "s3:ListAllMyBuckets",
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": "s3:GetBucketLocation",
+                  "Effect": "Allow",
+                  "Resource": Object {
+                    "Fn::GetAtt": Array [
+                      "ApiCanaryArtifactsBucket7ED0CDF4",
+                      "Arn",
+                    ],
+                  },
+                },
+                Object {
+                  "Action": "s3:PutObject",
+                  "Effect": "Allow",
+                  "Resource": Object {
+                    "Fn::Join": Array [
+                      "",
+                      Array [
+                        Object {
+                          "Fn::GetAtt": Array [
+                            "ApiCanaryArtifactsBucket7ED0CDF4",
+                            "Arn",
+                          ],
+                        },
+                        "/*",
+                      ],
+                    ],
+                  },
+                },
+                Object {
+                  "Action": "cloudwatch:PutMetricData",
+                  "Condition": Object {
+                    "StringEquals": Object {
+                      "cloudwatch:namespace": "CloudWatchSynthetics",
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                Object {
+                  "Action": Array [
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup",
+                    "logs:PutLogEvents",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": Object {
+                    "Fn::Join": Array [
+                      "",
+                      Array [
+                        "arn:",
+                        Object {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":logs:us-east-1:dummy:log-group:/aws/lambda/cwsyn-*",
+                      ],
+                    ],
+                  },
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "canaryPolicy",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ApiCanarySuccessAlarm85CC115D": Object {
+      "DependsOn": Array [
+        "ApiServiceSecurityGroupfromTestStackApiLBSecurityGroup0540FC958080EEE77C0F",
+        "ApiServiceSecurityGroupB2E30D06",
+        "ApiServiceD5B4A50A",
+      ],
+      "Properties": Object {
+        "ComparisonOperator": "LessThanThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "CanaryName",
+            "Value": Object {
+              "Ref": "ApiCanary29FBF4E7",
+            },
+          },
+        ],
+        "EvaluationPeriods": 2,
+        "MetricName": "SuccessPercent",
+        "Namespace": "CloudWatchSynthetics",
+        "Period": 300,
+        "Statistic": "Average",
+        "Threshold": 100,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ApiDeploymentGroupC5BA42E8": Object {
+      "Properties": Object {
+        "AlarmConfiguration": Object {
+          "Alarms": Array [
+            Object {
+              "Name": Object {
+                "Ref": "ApiHealthAlarm37D68E10",
+              },
+            },
+          ],
+          "Enabled": true,
+        },
+        "ApplicationName": Object {
+          "Ref": "ApiApplication4BE77DB2",
+        },
+        "AutoRollbackConfiguration": Object {
+          "Enabled": true,
+          "Events": Array [
+            "DEPLOYMENT_FAILURE",
+            "DEPLOYMENT_STOP_ON_REQUEST",
+            "DEPLOYMENT_STOP_ON_ALARM",
+          ],
+        },
+        "BlueGreenDeploymentConfiguration": Object {
+          "DeploymentReadyOption": Object {
+            "ActionOnTimeout": "CONTINUE_DEPLOYMENT",
+            "WaitTimeInMinutes": 0,
+          },
+          "TerminateBlueInstancesOnDeploymentSuccess": Object {
+            "Action": "TERMINATE",
+            "TerminationWaitTimeInMinutes": 5,
+          },
+        },
+        "DeploymentConfigName": "CodeDeployDefault.ECSAllAtOnce",
+        "DeploymentStyle": Object {
+          "DeploymentOption": "WITH_TRAFFIC_CONTROL",
+          "DeploymentType": "BLUE_GREEN",
+        },
+        "ECSServices": Array [
+          Object {
+            "ClusterName": Object {
+              "Ref": "ClusterEB0386A7",
+            },
+            "ServiceName": Object {
+              "Fn::GetAtt": Array [
+                "ApiServiceD5B4A50A",
+                "Name",
+              ],
+            },
+          },
+        ],
+        "LoadBalancerInfo": Object {
+          "TargetGroupPairInfoList": Array [
+            Object {
+              "ProdTrafficRoute": Object {
+                "ListenerArns": Array [
+                  Object {
+                    "Ref": "ApiLBPublicListener5142AAA5",
+                  },
+                ],
+              },
+              "TargetGroups": Array [
+                Object {
+                  "Name": Object {
+                    "Fn::GetAtt": Array [
+                      "ApiLBPublicListenerECSGroup45FF926A",
+                      "TargetGroupName",
+                    ],
+                  },
+                },
+                Object {
+                  "Name": Object {
+                    "Fn::GetAtt": Array [
+                      "ApiGreenTargetGroup8D009A5A",
+                      "TargetGroupName",
+                    ],
+                  },
+                },
+              ],
+              "TestTrafficRoute": Object {
+                "ListenerArns": Array [
+                  Object {
+                    "Ref": "ApiLBTestListener069F7CE5",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        "ServiceRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "ApiDeploymentGroupServiceRoleDDCCDD8C",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::CodeDeploy::DeploymentGroup",
+    },
+    "ApiDeploymentGroupDeployment4FBC33C6": Object {
+      "DeletionPolicy": "Delete",
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonEvent0B331B36",
+            "Arn",
+          ],
+        },
+        "applicationName": Object {
+          "Ref": "ApiApplication4BE77DB2",
+        },
+        "deploymentConfigName": "CodeDeployDefault.ECSAllAtOnce",
+        "deploymentGroupName": Object {
+          "Ref": "ApiDeploymentGroupC5BA42E8",
+        },
+        "revisionAppSpecContent": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"version\\":\\"0.0\\",\\"Resources\\":[{\\"TargetService\\":{\\"Type\\":\\"AWS::ECS::Service\\",\\"Properties\\":{\\"TaskDefinition\\":\\"",
+              Object {
+                "Ref": "ApiTaskDefCB0575BA",
+              },
+              "\\",\\"LoadBalancerInfo\\":{\\"ContainerName\\":\\"api\\",\\"ContainerPort\\":8080}}}}]}",
+            ],
+          ],
+        },
+      },
+      "Type": "Custom::EcsDeployment",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF": Object {
+      "DependsOn": Array [
+        "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambdaServiceRoleDefaultPolicy0BB11557",
+        "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambdaServiceRoleEF6A15A8",
+      ],
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "cdk-hnb659fds-assets-dummy-us-east-1",
+          "S3Key": "code.zip",
+        },
+        "Description": "src/ecs-deployment-provider/is-complete.lambda.ts",
+        "Environment": Object {
+          "Variables": Object {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambdaServiceRoleEF6A15A8",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambdaServiceRoleDefaultPolicy0BB11557": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "codedeploy:GetDeployment",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codedeploy:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":deploymentgroup:",
+                    Object {
+                      "Ref": "ApiApplication4BE77DB2",
+                    },
+                    "/",
+                    Object {
+                      "Ref": "ApiDeploymentGroupC5BA42E8",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambdaServiceRoleDefaultPolicy0BB11557",
+        "Roles": Array [
+          Object {
+            "Ref": "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambdaServiceRoleEF6A15A8",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambdaServiceRoleEF6A15A8": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E": Object {
+      "DependsOn": Array [
+        "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambdaServiceRoleDefaultPolicyF5B67E1D",
+        "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambdaServiceRole79C18604",
+      ],
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "cdk-hnb659fds-assets-dummy-us-east-1",
+          "S3Key": "code.zip",
+        },
+        "Description": "src/ecs-deployment-provider/on-event.lambda.ts",
+        "Environment": Object {
+          "Variables": Object {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambdaServiceRole79C18604",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambdaServiceRole79C18604": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambdaServiceRoleDefaultPolicyF5B67E1D": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "codedeploy:GetApplicationRevision",
+                "codedeploy:RegisterApplicationRevision",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codedeploy:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":application:",
+                    Object {
+                      "Ref": "ApiApplication4BE77DB2",
+                    },
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "codedeploy:CreateDeployment",
+                "codedeploy:StopDeployment",
+                "codedeploy:GetDeployment",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codedeploy:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":deploymentgroup:",
+                    Object {
+                      "Ref": "ApiApplication4BE77DB2",
+                    },
+                    "/",
+                    Object {
+                      "Ref": "ApiDeploymentGroupC5BA42E8",
+                    },
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": "codedeploy:GetDeploymentConfig",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codedeploy:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":deploymentconfig:CodeDeployDefault.ECSAllAtOnce",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambdaServiceRoleDefaultPolicyF5B67E1D",
+        "Roles": Array [
+          Object {
+            "Ref": "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambdaServiceRole79C18604",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderframeworkisCompleteE40E40A9": Object {
+      "DependsOn": Array [
+        "ApiDeploymentGroupDeploymentDeploymentProviderframeworkisCompleteServiceRoleDefaultPolicyB4B5D79A",
+        "ApiDeploymentGroupDeploymentDeploymentProviderframeworkisCompleteServiceRoleECCD985E",
+      ],
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "cdk-hnb659fds-assets-dummy-us-east-1",
+          "S3Key": "code.zip",
+        },
+        "Description": "AWS CDK resource provider framework - isComplete (TestStack/Api/DeploymentGroup/Deployment/DeploymentProvider)",
+        "Environment": Object {
+          "Variables": Object {
+            "USER_IS_COMPLETE_FUNCTION_ARN": Object {
+              "Fn::GetAtt": Array [
+                "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                "Arn",
+              ],
+            },
+            "USER_ON_EVENT_FUNCTION_ARN": Object {
+              "Fn::GetAtt": Array [
+                "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                "Arn",
+              ],
+            },
+          },
+        },
+        "Handler": "framework.isComplete",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "ApiDeploymentGroupDeploymentDeploymentProviderframeworkisCompleteServiceRoleECCD985E",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderframeworkisCompleteServiceRoleDefaultPolicyB4B5D79A": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ApiDeploymentGroupDeploymentDeploymentProviderframeworkisCompleteServiceRoleDefaultPolicyB4B5D79A",
+        "Roles": Array [
+          Object {
+            "Ref": "ApiDeploymentGroupDeploymentDeploymentProviderframeworkisCompleteServiceRoleECCD985E",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderframeworkisCompleteServiceRoleECCD985E": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonEvent0B331B36": Object {
+      "DependsOn": Array [
+        "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonEventServiceRoleDefaultPolicy78A47FBA",
+        "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonEventServiceRole3E41B788",
+      ],
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "cdk-hnb659fds-assets-dummy-us-east-1",
+          "S3Key": "code.zip",
+        },
+        "Description": "AWS CDK resource provider framework - onEvent (TestStack/Api/DeploymentGroup/Deployment/DeploymentProvider)",
+        "Environment": Object {
+          "Variables": Object {
+            "USER_IS_COMPLETE_FUNCTION_ARN": Object {
+              "Fn::GetAtt": Array [
+                "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                "Arn",
+              ],
+            },
+            "USER_ON_EVENT_FUNCTION_ARN": Object {
+              "Fn::GetAtt": Array [
+                "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                "Arn",
+              ],
+            },
+            "WAITER_STATE_MACHINE_ARN": Object {
+              "Ref": "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineF4C744F3",
+            },
+          },
+        },
+        "Handler": "framework.onEvent",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonEventServiceRole3E41B788",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonEventServiceRole3E41B788": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonEventServiceRoleDefaultPolicy78A47FBA": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "states:StartExecution",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineF4C744F3",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonEventServiceRoleDefaultPolicy78A47FBA",
+        "Roles": Array [
+          Object {
+            "Ref": "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonEventServiceRole3E41B788",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonTimeoutAA8B0A7D": Object {
+      "DependsOn": Array [
+        "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonTimeoutServiceRoleDefaultPolicyE805E916",
+        "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonTimeoutServiceRoleAAD24E7B",
+      ],
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "cdk-hnb659fds-assets-dummy-us-east-1",
+          "S3Key": "code.zip",
+        },
+        "Description": "AWS CDK resource provider framework - onTimeout (TestStack/Api/DeploymentGroup/Deployment/DeploymentProvider)",
+        "Environment": Object {
+          "Variables": Object {
+            "USER_IS_COMPLETE_FUNCTION_ARN": Object {
+              "Fn::GetAtt": Array [
+                "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                "Arn",
+              ],
+            },
+            "USER_ON_EVENT_FUNCTION_ARN": Object {
+              "Fn::GetAtt": Array [
+                "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                "Arn",
+              ],
+            },
+          },
+        },
+        "Handler": "framework.onTimeout",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonTimeoutServiceRoleAAD24E7B",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonTimeoutServiceRoleAAD24E7B": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonTimeoutServiceRoleDefaultPolicyE805E916": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonTimeoutServiceRoleDefaultPolicyE805E916",
+        "Roles": Array [
+          Object {
+            "Ref": "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonTimeoutServiceRoleAAD24E7B",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineF4C744F3": Object {
+      "DependsOn": Array [
+        "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineRoleDefaultPolicy0018A70D",
+        "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineRoleF348B4FE",
+      ],
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "DefinitionString": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"StartAt\\":\\"framework-isComplete-task\\",\\"States\\":{\\"framework-isComplete-task\\":{\\"End\\":true,\\"Retry\\":[{\\"ErrorEquals\\":[\\"States.ALL\\"],\\"IntervalSeconds\\":15,\\"MaxAttempts\\":240,\\"BackoffRate\\":1}],\\"Catch\\":[{\\"ErrorEquals\\":[\\"States.ALL\\"],\\"Next\\":\\"framework-onTimeout-task\\"}],\\"Type\\":\\"Task\\",\\"Resource\\":\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderframeworkisCompleteE40E40A9",
+                  "Arn",
+                ],
+              },
+              "\\"},\\"framework-onTimeout-task\\":{\\"End\\":true,\\"Type\\":\\"Task\\",\\"Resource\\":\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonTimeoutAA8B0A7D",
+                  "Arn",
+                ],
+              },
+              "\\"}}}",
+            ],
+          ],
+        },
+        "RoleArn": Object {
+          "Fn::GetAtt": Array [
+            "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineRoleF348B4FE",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::StepFunctions::StateMachine",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineRoleDefaultPolicy0018A70D": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ApiDeploymentGroupDeploymentDeploymentProviderframeworkisCompleteE40E40A9",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "ApiDeploymentGroupDeploymentDeploymentProviderframeworkisCompleteE40E40A9",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonTimeoutAA8B0A7D",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "ApiDeploymentGroupDeploymentDeploymentProviderframeworkonTimeoutAA8B0A7D",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineRoleDefaultPolicy0018A70D",
+        "Roles": Array [
+          Object {
+            "Ref": "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineRoleF348B4FE",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineRoleF348B4FE": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "states.us-east-1.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ApiDeploymentGroupServiceRoleDDCCDD8C": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/AWSCodeDeployRoleForECS",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSCodeDeployRoleForECS policy",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "codedeploy.us-east-1.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AWSCodeDeployRoleForECS",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ApiGreenTargetGroup8D009A5A": Object {
+      "Properties": Object {
+        "HealthCheckIntervalSeconds": 60,
+        "HealthCheckPath": "/actuator/health",
+        "HealthyThresholdCount": 2,
+        "Port": 8080,
+        "Protocol": "HTTP",
+        "TargetGroupAttributes": Array [
+          Object {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "5",
+          },
+          Object {
+            "Key": "stickiness.enabled",
+            "Value": "false",
+          },
+        ],
+        "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "ApiHealthAlarm37D68E10": Object {
+      "Properties": Object {
+        "AlarmName": "TestStackApiHealthAlarm8EE930EC",
+        "AlarmRule": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "(ALARM(\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ApiResponseTimeAlarm1A1F05BF",
+                  "Arn",
+                ],
+              },
+              "\\") OR ALARM(\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ApiCanarySuccessAlarm85CC115D",
+                  "Arn",
+                ],
+              },
+              "\\") OR ALARM(\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "ApiCanaryDurationAlarm5501D0DD",
+                  "Arn",
+                ],
+              },
+              "\\"))",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::CloudWatch::CompositeAlarm",
+    },
+    "ApiLB8D4BD609": Object {
+      "DependsOn": Array [
+        "ApiAccessLogBucketPolicy66E268A7",
+        "ApiAccessLogBucket47540DA5",
+        "VpcPublicSubnet1DefaultRoute3DA9E72A",
+        "VpcPublicSubnet1RouteTableAssociation97140677",
+        "VpcPublicSubnet2DefaultRoute97F91067",
+        "VpcPublicSubnet2RouteTableAssociationDD5762D8",
+        "VpcPublicSubnet3DefaultRoute4697774F",
+        "VpcPublicSubnet3RouteTableAssociation1F1EDF02",
+      ],
+      "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+          Object {
+            "Key": "access_logs.s3.enabled",
+            "Value": "true",
+          },
+          Object {
+            "Key": "access_logs.s3.bucket",
+            "Value": Object {
+              "Ref": "ApiAccessLogBucket47540DA5",
+            },
+          },
+          Object {
+            "Key": "access_logs.s3.prefix",
+            "Value": "",
+          },
+        ],
+        "Scheme": "internet-facing",
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "ApiLBSecurityGroup70AC4E5C",
+              "GroupId",
+            ],
+          },
+        ],
+        "Subnets": Array [
+          Object {
+            "Ref": "VpcPublicSubnet1Subnet5C2D37C4",
+          },
+          Object {
+            "Ref": "VpcPublicSubnet2Subnet691E08A3",
+          },
+          Object {
+            "Ref": "VpcPublicSubnet3SubnetBE12F0B6",
+          },
+        ],
+        "Type": "application",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "ApiLBPublicListener5142AAA5": Object {
+      "DependsOn": Array [
+        "ApiAccessLogBucketPolicy66E268A7",
+        "ApiAccessLogBucket47540DA5",
+      ],
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "ApiLBPublicListenerECSGroup45FF926A",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "ApiLB8D4BD609",
+        },
+        "Port": 80,
+        "Protocol": "HTTP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "ApiLBPublicListenerECSGroup45FF926A": Object {
+      "DependsOn": Array [
+        "ApiAccessLogBucketPolicy66E268A7",
+        "ApiAccessLogBucket47540DA5",
+      ],
+      "Properties": Object {
+        "HealthCheckIntervalSeconds": 60,
+        "HealthCheckPath": "/actuator/health",
+        "HealthyThresholdCount": 2,
+        "Port": 80,
+        "Protocol": "HTTP",
+        "TargetGroupAttributes": Array [
+          Object {
+            "Key": "stickiness.enabled",
+            "Value": "false",
+          },
+          Object {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "5",
+          },
+        ],
+        "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "ApiLBSecurityGroup70AC4E5C": Object {
+      "DependsOn": Array [
+        "ApiAccessLogBucketPolicy66E268A7",
+        "ApiAccessLogBucket47540DA5",
+      ],
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-EC23",
+              "reason": "Allow public inbound access on ELB",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "GroupDescription": "Automatically created Security Group for ELB TestStackApiLBF4CC58DF",
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
+          },
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 8080",
+            "FromPort": 8080,
+            "IpProtocol": "tcp",
+            "ToPort": 8080,
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ApiLBSecurityGrouptoTestStackApiServiceSecurityGroup56AF4AC580804BAC35E7": Object {
+      "DependsOn": Array [
+        "ApiAccessLogBucketPolicy66E268A7",
+        "ApiAccessLogBucket47540DA5",
+      ],
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "ApiServiceSecurityGroupB2E30D06",
+            "GroupId",
+          ],
+        },
+        "FromPort": 8080,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ApiLBSecurityGroup70AC4E5C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 8080,
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
+    },
+    "ApiLBTestListener069F7CE5": Object {
+      "DependsOn": Array [
+        "ApiAccessLogBucketPolicy66E268A7",
+        "ApiAccessLogBucket47540DA5",
+      ],
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "ApiGreenTargetGroup8D009A5A",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "ApiLB8D4BD609",
+        },
+        "Port": 8080,
+        "Protocol": "HTTP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "ApiResponseTimeAlarm1A1F05BF": Object {
+      "Properties": Object {
+        "ComparisonOperator": "GreaterThanThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "LoadBalancer",
+            "Value": Object {
+              "Fn::GetAtt": Array [
+                "ApiLB8D4BD609",
+                "LoadBalancerFullName",
+              ],
+            },
+          },
+        ],
+        "EvaluationPeriods": 2,
+        "ExtendedStatistic": "p95",
+        "MetricName": "TargetResponseTime",
+        "Namespace": "AWS/ApplicationELB",
+        "Period": 60,
+        "Threshold": 3,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ApiServiceD5B4A50A": Object {
+      "DependsOn": Array [
+        "ApiLBPublicListenerECSGroup45FF926A",
+        "ApiLBPublicListener5142AAA5",
+        "ApiTaskDefExecutionRoleDefaultPolicyE5F94BFA",
+        "ApiTaskDefExecutionRole5CBCA7DA",
+        "ApiTaskDefCB0575BA",
+        "ApiTaskDefTaskRole69DE15BC",
+      ],
+      "Properties": Object {
+        "CapacityProviderStrategy": Array [
+          Object {
+            "CapacityProvider": "FARGATE_SPOT",
+            "Weight": 1,
+          },
+        ],
+        "Cluster": Object {
+          "Ref": "ClusterEB0386A7",
+        },
+        "DeploymentConfiguration": Object {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50,
+        },
+        "DeploymentController": Object {
+          "Type": "CODE_DEPLOY",
+        },
+        "DesiredCount": 3,
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LoadBalancers": Array [
+          Object {
+            "ContainerName": "api",
+            "ContainerPort": 8080,
+            "TargetGroupArn": Object {
+              "Ref": "ApiLBPublicListenerECSGroup45FF926A",
+            },
+          },
+        ],
+        "NetworkConfiguration": Object {
+          "AwsvpcConfiguration": Object {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": Array [
+              Object {
+                "Fn::GetAtt": Array [
+                  "ApiServiceSecurityGroupB2E30D06",
+                  "GroupId",
+                ],
+              },
+            ],
+            "Subnets": Array [
+              Object {
+                "Ref": "VpcPrivateSubnet1Subnet536B997A",
+              },
+              Object {
+                "Ref": "VpcPrivateSubnet2Subnet3788AAA1",
+              },
+              Object {
+                "Ref": "VpcPrivateSubnet3SubnetF258B56E",
+              },
+            ],
+          },
+        },
+        "TaskDefinition": "teststack",
+      },
+      "Type": "AWS::ECS::Service",
+    },
+    "ApiServiceSecurityGroupB2E30D06": Object {
+      "DependsOn": Array [
+        "ApiTaskDefExecutionRoleDefaultPolicyE5F94BFA",
+        "ApiTaskDefExecutionRole5CBCA7DA",
+        "ApiTaskDefCB0575BA",
+        "ApiTaskDefTaskRole69DE15BC",
+      ],
+      "Properties": Object {
+        "GroupDescription": "TestStack/Api/Service/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ApiServiceSecurityGroupfromTestStackApiLBSecurityGroup0540FC958080EEE77C0F": Object {
+      "DependsOn": Array [
+        "ApiTaskDefExecutionRoleDefaultPolicyE5F94BFA",
+        "ApiTaskDefExecutionRole5CBCA7DA",
+        "ApiTaskDefCB0575BA",
+        "ApiTaskDefTaskRole69DE15BC",
+      ],
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "FromPort": 8080,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ApiServiceSecurityGroupB2E30D06",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "ApiLBSecurityGroup70AC4E5C",
+            "GroupId",
+          ],
+        },
+        "ToPort": 8080,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "ApiTaskDefCB0575BA": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-ECS2",
+              "reason": "Allow environment variables for configuration of values that are not confidential",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "ContainerDefinitions": Array [
+          Object {
+            "Environment": Array [
+              Object {
+                "Name": "SPRING_DATASOURCE_URL",
+                "Value": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "jdbc:mysql://",
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "AuroraCluster23D869C0",
+                          "Endpoint.Address",
+                        ],
+                      },
+                      ":",
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "AuroraCluster23D869C0",
+                          "Endpoint.Port",
+                        ],
+                      },
+                      "/fruits",
+                    ],
+                  ],
+                },
+              },
+            ],
+            "Essential": true,
+            "Image": Object {
+              "Fn::Sub": "dummy-ecr-image",
+            },
+            "LogConfiguration": Object {
+              "LogDriver": "awslogs",
+              "Options": Object {
+                "awslogs-group": Object {
+                  "Ref": "AppLogGroup7D8CD952",
+                },
+                "awslogs-region": "us-east-1",
+                "awslogs-stream-prefix": "service",
+              },
+            },
+            "Name": "api",
+            "PortMappings": Array [
+              Object {
+                "ContainerPort": 8080,
+                "Protocol": "tcp",
+              },
+            ],
+            "Secrets": Array [
+              Object {
+                "Name": "SPRING_DATASOURCE_USERNAME",
+                "ValueFrom": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Ref": "AuroraSecret41E6E877",
+                      },
+                      ":username::",
+                    ],
+                  ],
+                },
+              },
+              Object {
+                "Name": "SPRING_DATASOURCE_PASSWORD",
+                "ValueFrom": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Ref": "AuroraSecret41E6E877",
+                      },
+                      ":password::",
+                    ],
+                  ],
+                },
+              },
+            ],
+          },
+        ],
+        "Cpu": "512",
+        "ExecutionRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "ApiTaskDefExecutionRole5CBCA7DA",
+            "Arn",
+          ],
+        },
+        "Family": "teststack",
+        "Memory": "1024",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": Array [
+          "FARGATE",
+        ],
+        "TaskRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "ApiTaskDefTaskRole69DE15BC",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ECS::TaskDefinition",
+    },
+    "ApiTaskDefExecutionRole5CBCA7DA": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ApiTaskDefExecutionRoleDefaultPolicyE5F94BFA": Object {
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "applies_to": Array [
+                "Resource::*",
+              ],
+              "id": "AwsSolutions-IAM5",
+              "reason": "Allow ecr:GetAuthorizationToken",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ecr:us-east-1:dummy:repository/cdk-hnb659fds-container-assets-dummy-us-east-1",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": Array [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "AppLogGroup7D8CD952",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "AuroraSecret41E6E877",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ApiTaskDefExecutionRoleDefaultPolicyE5F94BFA",
+        "Roles": Array [
+          Object {
+            "Ref": "ApiTaskDefExecutionRole5CBCA7DA",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ApiTaskDefTaskRole69DE15BC": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "AppLogGroup7D8CD952": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "LogGroupName": "/aws/ecs/service/teststack",
+        "RetentionInDays": 7,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "AuroraCluster23D869C0": Object {
+      "DeletionPolicy": "Snapshot",
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-RDS6",
+              "reason": "IAM authentication not supported on Serverless v1",
+            },
+            Object {
+              "id": "AwsSolutions-RDS10",
+              "reason": "Disable delete protection to simplify cleanup of Reference Implementation",
+            },
+            Object {
+              "id": "AwsSolutions-RDS11",
+              "reason": "Custom port not supported on Serverless v1",
+            },
+            Object {
+              "id": "AwsSolutions-RDS14",
+              "reason": "Backtrack not supported on Serverless v1",
+            },
+            Object {
+              "id": "AwsSolutions-RDS16",
+              "reason": "CloudWatch Log Export not supported on Serverless v1",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "CopyTagsToSnapshot": true,
+        "DBClusterIdentifier": "teststack",
+        "DBClusterParameterGroupName": "default.aurora-mysql5.7",
+        "DBSubnetGroupName": Object {
+          "Ref": "AuroraClusterSubnetsF3E9E6AD",
+        },
+        "DatabaseName": "fruits",
+        "DeletionProtection": false,
+        "Engine": "aurora-mysql",
+        "EngineMode": "serverless",
+        "MasterUserPassword": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{{resolve:secretsmanager:",
+              Object {
+                "Ref": "AuroraSecret41E6E877",
+              },
+              ":SecretString:password::}}",
+            ],
+          ],
+        },
+        "MasterUsername": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{{resolve:secretsmanager:",
+              Object {
+                "Ref": "AuroraSecret41E6E877",
+              },
+              ":SecretString:username::}}",
+            ],
+          ],
+        },
+        "StorageEncrypted": true,
+        "VpcSecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "AuroraClusterSecurityGroupD85BF9CB",
+              "GroupId",
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBCluster",
+      "UpdateReplacePolicy": "Snapshot",
+    },
+    "AuroraClusterSecurityGroupD85BF9CB": Object {
+      "Properties": Object {
+        "GroupDescription": "RDS security group",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "AuroraClusterSecurityGroupfromTestStackApiServiceSecurityGroup56AF4AC5IndirectPort7B73ECC0": Object {
+      "Properties": Object {
+        "Description": "from TestStackApiServiceSecurityGroup56AF4AC5:{IndirectPort}",
+        "FromPort": Object {
+          "Fn::GetAtt": Array [
+            "AuroraCluster23D869C0",
+            "Endpoint.Port",
+          ],
+        },
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "AuroraClusterSecurityGroupD85BF9CB",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "ApiServiceSecurityGroupB2E30D06",
+            "GroupId",
+          ],
+        },
+        "ToPort": Object {
+          "Fn::GetAtt": Array [
+            "AuroraCluster23D869C0",
+            "Endpoint.Port",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "AuroraClusterSubnetsF3E9E6AD": Object {
+      "Properties": Object {
+        "DBSubnetGroupDescription": "Subnets for AuroraCluster database",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcPrivateSubnet1Subnet536B997A",
+          },
+          Object {
+            "Ref": "VpcPrivateSubnet2Subnet3788AAA1",
+          },
+          Object {
+            "Ref": "VpcPrivateSubnet3SubnetF258B56E",
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBSubnetGroup",
+    },
+    "AuroraSecret41E6E877": Object {
+      "DeletionPolicy": "Delete",
+      "Metadata": Object {
+        "cdk_nag": Object {
+          "rules_to_suppress": Array [
+            Object {
+              "id": "AwsSolutions-SMG4",
+              "reason": "Dont require secret rotation",
+            },
+          ],
+        },
+      },
+      "Properties": Object {
+        "Description": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "Generated by the CDK for stack: ",
+              Object {
+                "Ref": "AWS::StackName",
+              },
+            ],
+          ],
+        },
+        "GenerateSecretString": Object {
+          "ExcludeCharacters": " %+~\`#$&*()|[]{}:;<>?!'/@\\"\\\\",
+          "GenerateStringKey": "password",
+          "PasswordLength": 30,
+          "SecretStringTemplate": "{\\"username\\":\\"fruitapi\\"}",
+        },
+        "Name": "teststack-DB",
+      },
+      "Type": "AWS::SecretsManager::Secret",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "AuroraSecretAttachment65089D67": Object {
+      "Properties": Object {
+        "SecretId": Object {
+          "Ref": "AuroraSecret41E6E877",
+        },
+        "TargetId": Object {
+          "Ref": "AuroraCluster23D869C0",
+        },
+        "TargetType": "AWS::RDS::DBCluster",
+      },
+      "Type": "AWS::SecretsManager::SecretTargetAttachment",
+    },
+    "ClusterEB0386A7": Object {
+      "Properties": Object {
+        "ClusterName": "teststack",
+        "ClusterSettings": Array [
+          Object {
+            "Name": "containerInsights",
+            "Value": "enabled",
+          },
+        ],
+      },
+      "Type": "AWS::ECS::Cluster",
+    },
+    "Vpc8378EB38": Object {
+      "Properties": Object {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "VpcFlowLogF72230C7": Object {
+      "Properties": Object {
+        "DeliverLogsPermissionArn": Object {
+          "Fn::GetAtt": Array [
+            "VpcFlowLogIAMRoleB4DCB624",
+            "Arn",
+          ],
+        },
+        "LogDestinationType": "cloud-watch-logs",
+        "LogGroupName": Object {
+          "Ref": "VpcFlowLogLogGroupBB186289",
+        },
+        "ResourceId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+        "ResourceType": "VPC",
+        "TrafficType": "ALL",
+      },
+      "Type": "AWS::EC2::FlowLog",
+    },
+    "VpcFlowLogIAMRoleB4DCB624": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "vpc-flow-logs.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "VpcFlowLogIAMRoleDefaultPolicy7533133B": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "logs:DescribeLogStreams",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "VpcFlowLogLogGroupBB186289",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": "iam:PassRole",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "VpcFlowLogIAMRoleB4DCB624",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "VpcFlowLogIAMRoleDefaultPolicy7533133B",
+        "Roles": Array [
+          Object {
+            "Ref": "VpcFlowLogIAMRoleB4DCB624",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "VpcFlowLogLogGroupBB186289": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "VpcIGWD7BA715C": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::InternetGateway",
+    },
+    "VpcPrivateSubnet1DefaultRouteBE02A9ED": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": Object {
+          "Ref": "VpcPublicSubnet1NATGateway4D7517AA",
+        },
+        "RouteTableId": Object {
+          "Ref": "VpcPrivateSubnet1RouteTableB2C5B500",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "VpcPrivateSubnet1RouteTableAssociation70C59FA6": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcPrivateSubnet1RouteTableB2C5B500",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcPrivateSubnet1Subnet536B997A",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcPrivateSubnet1RouteTableB2C5B500": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PrivateSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcPrivateSubnet1Subnet536B997A": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.96.0/19",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PrivateSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcPrivateSubnet2DefaultRoute060D2087": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": Object {
+          "Ref": "VpcPublicSubnet2NATGateway9182C01D",
+        },
+        "RouteTableId": Object {
+          "Ref": "VpcPrivateSubnet2RouteTableA678073B",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "VpcPrivateSubnet2RouteTableA678073B": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PrivateSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcPrivateSubnet2RouteTableAssociationA89CAD56": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcPrivateSubnet2RouteTableA678073B",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcPrivateSubnet2Subnet3788AAA1",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcPrivateSubnet2Subnet3788AAA1": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1b",
+        "CidrBlock": "10.0.128.0/19",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PrivateSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcPrivateSubnet3DefaultRoute94B74F0D": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": Object {
+          "Ref": "VpcPublicSubnet3NATGateway7640CD1D",
+        },
+        "RouteTableId": Object {
+          "Ref": "VpcPrivateSubnet3RouteTableD98824C7",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "VpcPrivateSubnet3RouteTableAssociation16BDDC43": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcPrivateSubnet3RouteTableD98824C7",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcPrivateSubnet3SubnetF258B56E",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcPrivateSubnet3RouteTableD98824C7": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PrivateSubnet3",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcPrivateSubnet3SubnetF258B56E": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1c",
+        "CidrBlock": "10.0.160.0/19",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PrivateSubnet3",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcPublicSubnet1DefaultRoute3DA9E72A": Object {
+      "DependsOn": Array [
+        "VpcVPCGWBF912B6E",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "VpcIGWD7BA715C",
+        },
+        "RouteTableId": Object {
+          "Ref": "VpcPublicSubnet1RouteTable6C95E38E",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "VpcPublicSubnet1EIPD7E02669": Object {
+      "Properties": Object {
+        "Domain": "vpc",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PublicSubnet1",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::EIP",
+    },
+    "VpcPublicSubnet1NATGateway4D7517AA": Object {
+      "DependsOn": Array [
+        "VpcPublicSubnet1DefaultRoute3DA9E72A",
+        "VpcPublicSubnet1RouteTableAssociation97140677",
+      ],
+      "Properties": Object {
+        "AllocationId": Object {
+          "Fn::GetAtt": Array [
+            "VpcPublicSubnet1EIPD7E02669",
+            "AllocationId",
+          ],
+        },
+        "SubnetId": Object {
+          "Ref": "VpcPublicSubnet1Subnet5C2D37C4",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PublicSubnet1",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NatGateway",
+    },
+    "VpcPublicSubnet1RouteTable6C95E38E": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PublicSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcPublicSubnet1RouteTableAssociation97140677": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcPublicSubnet1RouteTable6C95E38E",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcPublicSubnet1Subnet5C2D37C4",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcPublicSubnet1Subnet5C2D37C4": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.0.0/19",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PublicSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcPublicSubnet2DefaultRoute97F91067": Object {
+      "DependsOn": Array [
+        "VpcVPCGWBF912B6E",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "VpcIGWD7BA715C",
+        },
+        "RouteTableId": Object {
+          "Ref": "VpcPublicSubnet2RouteTable94F7E489",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "VpcPublicSubnet2EIP3C605A87": Object {
+      "Properties": Object {
+        "Domain": "vpc",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PublicSubnet2",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::EIP",
+    },
+    "VpcPublicSubnet2NATGateway9182C01D": Object {
+      "DependsOn": Array [
+        "VpcPublicSubnet2DefaultRoute97F91067",
+        "VpcPublicSubnet2RouteTableAssociationDD5762D8",
+      ],
+      "Properties": Object {
+        "AllocationId": Object {
+          "Fn::GetAtt": Array [
+            "VpcPublicSubnet2EIP3C605A87",
+            "AllocationId",
+          ],
+        },
+        "SubnetId": Object {
+          "Ref": "VpcPublicSubnet2Subnet691E08A3",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PublicSubnet2",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NatGateway",
+    },
+    "VpcPublicSubnet2RouteTable94F7E489": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PublicSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcPublicSubnet2RouteTableAssociationDD5762D8": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcPublicSubnet2RouteTable94F7E489",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcPublicSubnet2Subnet691E08A3",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcPublicSubnet2Subnet691E08A3": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1b",
+        "CidrBlock": "10.0.32.0/19",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PublicSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcPublicSubnet3DefaultRoute4697774F": Object {
+      "DependsOn": Array [
+        "VpcVPCGWBF912B6E",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "VpcIGWD7BA715C",
+        },
+        "RouteTableId": Object {
+          "Ref": "VpcPublicSubnet3RouteTable93458DBB",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "VpcPublicSubnet3EIP3A666A23": Object {
+      "Properties": Object {
+        "Domain": "vpc",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PublicSubnet3",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::EIP",
+    },
+    "VpcPublicSubnet3NATGateway7640CD1D": Object {
+      "DependsOn": Array [
+        "VpcPublicSubnet3DefaultRoute4697774F",
+        "VpcPublicSubnet3RouteTableAssociation1F1EDF02",
+      ],
+      "Properties": Object {
+        "AllocationId": Object {
+          "Fn::GetAtt": Array [
+            "VpcPublicSubnet3EIP3A666A23",
+            "AllocationId",
+          ],
+        },
+        "SubnetId": Object {
+          "Ref": "VpcPublicSubnet3SubnetBE12F0B6",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PublicSubnet3",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NatGateway",
+    },
+    "VpcPublicSubnet3RouteTable93458DBB": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PublicSubnet3",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcPublicSubnet3RouteTableAssociation1F1EDF02": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcPublicSubnet3RouteTable93458DBB",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcPublicSubnet3SubnetBE12F0B6",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcPublicSubnet3SubnetBE12F0B6": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1c",
+        "CidrBlock": "10.0.64.0/19",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/Vpc/PublicSubnet3",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcVPCGWBF912B6E": Object {
+      "Properties": Object {
+        "InternetGatewayId": Object {
+          "Ref": "VpcIGWD7BA715C",
+        },
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+    },
+  },
+  "Rules": Object {
+    "CheckBootstrapVersion": Object {
+      "Assertions": Array [
+        Object {
+          "Assert": Object {
+            "Fn::Not": Array [
+              Object {
+                "Fn::Contains": Array [
+                  Array [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  Object {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;

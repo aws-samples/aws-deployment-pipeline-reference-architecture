@@ -9,7 +9,7 @@ Customers and third-party vendors can use the DPRA to create implementations - r
 The DPRA covers the following deployment pipelines in detail:
 
 <div class="cardwrapper">
-    <a href="application-pipeline" class="card">
+    <a href="application-pipeline/index.html" class="card">
         <h3>Application</h3>
         <p>
             Build, test, and deploy an application.

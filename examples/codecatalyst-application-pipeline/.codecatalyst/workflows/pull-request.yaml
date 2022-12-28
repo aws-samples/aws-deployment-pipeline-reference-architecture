@@ -1,0 +1,80 @@
+
+Name: pull-request
+SchemaVersion: "1.0"
+Triggers:
+  - Type: PULLREQUEST
+    Events:
+      - OPEN
+      - REVISION
+    Branches:
+      - main
+Actions:
+  Build:
+    Actions:
+      SCA:
+        Identifier: aws/github-actions-runner@v1
+        Inputs:
+          Sources:
+            - WorkflowSource
+        Configuration:
+          Steps:
+            - name: Trivy Vulnerability Scanner
+              uses: aquasecurity/trivy-action@master
+              with:
+                scan-type: fs
+                ignore-unfixed: true
+                format: sarif
+                output: report.sarif
+                security-checks: vuln,config,secret
+        Outputs:
+          Reports:
+            SCA:
+              Format: SARIFSCA
+              IncludePaths:
+                - report.sarif
+              SuccessCriteria:
+                Vulnerabilities:
+                  Severity: HIGH
+                Number: 0
+      Package:
+        Identifier: aws/build@v1
+        Inputs:
+          Sources:
+            - WorkflowSource
+        Outputs:
+          AutoDiscoverReports:
+            Enabled: true
+            ReportNamePrefix: build
+            SuccessCriteria:
+              PassRate: 100
+          Artifacts:
+            - Name: package
+              Files:
+                - "**/*"
+        Configuration:
+          Steps:
+            - Run: mvn verify --batch-mode --no-transfer-progress
+      Synth:
+        Identifier: aws/build@v1
+        Inputs:
+          Sources:
+            - WorkflowSource
+        Outputs:
+          AutoDiscoverReports:
+            Enabled: true
+            ReportNamePrefix: synth
+            IncludePaths:
+              - test-reports/*
+            SuccessCriteria:
+              PassRate: 100
+          Artifacts:
+            - Name: synth
+              Files:
+                - cdk.out/**/*
+        Configuration:
+          Steps:
+            - Run: npm ci
+            - Run: npm test
+            - Run: npm run lint
+            - Run: npm run build
+RunMode: SUPERSEDED

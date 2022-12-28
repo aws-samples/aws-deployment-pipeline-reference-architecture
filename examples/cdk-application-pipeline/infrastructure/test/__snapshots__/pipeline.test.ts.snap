@@ -123,7 +123,7 @@ Object {
           "BranchName": "main",
           "S3": Object {
             "Bucket": "cdk-hnb659fds-assets-dummy-us-east-1",
-            "Key": "ac1b5c0961a7269b6a053ee64276ed0e20a7f48aefb9f67519539d23aaf10149.zip",
+            "Key": "code.zip",
           },
         },
         "RepositoryName": "fruit-api",
@@ -187,7 +187,7 @@ Object {
       },
       "Type": "AWS::Events::Rule",
     },
-    "fruitapiAssetsDockerAsset14F79F031": Object {
+    "fruitapiAssetsDockerAssetD43255A2": Object {
       "Properties": Object {
         "Artifacts": Object {
           "Type": "CODEPIPELINE",
@@ -195,7 +195,7 @@ Object {
         "Cache": Object {
           "Type": "NO_CACHE",
         },
-        "Description": "Pipeline step TestStack/Pipeline/Assets/DockerAsset1",
+        "Description": "Pipeline step TestStack/Pipeline/Assets/DockerAsset",
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
             "fruitapiPipelineArtifactsBucketEncryptionKey9E5E2FC5",
@@ -216,29 +216,7 @@ Object {
           ],
         },
         "Source": Object {
-          "BuildSpec": "{
-  \\"version\\": \\"0.2\\",
-  \\"phases\\": {
-    \\"install\\": {
-      \\"commands\\": [
-        \\"npm install -g cdk-assets@2\\"
-      ]
-    },
-    \\"build\\": {
-      \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Beta-us-west-2/TestStackfruitapiBetauswest2fruitapiE54C0B51.assets.json\\\\\\" --verbose publish \\\\\\"049ff34819d20fdc5f2fe91196be61d0faf11a9479d056a18d2ae0b3559d3667:834418886742-us-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Gamma-us-west-2/TestStackfruitapiGammauswest2fruitapi6ACE9A1B.assets.json\\\\\\" --verbose publish \\\\\\"049ff34819d20fdc5f2fe91196be61d0faf11a9479d056a18d2ae0b3559d3667:384134908869-us-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Gamma-us-east-1/TestStackfruitapiGammauseast1fruitapi8F799F28.assets.json\\\\\\" --verbose publish \\\\\\"049ff34819d20fdc5f2fe91196be61d0faf11a9479d056a18d2ae0b3559d3667:384134908869-us-east-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-us-west-2/TestStackfruitapiProduswest2fruitapiDDA9C7BF.assets.json\\\\\\" --verbose publish \\\\\\"049ff34819d20fdc5f2fe91196be61d0faf11a9479d056a18d2ae0b3559d3667:211909469734-us-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-us-east-1/TestStackfruitapiProduseast1fruitapiC0C2CDB3.assets.json\\\\\\" --verbose publish \\\\\\"049ff34819d20fdc5f2fe91196be61d0faf11a9479d056a18d2ae0b3559d3667:211909469734-us-east-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-eu-north-1/TestStackfruitapiProdeunorth1fruitapi4720EDC1.assets.json\\\\\\" --verbose publish \\\\\\"049ff34819d20fdc5f2fe91196be61d0faf11a9479d056a18d2ae0b3559d3667:211909469734-eu-north-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-eu-west-2/TestStackfruitapiProdeuwest2fruitapi23EE3CBD.assets.json\\\\\\" --verbose publish \\\\\\"049ff34819d20fdc5f2fe91196be61d0faf11a9479d056a18d2ae0b3559d3667:211909469734-eu-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-ap-south-1/TestStackfruitapiProdapsouth1fruitapi9D505BC6.assets.json\\\\\\" --verbose publish \\\\\\"049ff34819d20fdc5f2fe91196be61d0faf11a9479d056a18d2ae0b3559d3667:211909469734-ap-south-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-ap-southeast-2/TestStackfruitapiProdapsoutheast2fruitapi923CF575.assets.json\\\\\\" --verbose publish \\\\\\"049ff34819d20fdc5f2fe91196be61d0faf11a9479d056a18d2ae0b3559d3667:211909469734-ap-southeast-2\\\\\\"\\"
-      ]
-    }
-  }
-}",
+          "BuildSpec": "buildspec-c81cb9840889e8394c8dd75a23a3f9fe04346e4f19-DockerAsset.yaml",
           "Type": "CODEPIPELINE",
         },
       },
@@ -354,10 +332,10 @@ Object {
                   "Fn::Sub": "arn:\${AWS::Partition}:iam::211909469734:role/cdk-hnb659fds-image-publishing-role-211909469734-us-east-1",
                 },
                 Object {
-                  "Fn::Sub": "arn:\${AWS::Partition}:iam::211909469734:role/cdk-hnb659fds-image-publishing-role-211909469734-eu-north-1",
+                  "Fn::Sub": "arn:\${AWS::Partition}:iam::211909469734:role/cdk-hnb659fds-image-publishing-role-211909469734-eu-central-1",
                 },
                 Object {
-                  "Fn::Sub": "arn:\${AWS::Partition}:iam::211909469734:role/cdk-hnb659fds-image-publishing-role-211909469734-eu-west-2",
+                  "Fn::Sub": "arn:\${AWS::Partition}:iam::211909469734:role/cdk-hnb659fds-image-publishing-role-211909469734-eu-west-1",
                 },
                 Object {
                   "Fn::Sub": "arn:\${AWS::Partition}:iam::211909469734:role/cdk-hnb659fds-image-publishing-role-211909469734-ap-south-1",
@@ -422,7 +400,7 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
-    "fruitapiAssetsFileAsset10798E6EF": Object {
+    "fruitapiAssetsFileAssetE1558F89": Object {
       "Properties": Object {
         "Artifacts": Object {
           "Type": "CODEPIPELINE",
@@ -430,7 +408,7 @@ Object {
         "Cache": Object {
           "Type": "NO_CACHE",
         },
-        "Description": "Pipeline step TestStack/Pipeline/Assets/FileAsset1",
+        "Description": "Pipeline step TestStack/Pipeline/Assets/FileAsset",
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
             "fruitapiPipelineArtifactsBucketEncryptionKey9E5E2FC5",
@@ -451,143 +429,7 @@ Object {
           ],
         },
         "Source": Object {
-          "BuildSpec": "{
-  \\"version\\": \\"0.2\\",
-  \\"phases\\": {
-    \\"install\\": {
-      \\"commands\\": [
-        \\"npm install -g cdk-assets@2\\"
-      ]
-    },
-    \\"build\\": {
-      \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Beta-us-west-2/TestStackfruitapiBetauswest2fruitapiE54C0B51.assets.json\\\\\\" --verbose publish \\\\\\"5f378cedb4a089a8cf4496cb6ab160c882b2f7e2706c3000c6a6d9c81408c487:834418886742-us-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Gamma-us-west-2/TestStackfruitapiGammauswest2fruitapi6ACE9A1B.assets.json\\\\\\" --verbose publish \\\\\\"5f378cedb4a089a8cf4496cb6ab160c882b2f7e2706c3000c6a6d9c81408c487:384134908869-us-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Gamma-us-east-1/TestStackfruitapiGammauseast1fruitapi8F799F28.assets.json\\\\\\" --verbose publish \\\\\\"5f378cedb4a089a8cf4496cb6ab160c882b2f7e2706c3000c6a6d9c81408c487:384134908869-us-east-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-us-west-2/TestStackfruitapiProduswest2fruitapiDDA9C7BF.assets.json\\\\\\" --verbose publish \\\\\\"5f378cedb4a089a8cf4496cb6ab160c882b2f7e2706c3000c6a6d9c81408c487:211909469734-us-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-us-east-1/TestStackfruitapiProduseast1fruitapiC0C2CDB3.assets.json\\\\\\" --verbose publish \\\\\\"5f378cedb4a089a8cf4496cb6ab160c882b2f7e2706c3000c6a6d9c81408c487:211909469734-us-east-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-eu-north-1/TestStackfruitapiProdeunorth1fruitapi4720EDC1.assets.json\\\\\\" --verbose publish \\\\\\"5f378cedb4a089a8cf4496cb6ab160c882b2f7e2706c3000c6a6d9c81408c487:211909469734-eu-north-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-eu-west-2/TestStackfruitapiProdeuwest2fruitapi23EE3CBD.assets.json\\\\\\" --verbose publish \\\\\\"5f378cedb4a089a8cf4496cb6ab160c882b2f7e2706c3000c6a6d9c81408c487:211909469734-eu-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-ap-south-1/TestStackfruitapiProdapsouth1fruitapi9D505BC6.assets.json\\\\\\" --verbose publish \\\\\\"5f378cedb4a089a8cf4496cb6ab160c882b2f7e2706c3000c6a6d9c81408c487:211909469734-ap-south-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-ap-southeast-2/TestStackfruitapiProdapsoutheast2fruitapi923CF575.assets.json\\\\\\" --verbose publish \\\\\\"5f378cedb4a089a8cf4496cb6ab160c882b2f7e2706c3000c6a6d9c81408c487:211909469734-ap-southeast-2\\\\\\"\\"
-      ]
-    }
-  }
-}",
-          "Type": "CODEPIPELINE",
-        },
-      },
-      "Type": "AWS::CodeBuild::Project",
-    },
-    "fruitapiAssetsFileAsset28B28E0BF": Object {
-      "Properties": Object {
-        "Artifacts": Object {
-          "Type": "CODEPIPELINE",
-        },
-        "Cache": Object {
-          "Type": "NO_CACHE",
-        },
-        "Description": "Pipeline step TestStack/Pipeline/Assets/FileAsset2",
-        "EncryptionKey": Object {
-          "Fn::GetAtt": Array [
-            "fruitapiPipelineArtifactsBucketEncryptionKey9E5E2FC5",
-            "Arn",
-          ],
-        },
-        "Environment": Object {
-          "ComputeType": "BUILD_GENERAL1_SMALL",
-          "Image": "aws/codebuild/standard:5.0",
-          "ImagePullCredentialsType": "CODEBUILD",
-          "PrivilegedMode": false,
-          "Type": "LINUX_CONTAINER",
-        },
-        "ServiceRole": Object {
-          "Fn::GetAtt": Array [
-            "fruitapiAssetsFileRole2CEFDD50",
-            "Arn",
-          ],
-        },
-        "Source": Object {
-          "BuildSpec": "{
-  \\"version\\": \\"0.2\\",
-  \\"phases\\": {
-    \\"install\\": {
-      \\"commands\\": [
-        \\"npm install -g cdk-assets@2\\"
-      ]
-    },
-    \\"build\\": {
-      \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Beta-us-west-2/TestStackfruitapiBetauswest2fruitapiE54C0B51.assets.json\\\\\\" --verbose publish \\\\\\"8c447fb824a947755a122af0c3527c85acb62beb6ae29cd81a03015da902f044:834418886742-us-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Gamma-us-west-2/TestStackfruitapiGammauswest2fruitapi6ACE9A1B.assets.json\\\\\\" --verbose publish \\\\\\"8c447fb824a947755a122af0c3527c85acb62beb6ae29cd81a03015da902f044:384134908869-us-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Gamma-us-east-1/TestStackfruitapiGammauseast1fruitapi8F799F28.assets.json\\\\\\" --verbose publish \\\\\\"8c447fb824a947755a122af0c3527c85acb62beb6ae29cd81a03015da902f044:384134908869-us-east-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-us-west-2/TestStackfruitapiProduswest2fruitapiDDA9C7BF.assets.json\\\\\\" --verbose publish \\\\\\"8c447fb824a947755a122af0c3527c85acb62beb6ae29cd81a03015da902f044:211909469734-us-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-us-east-1/TestStackfruitapiProduseast1fruitapiC0C2CDB3.assets.json\\\\\\" --verbose publish \\\\\\"8c447fb824a947755a122af0c3527c85acb62beb6ae29cd81a03015da902f044:211909469734-us-east-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-eu-north-1/TestStackfruitapiProdeunorth1fruitapi4720EDC1.assets.json\\\\\\" --verbose publish \\\\\\"8c447fb824a947755a122af0c3527c85acb62beb6ae29cd81a03015da902f044:211909469734-eu-north-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-eu-west-2/TestStackfruitapiProdeuwest2fruitapi23EE3CBD.assets.json\\\\\\" --verbose publish \\\\\\"8c447fb824a947755a122af0c3527c85acb62beb6ae29cd81a03015da902f044:211909469734-eu-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-ap-south-1/TestStackfruitapiProdapsouth1fruitapi9D505BC6.assets.json\\\\\\" --verbose publish \\\\\\"8c447fb824a947755a122af0c3527c85acb62beb6ae29cd81a03015da902f044:211909469734-ap-south-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-ap-southeast-2/TestStackfruitapiProdapsoutheast2fruitapi923CF575.assets.json\\\\\\" --verbose publish \\\\\\"8c447fb824a947755a122af0c3527c85acb62beb6ae29cd81a03015da902f044:211909469734-ap-southeast-2\\\\\\"\\"
-      ]
-    }
-  }
-}",
-          "Type": "CODEPIPELINE",
-        },
-      },
-      "Type": "AWS::CodeBuild::Project",
-    },
-    "fruitapiAssetsFileAsset318E4071C": Object {
-      "Properties": Object {
-        "Artifacts": Object {
-          "Type": "CODEPIPELINE",
-        },
-        "Cache": Object {
-          "Type": "NO_CACHE",
-        },
-        "Description": "Pipeline step TestStack/Pipeline/Assets/FileAsset3",
-        "EncryptionKey": Object {
-          "Fn::GetAtt": Array [
-            "fruitapiPipelineArtifactsBucketEncryptionKey9E5E2FC5",
-            "Arn",
-          ],
-        },
-        "Environment": Object {
-          "ComputeType": "BUILD_GENERAL1_SMALL",
-          "Image": "aws/codebuild/standard:5.0",
-          "ImagePullCredentialsType": "CODEBUILD",
-          "PrivilegedMode": false,
-          "Type": "LINUX_CONTAINER",
-        },
-        "ServiceRole": Object {
-          "Fn::GetAtt": Array [
-            "fruitapiAssetsFileRole2CEFDD50",
-            "Arn",
-          ],
-        },
-        "Source": Object {
-          "BuildSpec": "{
-  \\"version\\": \\"0.2\\",
-  \\"phases\\": {
-    \\"install\\": {
-      \\"commands\\": [
-        \\"npm install -g cdk-assets@2\\"
-      ]
-    },
-    \\"build\\": {
-      \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Beta-us-west-2/TestStackfruitapiBetauswest2fruitapiE54C0B51.assets.json\\\\\\" --verbose publish \\\\\\"e7c95e1a12d903d913ebdd526c735f1ac58b2024882a5562110221fe685ebe85:834418886742-us-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Gamma-us-west-2/TestStackfruitapiGammauswest2fruitapi6ACE9A1B.assets.json\\\\\\" --verbose publish \\\\\\"e7c95e1a12d903d913ebdd526c735f1ac58b2024882a5562110221fe685ebe85:384134908869-us-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Gamma-us-east-1/TestStackfruitapiGammauseast1fruitapi8F799F28.assets.json\\\\\\" --verbose publish \\\\\\"e7c95e1a12d903d913ebdd526c735f1ac58b2024882a5562110221fe685ebe85:384134908869-us-east-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-us-west-2/TestStackfruitapiProduswest2fruitapiDDA9C7BF.assets.json\\\\\\" --verbose publish \\\\\\"e7c95e1a12d903d913ebdd526c735f1ac58b2024882a5562110221fe685ebe85:211909469734-us-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-us-east-1/TestStackfruitapiProduseast1fruitapiC0C2CDB3.assets.json\\\\\\" --verbose publish \\\\\\"e7c95e1a12d903d913ebdd526c735f1ac58b2024882a5562110221fe685ebe85:211909469734-us-east-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-eu-north-1/TestStackfruitapiProdeunorth1fruitapi4720EDC1.assets.json\\\\\\" --verbose publish \\\\\\"e7c95e1a12d903d913ebdd526c735f1ac58b2024882a5562110221fe685ebe85:211909469734-eu-north-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-eu-west-2/TestStackfruitapiProdeuwest2fruitapi23EE3CBD.assets.json\\\\\\" --verbose publish \\\\\\"e7c95e1a12d903d913ebdd526c735f1ac58b2024882a5562110221fe685ebe85:211909469734-eu-west-2\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-ap-south-1/TestStackfruitapiProdapsouth1fruitapi9D505BC6.assets.json\\\\\\" --verbose publish \\\\\\"e7c95e1a12d903d913ebdd526c735f1ac58b2024882a5562110221fe685ebe85:211909469734-ap-south-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-TestStack-fruit-api-Prod-ap-southeast-2/TestStackfruitapiProdapsoutheast2fruitapi923CF575.assets.json\\\\\\" --verbose publish \\\\\\"e7c95e1a12d903d913ebdd526c735f1ac58b2024882a5562110221fe685ebe85:211909469734-ap-southeast-2\\\\\\"\\"
-      ]
-    }
-  }
-}",
+          "BuildSpec": "buildspec-c81cb9840889e8394c8dd75a23a3f9fe04346e4f19-FileAsset.yaml",
           "Type": "CODEPIPELINE",
         },
       },
@@ -703,10 +545,10 @@ Object {
                   "Fn::Sub": "arn:\${AWS::Partition}:iam::211909469734:role/cdk-hnb659fds-file-publishing-role-211909469734-us-east-1",
                 },
                 Object {
-                  "Fn::Sub": "arn:\${AWS::Partition}:iam::211909469734:role/cdk-hnb659fds-file-publishing-role-211909469734-eu-north-1",
+                  "Fn::Sub": "arn:\${AWS::Partition}:iam::211909469734:role/cdk-hnb659fds-file-publishing-role-211909469734-eu-central-1",
                 },
                 Object {
-                  "Fn::Sub": "arn:\${AWS::Partition}:iam::211909469734:role/cdk-hnb659fds-file-publishing-role-211909469734-eu-west-2",
+                  "Fn::Sub": "arn:\${AWS::Partition}:iam::211909469734:role/cdk-hnb659fds-file-publishing-role-211909469734-eu-west-1",
                 },
                 Object {
                   "Fn::Sub": "arn:\${AWS::Partition}:iam::211909469734:role/cdk-hnb659fds-file-publishing-role-211909469734-ap-south-1",
@@ -873,7 +715,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "fruitapiAssetsDockerAsset14F79F031",
+                  "fruitapiAssetsDockerAssetD43255A2",
                   "Arn",
                 ],
               },
@@ -887,35 +729,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "fruitapiAssetsFileAsset10798E6EF",
-                  "Arn",
-                ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "codebuild:BatchGetBuilds",
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "fruitapiAssetsFileAsset28B28E0BF",
-                  "Arn",
-                ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "codebuild:BatchGetBuilds",
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "fruitapiAssetsFileAsset318E4071C",
+                  "fruitapiAssetsFileAssetE1558F89",
                   "Arn",
                 ],
               },
@@ -1014,16 +828,16 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":kms:eu-north-1:dummy:alias/-eu-norttencryptionaliasbeac523ff74350bd7701",
+                      ":kms:eu-central-1:dummy:alias/-eu-centtencryptionalias9af9f3baa6f4d0e08faa",
                     ],
                   ],
                 },
                 "Type": "KMS",
               },
-              "Location": "teststack-support-eu-norteplicationbucketab7ed30a8189be1ca111",
+              "Location": "teststack-support-eu-centeplicationbucket2ea6a5e48d5e28fc8bac",
               "Type": "S3",
             },
-            "Region": "eu-north-1",
+            "Region": "eu-central-1",
           },
           Object {
             "ArtifactStore": Object {
@@ -1036,16 +850,16 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":kms:eu-west-2:dummy:alias/-eu-westtencryptionalias9f76b85613bbd27ad2db",
+                      ":kms:eu-west-1:dummy:alias/-eu-westtencryptionalias2c129cd6ae48a82d3c41",
                     ],
                   ],
                 },
                 "Type": "KMS",
               },
-              "Location": "teststack-support-eu-westeplicationbucket4aa57ce9205d1a3c5b83",
+              "Location": "teststack-support-eu-westeplicationbucket38f2db97e24f75f47670",
               "Type": "S3",
             },
-            "Region": "eu-west-2",
+            "Region": "eu-west-1",
           },
           Object {
             "ArtifactStore": Object {
@@ -1225,7 +1039,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"_PROJECT_CONFIG_HASH\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"e78d881de9139479635355236fe6fa80405543be5e89a743f90f199c9cce58a0\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"_PROJECT_CONFIG_HASH\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"46b71af4fd0b7b3d1f01a94eb217661d6d6f118c8d122151481708793d1c084b\\"}]",
                   "ProjectName": Object {
                     "Ref": "fruitapiPipelineBuildTrivyScan7159420B",
                   },
@@ -1359,7 +1173,7 @@ Object {
                 },
                 "Configuration": Object {
                   "ProjectName": Object {
-                    "Ref": "fruitapiAssetsDockerAsset14F79F031",
+                    "Ref": "fruitapiAssetsDockerAssetD43255A2",
                   },
                 },
                 "InputArtifacts": Array [
@@ -1367,7 +1181,7 @@ Object {
                     "Name": "Synth_Output",
                   },
                 ],
-                "Name": "DockerAsset1",
+                "Name": "DockerAsset",
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
                     "fruitapiCodeBuildActionRole9A61A6CE",
@@ -1385,7 +1199,7 @@ Object {
                 },
                 "Configuration": Object {
                   "ProjectName": Object {
-                    "Ref": "fruitapiAssetsFileAsset10798E6EF",
+                    "Ref": "fruitapiAssetsFileAssetE1558F89",
                   },
                 },
                 "InputArtifacts": Array [
@@ -1393,59 +1207,7 @@ Object {
                     "Name": "Synth_Output",
                   },
                 ],
-                "Name": "FileAsset1",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "fruitapiCodeBuildActionRole9A61A6CE",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 1,
-              },
-              Object {
-                "ActionTypeId": Object {
-                  "Category": "Build",
-                  "Owner": "AWS",
-                  "Provider": "CodeBuild",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "ProjectName": Object {
-                    "Ref": "fruitapiAssetsFileAsset28B28E0BF",
-                  },
-                },
-                "InputArtifacts": Array [
-                  Object {
-                    "Name": "Synth_Output",
-                  },
-                ],
-                "Name": "FileAsset2",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "fruitapiCodeBuildActionRole9A61A6CE",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 1,
-              },
-              Object {
-                "ActionTypeId": Object {
-                  "Category": "Build",
-                  "Owner": "AWS",
-                  "Provider": "CodeBuild",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "ProjectName": Object {
-                    "Ref": "fruitapiAssetsFileAsset318E4071C",
-                  },
-                },
-                "InputArtifacts": Array [
-                  Object {
-                    "Name": "Synth_Output",
-                  },
-                ],
-                "Name": "FileAsset3",
+                "Name": "FileAsset",
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
                     "fruitapiCodeBuildActionRole9A61A6CE",
@@ -1781,30 +1543,14 @@ Object {
                   "Provider": "Manual",
                   "Version": "1",
                 },
-                "Name": "Gamma-us-west-2.PromoteFromGamma",
+                "Name": "PromoteToProd",
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "fruitapiPipelineGamma0Gammauswest2PromoteFromGammaCodePipelineActionRole56FAD24E",
+                    "fruitapiPipelineGamma0PromoteToProdCodePipelineActionRoleC0594F5B",
                     "Arn",
                   ],
                 },
-                "RunOrder": 3,
-              },
-              Object {
-                "ActionTypeId": Object {
-                  "Category": "Approval",
-                  "Owner": "AWS",
-                  "Provider": "Manual",
-                  "Version": "1",
-                },
-                "Name": "Gamma-us-east-1.PromoteFromGamma",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "fruitapiPipelineGamma0Gammauseast1PromoteFromGammaCodePipelineActionRole35C17AC1",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 3,
+                "RunOrder": 4,
               },
             ],
             "Name": "Gamma-0",
@@ -1985,21 +1731,21 @@ Object {
                         Object {
                           "Ref": "AWS::Partition",
                         },
-                        ":iam::211909469734:role/cdk-hnb659fds-cfn-exec-role-211909469734-eu-north-1",
+                        ":iam::211909469734:role/cdk-hnb659fds-cfn-exec-role-211909469734-eu-central-1",
                       ],
                     ],
                   },
-                  "StackName": "Prod-eu-north-1-fruit-api",
-                  "TemplateConfiguration": "Synth_Output::assembly-TestStack-fruit-api-Prod-eu-north-1/TestStackfruitapiProdeunorth1fruitapi4720EDC1.template.json.config.json",
-                  "TemplatePath": "Synth_Output::assembly-TestStack-fruit-api-Prod-eu-north-1/TestStackfruitapiProdeunorth1fruitapi4720EDC1.template.json",
+                  "StackName": "Prod-eu-central-1-fruit-api",
+                  "TemplateConfiguration": "Synth_Output::assembly-TestStack-fruit-api-Prod-eu-central-1/TestStackfruitapiProdeucentral1fruitapi5AF03006.template.json.config.json",
+                  "TemplatePath": "Synth_Output::assembly-TestStack-fruit-api-Prod-eu-central-1/TestStackfruitapiProdeucentral1fruitapi5AF03006.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
                     "Name": "Synth_Output",
                   },
                 ],
-                "Name": "Prod-eu-north-1.fruit-api.Prepare",
-                "Region": "eu-north-1",
+                "Name": "Prod-eu-central-1.fruit-api.Prepare",
+                "Region": "eu-central-1",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -2008,7 +1754,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::211909469734:role/cdk-hnb659fds-deploy-role-211909469734-eu-north-1",
+                      ":iam::211909469734:role/cdk-hnb659fds-deploy-role-211909469734-eu-central-1",
                     ],
                   ],
                 },
@@ -2033,21 +1779,21 @@ Object {
                         Object {
                           "Ref": "AWS::Partition",
                         },
-                        ":iam::211909469734:role/cdk-hnb659fds-cfn-exec-role-211909469734-eu-west-2",
+                        ":iam::211909469734:role/cdk-hnb659fds-cfn-exec-role-211909469734-eu-west-1",
                       ],
                     ],
                   },
-                  "StackName": "Prod-eu-west-2-fruit-api",
-                  "TemplateConfiguration": "Synth_Output::assembly-TestStack-fruit-api-Prod-eu-west-2/TestStackfruitapiProdeuwest2fruitapi23EE3CBD.template.json.config.json",
-                  "TemplatePath": "Synth_Output::assembly-TestStack-fruit-api-Prod-eu-west-2/TestStackfruitapiProdeuwest2fruitapi23EE3CBD.template.json",
+                  "StackName": "Prod-eu-west-1-fruit-api",
+                  "TemplateConfiguration": "Synth_Output::assembly-TestStack-fruit-api-Prod-eu-west-1/TestStackfruitapiProdeuwest1fruitapiC737DFE7.template.json.config.json",
+                  "TemplatePath": "Synth_Output::assembly-TestStack-fruit-api-Prod-eu-west-1/TestStackfruitapiProdeuwest1fruitapiC737DFE7.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
                     "Name": "Synth_Output",
                   },
                 ],
-                "Name": "Prod-eu-west-2.fruit-api.Prepare",
-                "Region": "eu-west-2",
+                "Name": "Prod-eu-west-1.fruit-api.Prepare",
+                "Region": "eu-west-1",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -2056,7 +1802,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::211909469734:role/cdk-hnb659fds-deploy-role-211909469734-eu-west-2",
+                      ":iam::211909469734:role/cdk-hnb659fds-deploy-role-211909469734-eu-west-1",
                     ],
                   ],
                 },
@@ -2072,10 +1818,10 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "Prod-eu-north-1-fruit-api",
+                  "StackName": "Prod-eu-central-1-fruit-api",
                 },
-                "Name": "Prod-eu-north-1.fruit-api.Deploy",
-                "Region": "eu-north-1",
+                "Name": "Prod-eu-central-1.fruit-api.Deploy",
+                "Region": "eu-central-1",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -2084,7 +1830,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::211909469734:role/cdk-hnb659fds-deploy-role-211909469734-eu-north-1",
+                      ":iam::211909469734:role/cdk-hnb659fds-deploy-role-211909469734-eu-central-1",
                     ],
                   ],
                 },
@@ -2100,10 +1846,10 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "Prod-eu-west-2-fruit-api",
+                  "StackName": "Prod-eu-west-1-fruit-api",
                 },
-                "Name": "Prod-eu-west-2.fruit-api.Deploy",
-                "Region": "eu-west-2",
+                "Name": "Prod-eu-west-1.fruit-api.Deploy",
+                "Region": "eu-west-1",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -2112,7 +1858,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::211909469734:role/cdk-hnb659fds-deploy-role-211909469734-eu-west-2",
+                      ":iam::211909469734:role/cdk-hnb659fds-deploy-role-211909469734-eu-west-1",
                     ],
                   ],
                 },
@@ -3607,7 +3353,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"trivy filesystem --exit-code 1 --no-progress --severity CRITICAL,HIGH --security-checks vuln,config,secret .\\"
+        \\"trivy filesystem --exit-code 1 --no-progress --format cyclonedx --output sbom.json --severity CRITICAL,HIGH --security-checks vuln,config,secret .\\"
       ]
     }
   },
@@ -3800,7 +3546,7 @@ Object {
       "Properties": Object {
         "Code": Object {
           "S3Bucket": "cdk-hnb659fds-assets-dummy-us-east-1",
-          "S3Key": "e509984ecf02efa4d9c571ba92b52d21bbd40006df89da8ff4afb542838fe48b.zip",
+          "S3Key": "code.zip",
         },
         "Environment": Object {
           "Variables": Object {
@@ -3890,7 +3636,7 @@ Object {
       "Properties": Object {
         "Code": Object {
           "S3Bucket": "cdk-hnb659fds-assets-dummy-us-east-1",
-          "S3Key": "e509984ecf02efa4d9c571ba92b52d21bbd40006df89da8ff4afb542838fe48b.zip",
+          "S3Key": "code.zip",
         },
         "Environment": Object {
           "Variables": Object {
@@ -4292,34 +4038,6 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
-    "fruitapiPipelineGamma0Gammauseast1PromoteFromGammaCodePipelineActionRole35C17AC1": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::dummy:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::IAM::Role",
-    },
     "fruitapiPipelineGamma0Gammauswest2PerformanceTestPerformanceTest8C6ACD96": Object {
       "Properties": Object {
         "Artifacts": Object {
@@ -4588,7 +4306,7 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
-    "fruitapiPipelineGamma0Gammauswest2PromoteFromGammaCodePipelineActionRole56FAD24E": Object {
+    "fruitapiPipelineGamma0PromoteToProdCodePipelineActionRoleC0594F5B": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -4835,17 +4553,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "fruitapiPipelineGamma0Gammauswest2PromoteFromGammaCodePipelineActionRole56FAD24E",
-                  "Arn",
-                ],
-              },
-            },
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "fruitapiPipelineGamma0Gammauseast1PromoteFromGammaCodePipelineActionRole35C17AC1",
+                  "fruitapiPipelineGamma0PromoteToProdCodePipelineActionRoleC0594F5B",
                   "Arn",
                 ],
               },
@@ -4905,7 +4613,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":s3:::teststack-support-eu-norteplicationbucketab7ed30a8189be1ca111",
+                      ":s3:::teststack-support-eu-centeplicationbucket2ea6a5e48d5e28fc8bac",
                     ],
                   ],
                 },
@@ -4917,7 +4625,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":s3:::teststack-support-eu-norteplicationbucketab7ed30a8189be1ca111/*",
+                      ":s3:::teststack-support-eu-centeplicationbucket2ea6a5e48d5e28fc8bac/*",
                     ],
                   ],
                 },
@@ -4934,7 +4642,7 @@ Object {
                     Object {
                       "Ref": "AWS::Partition",
                     },
-                    ":iam::211909469734:role/cdk-hnb659fds-deploy-role-211909469734-eu-north-1",
+                    ":iam::211909469734:role/cdk-hnb659fds-deploy-role-211909469734-eu-central-1",
                   ],
                 ],
               },
@@ -4962,7 +4670,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":s3:::teststack-support-eu-westeplicationbucket4aa57ce9205d1a3c5b83",
+                      ":s3:::teststack-support-eu-westeplicationbucket38f2db97e24f75f47670",
                     ],
                   ],
                 },
@@ -4974,7 +4682,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":s3:::teststack-support-eu-westeplicationbucket4aa57ce9205d1a3c5b83/*",
+                      ":s3:::teststack-support-eu-westeplicationbucket38f2db97e24f75f47670/*",
                     ],
                   ],
                 },
@@ -4991,7 +4699,7 @@ Object {
                     Object {
                       "Ref": "AWS::Partition",
                     },
-                    ":iam::211909469734:role/cdk-hnb659fds-deploy-role-211909469734-eu-west-2",
+                    ":iam::211909469734:role/cdk-hnb659fds-deploy-role-211909469734-eu-west-1",
                   ],
                 ],
               },
