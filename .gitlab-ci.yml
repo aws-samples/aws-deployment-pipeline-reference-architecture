@@ -15,7 +15,7 @@ include:
 
 markdownlint:
   stage: build
-  image: node:18.8-bullseye
+  image: public.ecr.aws/docker/library/node:18-bullseye
   script:
   - npm install -g markdownlint-cli
   - markdownlint docs
@@ -28,7 +28,7 @@ mkdocs:
   stage: build
   variables:
     ENABLE_PDF_EXPORT: 1
-  image: python:3.9-bullseye
+  image: public.ecr.aws/docker/library/python:3.9-bullseye
   before_script:
   - apt-get update && apt-get install -y graphviz=2.42.2-5 wget curl libgbm-dev libasound2 xvfb
   - Xvfb :5 -screen 0 1920x1080x8 &
