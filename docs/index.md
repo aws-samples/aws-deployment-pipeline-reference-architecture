@@ -27,6 +27,12 @@ The DPRA covers the following deployment pipelines in detail:
             Manage a fleet of AWS accounts through a pipeline.
         </p>
     </a>
+    <a href="dynamic-configuration-pipeline/motivation.html" class="card disabled">
+        <h3>Dynamic Configuration</h3>
+        <p>
+            Manage dynamic configuration for a workload.
+        </p>
+    </a>
 </div>
 
 ## Architecture
