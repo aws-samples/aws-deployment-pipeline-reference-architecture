@@ -29,6 +29,13 @@ The DPRA covers the following deployment pipelines in detail:
     </a>
 </div>
 
+## Architecture
+
+A typical solution uses multiple or all of the pipelines in combination as follows:
+![Architecture](architecture.drawio)
+
+## Business Outcomes
+
 Modern deployment pipelines create the following business outcomes:
 
 * **Automation** - Everything necessary to build, test, deploy, and run an application should be defined as code - code for pipelines, accounts, networking, infrastructure, applications/services, configuration, data, security, compliance, governance, auditing, and documentation – any aspect inside and outside software systems.

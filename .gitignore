@@ -9,6 +9,8 @@ acat_report/
 jmeter.log
 docs/drawio-exporter/
 .cache/
+*.drawio.bkp
+*.drawio.dtmp
 
 examples/cdk-application-pipeline/.accounts.json
 examples/cdk-application-pipeline/cdk.context.json
