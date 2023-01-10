@@ -1,4 +1,4 @@
-FROM public.ecr.aws/amazoncorretto/amazoncorretto:11-al2022-jdk as build
+FROM public.ecr.aws/amazoncorretto/amazoncorretto:17-al2022-jdk as build
 USER nobody
 WORKDIR /app
 COPY target/fruit-api.jar /app
