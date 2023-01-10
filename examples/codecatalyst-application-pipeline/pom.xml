@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.7.5</version>
+    <version>3.0.1</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.amazonaws.dpri</groupId>
@@ -15,8 +15,8 @@
   <description>Fruits API for DPRI Application Pipeline</description>
 
   <properties>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
     <soapui.endpoint>http://localhost:8080</soapui.endpoint>
     <jmeter.endpoint>http://localhost:8080</jmeter.endpoint>
     <jmeter.threads>10</jmeter.threads>
@@ -38,14 +38,18 @@
       <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+    <dependency>
       <artifactId>snakeyaml</artifactId>
       <groupId>org.yaml</groupId>
       <version>1.33</version>
     </dependency>
     <dependency>
       <groupId>org.springdoc</groupId>
-      <artifactId>springdoc-openapi-ui</artifactId>
-      <version>1.6.14</version>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>2.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.liquibase</groupId>
