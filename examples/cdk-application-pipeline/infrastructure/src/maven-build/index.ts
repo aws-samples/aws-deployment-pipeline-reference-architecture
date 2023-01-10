@@ -1,4 +1,4 @@
-import { BuildSpec, Cache } from 'aws-cdk-lib/aws-codebuild';
+import { BuildSpec, Cache, LinuxBuildImage } from 'aws-cdk-lib/aws-codebuild';
 import { Bucket } from 'aws-cdk-lib/aws-s3';
 import { CodeBuildStep, CodePipelineSource } from 'aws-cdk-lib/pipelines';
 
@@ -15,6 +15,9 @@ export class MavenBuild extends CodeBuildStep {
     const stepProps = {
       input: props.source,
       commands: [],
+      buildEnvironment: {
+        buildImage: LinuxBuildImage.STANDARD_6_0,
+      },
       partialBuildSpec: BuildSpec.fromObject({
         env: {
           variables: {
