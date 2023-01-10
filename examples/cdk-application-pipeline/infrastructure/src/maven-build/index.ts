@@ -25,7 +25,7 @@ export class MavenBuild extends CodeBuildStep {
         phases: {
           install: {
             'runtime-versions': {
-              java: (props.javaRuntime || 'corretto11'),
+              java: (props.javaRuntime || 'corretto17'),
             },
           },
           build: {

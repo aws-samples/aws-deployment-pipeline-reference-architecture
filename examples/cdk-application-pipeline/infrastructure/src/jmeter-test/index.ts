@@ -33,7 +33,7 @@ export class JMeterTest extends CodeBuildStep {
         phases: {
           install: {
             'runtime-versions': {
-              java: (props.javaRuntime || 'corretto11'),
+              java: (props.javaRuntime || 'corretto17'),
             },
           },
           build: { commands: [`mvn \${MAVEN_ARGS} compile jmeter:jmeter jmeter:results -Djmeter.endpoint=\${ENDPOINT} -Djmeter.threads=${props.threads} -Djmeter.duration=${props.duration} -Djmeter.throughput=${props.throughput}`] },
