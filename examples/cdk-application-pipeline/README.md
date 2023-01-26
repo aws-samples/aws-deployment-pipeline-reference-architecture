@@ -19,44 +19,114 @@ This reference implementation contains the following significant components:
 * [ ] **cdk bootstrap with AdministratorAccess** - the default policy used for `cdk bootstrap` is `AdministratorAccess` but should be replaced with a more appropriate policy with least priviledge in your account.
 * [ ] **TLS on HTTP endpoint** - the listener for the sample application uses HTTP instead of HTTPS to avoid having to create new ACM certificates and Route53 hosted zones. This should be replaced in your account with an `HTTPS` listener.
 
-## Pipeline Setup
+## Prerequisites
 
-This reference implementation is intended to be used in your own accounts. By deploying the CDK application in your toolchain account, a new AWS CodeCommit repository will be created and will be seeded with this reference implementation. You'll need to perform the following steps:
+Before beginning this walk through, you should have the following prerequisites:
 
-1. Install prerequisite software: [Node.js](https://nodejs.org/en/)
-2. Install dependencies: `npm install`
-3. Create 4 AWS Accounts: toolchain, beta, gamma, production
-4. Bootstrap the accounts:
+* 4 AWS accounts (https://portal.aws.amazon.com/billing/signup) - with named profiles (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) as: toolchain, beta, gamma and production
+* AWS Command Line Interface (AWS CLI) (https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) installed
+* AWS CDK (https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html) installed
+* Node.js (https://nodejs.org/)(>= 10.13.0, except for versions 13.0.0 - 13.6.0) installed
+*  Apache Maven (https://maven.apache.org/install.html) installed
+* JDK 18.0.2.1 (https://www.oracle.com/java/technologies/javase/jdk18-archive-downloads.html) installed
+* Basic understanding of continuous integration/continuous development (CI/CD) Pipelines
 
-```bash
-./infrastructure/src/bootstrap.ts
-```
+## Initial setup
 
-5. Deploy the pipeline to the toolchain account:
-
-```bash
-# Use the AWS Profile for your toolchain account
-npx cdk deploy --all
-```
-
-8. (OPTIONAL) If you'd like to make changes and deploy with the pipeline, you'll need to [setup Git for AWS CodeCommit](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up.html) and then clone the new CodeCommit repository:
+1. Clone the repository from GitHub (https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture):
 
 ```bash
-git clone https://git-codecommit.us-west-2.amazonaws.com/v1/repos/fruit-api
+git clone https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture.git
+cd aws-deployment-pipeline-reference-architecture/examples/cdk-application-pipeline
 ```
+This reference implementation contains the following significant components:
 
-## Local Development
+* [infrastructure/](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/blob/main/examples/cdk-application-pipeline/infrastructure) - Amazon CDK code necessary to provision the pipeline
+* [src/](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/blob/main/examples/cdk-application-pipeline/src) - Java source code for a simple API that manages a list of fruits in a relational database
 
-Setup [pre-commit](https://pre-commit.com/): `brew install pre-commit && pre-commit install`
-
-To test changes to the CDK code, run:
+2. To build and run the unit tests for the Spring Boot Application, run the following command:
 
 ```bash
-npm test
+mvn package
 ```
 
-To run the Java application locally, run:
+3. To install dependencies run:
+```bash
+npm install
+```
+4. To bootstrap your AWS accounts for AWS CDK, run:
 
 ```bash
-mvn spring-boot:run
+npx ts-node infrastructure/src/bootstrap.ts
 ```
+![BootStrap-1 Diagram](docs/bootstrap-1.png)
+
+Use the keyboard up/down arrow-key to choose the AWS profile for `toolchain`, `beta`, `gamma` and `production` as prompted.
+
+![BootStrap-2 Diagram](docs/bootstrap-2.png)
+
+The bootstraping script shall print out 4 commands as shown above.
+
+5. Run the following commands to bootstrap toolchain environment:
+
+```bash
+npx cdk bootstrap --profile toolchain aws://434237322345/us-east-1
+```
+![BootStrap-3 Diagram](docs/bootstrap-3.png)
+
+6. Run the following commands to bootstrap beta environment:
+
+```bash
+npx cdk bootstrap --profile beta --trust 434237322345 --cloudformation-execution-policies 'arn:aws:iam::aws:policy/AdministratorAccess' aws://564557675581/us-west-2
+```
+7. Run the following commands to bootstrap gamma environment:
+
+```bash
+npx cdk bootstrap --profile gamma --trust 434237322345 --cloudformation-execution-policies \
+ arn:aws:iam::aws:policy/AdministratorAccess aws://742374864928/us-west-2 aws://742374864928/us-east-1
+```
+8. Run the following commands to bootstrap production environment:
+
+```bash
+npx cdk bootstrap --profile production --trust 434237322345 --cloudformation-execution-policies \
+ arn:aws:iam::aws:policy/AdministratorAccess aws://088471062845/us-west-2 aws://088471062845/us-east-1 aws://088471062845/eu-central-1 aws://088471062845/eu-west-1 aws://088471062845/ap-south-1 aws://088471062845/ap-southeast-2
+```
+To learn more about the CDK boostrapping process, see: https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html
+
+## Pipeline Deploy
+
+To deploy the pipeline to the toolchain AWS account run:
+
+```bash
+npx cdk deploy --profile toolchain --all --require-approval never
+```
+![Pipeline-1 Diagram](docs/pipeline-1.png)
+
+Using AWS management console, login to `toolchain` account and click [AWS CodePipeline](https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/home?region=us-east-1) to check the different stages of the pipeline.
+
+
+![Fruit API Diagram](docs/fruit-api.png)
+
+Here is the deployment to `Beta` environment.
+
+![Beta-0 Diagram](docs/beta-0.png)
+
+Here is the deployment to `Gamma` environment.
+
+![Gamma-0 Diagram](docs/gamma-0.png)
+
+Click the Review button to manually approve the *PromoteToProd.*
+
+![Prod-0 Diagram](docs/prod-0.png)
+
+Here is the deployment to `Prod-1` environment.
+
+![Prod-1 Diagram](docs/prod-1.png)
+
+Here is the deployment to `Prod-2` environment.
+
+![Prod-2 Diagram](docs/prod-2.png)
+
+Here is the application running in production in us-east-1 region.
+
+![App Diagram](docs/app-1.png)
