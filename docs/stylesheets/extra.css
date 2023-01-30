@@ -75,6 +75,8 @@
 
 .card.disabled::after {
   content: "🛠 under development 🛠";
+  font-size: smaller;
+  font-weight: bold;
 }
 
 .card.disabled:hover {
