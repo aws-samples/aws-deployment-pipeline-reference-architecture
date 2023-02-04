@@ -1,6 +1,6 @@
 # Overview
 
-Reference implementation of application pipeline from DPRA that includes a CI/CD pipeline to build an application and deploy via AWS CloudFormation across 3 different environment accounts.
+Reference implementation of application pipeline from DPRA that includes a CI/CD pipeline to build an application and deploy via AWS CloudFormation across different accounts for each environment.
 
 ![Pipeline Diagram](docs/pipeline.png)
 
@@ -16,7 +16,6 @@ This reference implementation contains the following significant components:
 > **Warning**
 > This reference implementation has intentionally not followed the following [AWS Well-Architected](https://aws.amazon.com/architecture/well-architected/) best practices to make it accessible by a wider range of customers. Be sure to address these before using this code for any workloads in your own environment:
 
-* [ ] **cdk bootstrap with AdministratorAccess** - the default policy used for `cdk bootstrap` is `AdministratorAccess` but should be replaced with a more appropriate policy with least priviledge in your account.
 * [ ] **TLS on HTTP endpoint** - the listener for the sample application uses HTTP instead of HTTPS to avoid having to create new ACM certificates and Route53 hosted zones. This should be replaced in your account with an `HTTPS` listener.
 
 ## Prerequisites
@@ -138,3 +137,26 @@ Here is the deployment to `Prod-2` environment.
 Here is the application running in production in us-east-1 region.
 
 ![App Diagram](docs/app-1.png)
+
+(OPTIONAL) If you'd like to make changes and deploy with the pipeline, you'll need to [setup Git for AWS CodeCommit](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up.html) and then clone the new CodeCommit repository:
+
+```bash
+git clone https://git-codecommit.us-west-2.amazonaws.com/v1/repos/fruit-api
+```
+
+To fix failed Trivy scans, see: https://www.mojohaus.org/versions/versions-maven-plugin/index.html or https://docs.npmjs.com/packages-and-modules
+
+## Pipeline Teardown
+
+The cleanup task will take these actions:
+
+1. Destroy the CDK app using: `npx cdk --profile dpra-toolchain destroy --all`
+2. Empty and remove the CDKToolkit S3 staging buckets in all environments
+2. Empty and remove the CDKToolkit ECR repository in all environments
+3. Delete the CDKToolkit stacks in all environments
+
+```bash
+./infrastructure/src/cleanup.ts
+```
+
+NOTE: account removal is left to the account owner.

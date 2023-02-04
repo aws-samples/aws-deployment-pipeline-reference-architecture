@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node 
+#!/usr/bin/env ts-node
 
 import * as child from 'child_process';
 import { STS } from '@aws-sdk/client-sts';
@@ -25,45 +25,19 @@ async function main() {
   // bootstrap toolchain
   const toolchainRegion = await getRegion(accounts.toolchain!.profile);
   const toolchainAccountId = accounts.toolchain!.accountId;
-  commands.push(`npx cdk bootstrap --profile ${accounts.toolchain!.profile} aws://${toolchainAccountId}/${toolchainRegion}`);
+  commands.push(`npx cdk bootstrap --profile ${accounts.toolchain!.profile} --cloudformation-execution-policies USES_DpraCfnExecutionPolicy_IN_TEMPLATE --template ./infrastructure/src/dpra_bootstrap_template.yaml aws://${toolchainAccountId}/${toolchainRegion}`);
 
-  const policyArn = await prompts.text({
-    type: 'text',
-    name: 'policyArn',
-    message: 'Managed Policy ARN for CloudFormation Excecution',
-    initial: 'arn:aws:iam::aws:policy/AdministratorAccess',
-  }) as unknown as string;
-  'arn:aws:iam::aws:policy/AdministratorAccess';
   for (let account of [Beta, Gamma, Prod]) {
     const accountRegions = account.waves.flatMap(w => w.map(r => `aws://${account.account?.accountId}/${r}`)).join(' ');
-    commands.push(`npx cdk bootstrap --profile ${account.account!.profile} --trust ${toolchainAccountId} --cloudformation-execution-policies ${policyArn} ${accountRegions}`);
+    commands.push(`npx cdk bootstrap --profile ${account.account!.profile} --trust ${toolchainAccountId} --cloudformation-execution-policies USES_DpraCfnExecutionPolicy_IN_TEMPLATE --template ./infrastructure/src/dpra_bootstrap_template.yaml ${accountRegions}`);
   }
 
-
-  if (process.env.npm_config_exec) {
-    if (policyArn === 'arn:aws:iam::aws:policy/AdministratorAccess') {
-      const confirmed = await prompts.confirm({
-        type: 'confirm',
-        name: 'confirm',
-        message: 'You chose the `AdministratorAccess` policy which allows the trusted account full access to this account. Are you sure you want to do this?',
-        initial: false,
-      }) as unknown as boolean;
-      if (!confirmed) {
-        throw new Error();
-      }
-    }
-    for (let command of commands) {
-      console.log(command);
-      const commandParts = command.split(/\s+/);
-      const resp = child.spawnSync(commandParts[0], commandParts.slice(1), { stdio: 'inherit' });
-      if (resp.status !== 0) {
-        throw new Error(`${resp.status} - Error`);
-      }
-    }
-  } else {
-    console.log('\nRun the following commands to bootstrap your environments:\n');
-    for (let command of commands) {
-      console.log(command);
+  for (let command of commands) {
+    console.log(command);
+    const commandParts = command.split(/\s+/);
+    const resp = child.spawnSync(commandParts[0], commandParts.slice(1), { stdio: 'inherit' });
+    if (resp.status !== 0) {
+      throw new Error(`${resp.status} - Error`);
     }
   }
 }
