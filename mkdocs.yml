@@ -67,7 +67,7 @@ plugins:
       drawio_args:
       - --no-sandbox
   - with-pdf:
-      author: AWS Professional Services
+      author: AWS Global Services Security
       copyright: Copyright © Amazon Web Services, Inc. and/or its affiliates. All rights reserved.
       cover_subtitle: "September 2022"
       enabled_if_env: ENABLE_PDF_EXPORT
