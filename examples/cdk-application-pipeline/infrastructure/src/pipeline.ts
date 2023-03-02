@@ -180,9 +180,11 @@ class Deployment extends Stage {
   constructor(scope: Construct, environmentName: string, env?: Environment) {
     super(scope, `${environmentName}-${env!.region!}`, { env });
     const appName = this.node.tryGetContext('appName');
+    const solutionCode = this.node.tryGetContext('solutionCode');
     const stack = new DeploymentStack(this, appName, {
       deploymentConfigName: this.node.tryGetContext('deploymentConfigurationName'),
       natGateways: this.node.tryGetContext('natGateways'),
+      description: `${appName} ${environmentName} deployment (${solutionCode})`,
     });
     this.apiUrl = stack.apiUrl;
 

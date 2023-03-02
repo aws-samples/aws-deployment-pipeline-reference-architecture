@@ -2,7 +2,8 @@
   "app": "npx ts-node -P tsconfig.json --prefer-ts-exts infrastructure/src/main.ts",
   "context": {
     "deployMode": "pipeline",
-    "deploymentConfigurationName": "CodeDeployDefault.ECSCanary10Percent5Minutes"
+    "deploymentConfigurationName": "CodeDeployDefault.ECSCanary10Percent5Minutes",
+    "solutionCode": "dpra-app-1tub7qkbd"
   },
   "output": "cdk.out",
   "watch": {

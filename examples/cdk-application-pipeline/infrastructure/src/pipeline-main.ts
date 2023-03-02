@@ -6,7 +6,9 @@ export const accounts = Accounts.load();
 
 const appName = 'fruit-api';
 const app = new App({ context: { appName } });
+const solutionCode = app.node.tryGetContext('solutionCode');
 new PipelineStack(app, `${appName}-pipeline`, {
+  description: `${appName} pipeline (${solutionCode})`,
   env: {
     account: accounts.toolchain!.accountId,
     region: process.env.CDK_DEFAULT_REGION,
