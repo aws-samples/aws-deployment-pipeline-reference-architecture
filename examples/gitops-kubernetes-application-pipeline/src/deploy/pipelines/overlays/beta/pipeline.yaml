@@ -3,7 +3,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: buildpack-build
-  namespace: tekton-pipelines
+  namespace: tekton-runtime
 spec:
   params:
     - name: repository

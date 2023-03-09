@@ -3,7 +3,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: flux-clone
-  namespace: tekton-pipelines
+  namespace: tekton-runtime
 spec:
   workspaces:
     - name: output

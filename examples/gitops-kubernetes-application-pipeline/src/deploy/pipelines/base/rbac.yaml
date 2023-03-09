@@ -3,14 +3,14 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: flux-tekton-sa
-  namespace: tekton-pipelines
+  namespace: tekton-runtime
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: snyk-eventlistener-binding
-  namespace: tekton-pipelines
+  namespace: tekton-runtime
 subjects:
   - kind: ServiceAccount
     name: flux-tekton-sa
@@ -27,7 +27,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: flux-tekton-sa
-    namespace: tekton-pipelines
+    namespace: tekton-runtime
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -38,7 +38,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: build-pipeline
-  namespace: tekton-pipelines
+  namespace: tekton-runtime
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -65,4 +65,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: build-pipeline
-    namespace: tekton-pipelines
+    namespace: tekton-runtime

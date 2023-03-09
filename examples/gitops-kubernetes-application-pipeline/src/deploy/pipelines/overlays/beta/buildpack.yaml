@@ -3,7 +3,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: buildpacks
-  namespace: tekton-pipelines
+  namespace: tekton-runtime
   labels:
     app.kubernetes.io/version: "0.3"
   annotations:

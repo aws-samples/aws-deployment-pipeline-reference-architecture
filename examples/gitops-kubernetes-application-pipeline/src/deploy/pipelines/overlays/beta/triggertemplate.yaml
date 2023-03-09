@@ -3,7 +3,7 @@ apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: flux-triggertemplate
-  namespace: tekton-pipelines
+  namespace: tekton-runtime
 spec:
   params:
     - name: revision

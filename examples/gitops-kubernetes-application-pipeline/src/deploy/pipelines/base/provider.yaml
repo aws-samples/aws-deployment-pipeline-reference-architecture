@@ -6,4 +6,4 @@ metadata:
   namespace: flux-system
 spec:
   type: generic
-  address: http://el-flux.tekton-pipelines.svc.cluster.local:8080
+  address: http://el-flux.tekton-runtime.svc.cluster.local:8080
