@@ -39,6 +39,8 @@ kind: ServiceAccount
 metadata:
   name: build-pipeline
   namespace: tekton-runtime
+secrets:
+  - name: ci-template-registry-secret
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1

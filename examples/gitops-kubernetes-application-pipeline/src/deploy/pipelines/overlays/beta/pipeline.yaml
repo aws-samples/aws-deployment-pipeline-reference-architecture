@@ -28,11 +28,24 @@ spec:
           value: $(params.revision)
         - name: namespace
           value: $(params.namespace)
+    - name: snyk-scan
+      runAfter:
+        - fetch-repository
+      taskRef:
+        name: snyk-scan
+      workspaces:
+        - name: source
+          workspace: source-workspace
+      params:
+        - name: snyk-token
+          value: yourToken
+        - name: target-directory
+          value: /examples/gitops-kubernetes-application-pipeline/src
     - name: buildpacks
       taskRef:
         name: buildpacks
       runAfter:
-        - fetch-repository
+        - snyk-scan
       workspaces:
         - name: source
           workspace: source-workspace

@@ -4,6 +4,7 @@ resources:
   - ../../base
   - buildpack.yaml
   - clone.yaml
+  - scan.yaml
   - triggerbinding.yaml
   - triggertemplate.yaml
   - pipeline.yaml
