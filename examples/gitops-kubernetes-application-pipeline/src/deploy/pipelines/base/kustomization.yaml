@@ -7,3 +7,4 @@ resources:
   - provider.yaml
   - eventlistener.yaml
   - pvc.yaml
+  - registry-secret.yaml

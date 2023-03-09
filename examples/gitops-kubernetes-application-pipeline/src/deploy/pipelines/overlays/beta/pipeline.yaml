@@ -40,7 +40,7 @@ spec:
         - name: APP_IMAGE
           value: $(tasks.fetch-repository.results.imageTag)
         - name: SOURCE_SUBPATH
-          value: examples/gitops-kubernetes-application-pipeline
+          value: /examples/gitops-kubernetes-application-pipeline/src
         - name: BUILDER_IMAGE
           value: paketobuildpacks/builder:base
     - name: display-results
