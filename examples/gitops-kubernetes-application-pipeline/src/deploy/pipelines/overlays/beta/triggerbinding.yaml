@@ -1,0 +1,14 @@
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: flux-triggerbinding
+  namespace: tekton-pipelines
+spec:
+  params:
+  - name: revision
+    value: $(body.metadata.revision)
+  - name: repository
+    value: $(body.involvedObject.name)
+  - name: namespace
+    value: $(body.involvedObject.namespace)

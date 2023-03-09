@@ -1,0 +1,14 @@
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: flux
+  namespace: tekton-pipelines
+spec:
+  serviceAccountName: flux-tekton-sa
+  triggers:
+    - name: flux-triggerbinding
+      bindings:
+        - ref: flux-triggerbinding
+      template:
+        ref: flux-triggertemplate
