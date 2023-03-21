@@ -1,0 +1,22 @@
+appconfig-agent:
+  enabled: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: without-classification
+
+appconfig:
+  features:
+    classification: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: with-classification
+
+appconfig:
+  features:
+    classification: true

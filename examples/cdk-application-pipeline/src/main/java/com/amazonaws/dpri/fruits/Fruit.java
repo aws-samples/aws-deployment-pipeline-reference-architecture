@@ -3,6 +3,8 @@ package com.amazonaws.dpri.fruits;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,11 +24,18 @@ public class Fruit {
    */
   private String name;
 
+  /**
+   * Classification of the fruit
+   */
+  @Enumerated(EnumType.STRING)
+  private FruitClassification classification;
+
   Fruit() {
   }
 
-  Fruit(final String n) {
+  Fruit(final String n, final FruitClassification c) {
     this.name = n;
+    this.classification = c;
   }
 
   /**
@@ -62,6 +71,23 @@ public class Fruit {
   }
 
   /**
+   * Get the current classification.
+   * @return classification
+   */
+  public FruitClassification getClassification() {
+    return this.classification;
+  }
+
+
+  /**
+   * Set classification to new value.
+   * @param newClassification
+   */
+  public void setClassification(final FruitClassification newClassification) {
+    this.classification = newClassification;
+  }
+
+  /**
    * Fruits are equal if they have the same id and name.
    */
   @Override
@@ -75,7 +101,8 @@ public class Fruit {
     }
     Fruit fruit = (Fruit) o;
     return Objects.equals(this.id, fruit.id)
-        && Objects.equals(this.name, fruit.name);
+        && Objects.equals(this.name, fruit.name)
+        && Objects.equals(this.classification, fruit.classification);
   }
 
   /**
@@ -83,6 +110,6 @@ public class Fruit {
    */
   @Override
   public int hashCode() {
-    return Objects.hash(this.id, this.name);
+    return Objects.hash(this.id, this.name, this.classification);
   }
 }

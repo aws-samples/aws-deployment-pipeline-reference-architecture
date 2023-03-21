@@ -1,6 +1,7 @@
 import { CfnOutput, Environment, Stack, StackProps, Stage, Tags } from 'aws-cdk-lib';
 import { BuildSpec } from 'aws-cdk-lib/aws-codebuild';
 import { BlockPublicAccess, Bucket, BucketEncryption } from 'aws-cdk-lib/aws-s3';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { CodePipeline, CodeBuildStep, ManualApprovalStep, StageDeployment, Wave } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
 
@@ -91,11 +92,11 @@ export class PipelineStack extends Stack {
         phases: {
           install: {
             'runtime-versions': {
-              nodejs: 14,
+              nodejs: 16,
             },
           },
           build: {
-            commands: ['yarn install --frozen-lockfile', 'npm run build', 'npx cdk synth'],
+            commands: ['yarn install --frozen-lockfile', 'npm test', 'npm run build'],
           },
         },
         version: '0.2',
@@ -181,7 +182,13 @@ class Deployment extends Stage {
     super(scope, `${environmentName}-${env!.region!}`, { env });
     const appName = this.node.tryGetContext('appName');
     const solutionCode = this.node.tryGetContext('solutionCode');
+    const workloadName = this.node.tryGetContext('workloadName');
+    var appConfigRoleArn;
+    if(workloadName) {
+      appConfigRoleArn = StringParameter.valueFromLookup(scope, `/${workloadName}/dynamic_config_role-${environmentName.toLowerCase()}`)
+    }
     const stack = new DeploymentStack(this, appName, {
+      appConfigRoleArn,
       deploymentConfigName: this.node.tryGetContext('deploymentConfigurationName'),
       natGateways: this.node.tryGetContext('natGateways'),
       description: `${appName} ${environmentName} deployment (${solutionCode})`,

@@ -51,3 +51,56 @@ databaseChangeLog:
            - column:
                name: name
                value: Grape
+
+   - changeSet:
+       id: "2"
+       author: AWS
+       changes:
+       - addColumn:
+           tableName: fruit
+           columns:
+           - column:
+               name: classification
+               type: varchar(250)
+               constraints:
+                 nullable: true
+
+       - update:
+           tableName: fruit
+           columns:
+           - column:
+               name: classification
+               value: pome
+           where: name='Apple'
+
+       - update:
+           tableName: fruit
+           columns:
+           - column:
+               name: classification
+               value: berry
+           where: name='Orange'
+
+       - update:
+           tableName: fruit
+           columns:
+           - column:
+               name: classification
+               value: berry
+           where: name='Banana'
+
+       - update:
+           tableName: fruit
+           columns:
+           - column:
+               name: classification
+               value: drupe
+           where: name='Cherry'
+
+       - update:
+           tableName: fruit
+           columns:
+           - column:
+               name: classification
+               value: berry
+           where: name='Grape'

@@ -5,6 +5,7 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import { FlowLog, FlowLogResourceType, Port } from 'aws-cdk-lib/aws-ec2';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
 import { AssetImage, AwsLogDriver, Secret } from 'aws-cdk-lib/aws-ecs';
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Credentials, DatabaseClusterEngine, DatabaseSecret, ServerlessCluster } from 'aws-cdk-lib/aws-rds';
 import { Construct } from 'constructs';
@@ -12,6 +13,7 @@ import { Construct } from 'constructs';
 export interface DeploymentProps extends StackProps {
   deploymentConfigName?: string;
   natGateways?: number;
+  appConfigRoleArn?: string;
 }
 
 export class DeploymentStack extends Stack {
@@ -57,6 +59,7 @@ export class DeploymentStack extends Stack {
     if (props?.deploymentConfigName) {
       deploymentConfig = EcsDeploymentConfig.fromEcsDeploymentConfigName(this, 'DeploymentConfig', props.deploymentConfigName);
     }
+    const appConfigEnabled = props?.appConfigRoleArn !== undefined && props.appConfigRoleArn.length > 0;
     const service = new ApplicationLoadBalancedCodeDeployedFargateService(this, 'Api', {
       cluster,
       capacityProviderStrategies: [
@@ -85,6 +88,9 @@ export class DeploymentStack extends Stack {
         },
         environment: {
           SPRING_DATASOURCE_URL: `jdbc:mysql://${db.clusterEndpoint.hostname}:${db.clusterEndpoint.port}/${dbName}`,
+          APPCONFIG_AGENT_APPLICATION: this.node.tryGetContext('workloadName'),
+          APPCONFIG_AGENT_ENVIRONMENT: this.node.tryGetContext('environmentName'),
+          APPCONFIG_AGENT_ENABLED: appConfigEnabled.toString(),
         },
       },
       deregistrationDelay: Duration.seconds(5),
@@ -105,6 +111,29 @@ export class DeploymentStack extends Stack {
         expectedValue: 5,
       }],
     });
+
+    if (appConfigEnabled) {
+      service.taskDefinition.addContainer('appconfig-agent', {
+        image: ecs.ContainerImage.fromRegistry('public.ecr.aws/aws-appconfig/aws-appconfig-agent:2.x'),
+        essential: false,
+        logging: AwsLogDriver.awsLogs({
+          logGroup: appLogGroup,
+          streamPrefix: 'service',
+        }),
+        environment: {
+          SERVICE_REGION: this.region,
+          ROLE_ARN: props!.appConfigRoleArn!,
+          ROLE_SESSION_NAME: appName,
+          LOG_LEVEL: 'info',
+        },
+        portMappings: [{ containerPort: 2772 }],
+      });
+
+      service.taskDefinition.addToTaskRolePolicy(new PolicyStatement({
+        actions: ['sts:AssumeRole'],
+        resources: [props!.appConfigRoleArn!],
+      }));
+    }
 
     service.service.connections.allowTo(db, Port.tcp(db.clusterEndpoint.port));
 
