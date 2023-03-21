@@ -15,38 +15,46 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.annotation.RequestScope;
 
 /**
  * API controller for fruits.
  */
 @RestController
-public final class FruitController {
+@RequestScope
+public class FruitController {
     /**
      * JPA repository for fruits.
      */
     private final FruitRepository repository;
 
-    FruitController(final FruitRepository r) {
+    /**
+     * Logic to map between entities and DTOs
+     */
+    private final FruitMapper mapper;
+
+    FruitController(final FruitRepository r, final FruitMapper m) {
         this.repository = r;
+        this.mapper = m;
     }
 
     @GetMapping("/api/fruits")
     List<FruitDTO> all() {
         return repository.findAll()
                 .stream()
-                .map(this::convertToDto)
+                .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @PostMapping("/api/fruits")
     FruitDTO newFruit(@RequestBody final FruitDTO fruit) {
-        return convertToDto(repository.save(convertToEntity(fruit)));
+        return mapper.toDto(repository.save(mapper.toEntity(fruit)));
     }
 
     @GetMapping("/api/fruits/{id}")
     FruitDTO one(@PathVariable final Long id) {
         return repository.findById(id)
-                .map(this::convertToDto)
+                .map(mapper::toDto)
                 .orElseThrow(() -> new FruitNotFoundException(id));
     }
 
@@ -54,35 +62,13 @@ public final class FruitController {
     FruitDTO replaceFruit(
             @RequestBody final FruitDTO newFruit,
             @PathVariable final Long id) {
-        Fruit entity = repository.findById(id)
-                .map(fruit -> {
-                    fruit.setName(newFruit.getName());
-                    return repository.save(fruit);
-                })
-                .orElseGet(() -> {
-                    newFruit.setId(id);
-                    return repository.save(convertToEntity(newFruit));
-                });
-        return convertToDto(entity);
+        newFruit.setId(id);
+        return mapper.toDto(repository.save(mapper.toEntity(newFruit)));
     }
 
     @DeleteMapping("/api/fruits/{id}")
     void deleteFruit(@PathVariable final Long id) {
         repository.deleteById(id);
-    }
-
-    FruitDTO convertToDto(final Fruit fruit) {
-        FruitDTO dto = new FruitDTO();
-        dto.setId(fruit.getId());
-        dto.setName(fruit.getName());
-        return dto;
-    }
-
-    Fruit convertToEntity(final FruitDTO fruit) {
-        Fruit entity = new Fruit();
-        entity.setId(fruit.getId());
-        entity.setName(fruit.getName());
-        return entity;
     }
 }
 
@@ -95,7 +81,6 @@ class FruitNotFoundAdvice {
     String fruitNotFoundHandler(final FruitNotFoundException ex) {
         return ex.getMessage();
     }
-
 }
 
 class FruitNotFoundException extends RuntimeException {

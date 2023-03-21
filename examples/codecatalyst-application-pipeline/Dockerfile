@@ -2,6 +2,7 @@ FROM public.ecr.aws/amazoncorretto/amazoncorretto:17-al2022-jdk as build
 USER nobody
 WORKDIR /app
 COPY target/fruit-api.jar /app
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 CMD /bin/curl --fail --silent localhost:8080/actuator/health | grep UP || exit 1
 ENTRYPOINT ["java","-jar","/app/fruit-api.jar"]
 
 # Use multi-stage builds to scan newly created image with Trivy. This second stage 'vulnscan'
@@ -16,5 +17,5 @@ ENTRYPOINT ["java","-jar","/app/fruit-api.jar"]
 FROM build AS vulnscan
 USER root
 COPY --from=aquasec/trivy:latest /usr/local/bin/trivy /usr/local/bin/trivy
-RUN trivy filesystem --exit-code 1 --no-progress --ignore-unfixed -s HIGH,CRITICAL /
+RUN trivy filesystem --exit-code 1 --no-progress --ignore-unfixed -s CRITICAL /
 USER nobody

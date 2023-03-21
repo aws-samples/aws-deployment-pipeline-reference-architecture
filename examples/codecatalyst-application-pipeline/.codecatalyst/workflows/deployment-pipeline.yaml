@@ -32,7 +32,7 @@ Actions:
               SuccessCriteria:
                 Vulnerabilities:
                   Severity: HIGH
-                Number: 0
+                  Number: 0
       Package:
         Identifier: aws/build@v1
         Inputs:

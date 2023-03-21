@@ -8,14 +8,24 @@ import { DeploymentStack } from '../src/deployment';
 function synthesisMessageToString(sm: SynthesisMessage): string {
   return `${sm.entry.data} [${sm.id}]`;
 }
+expect.addSnapshotSerializer({
+  test: (val) => typeof val === 'string' && val.match(/^dummy.dkr.ecr.us-east.1/) !== null,
+  serialize: () => '"dummy-ecr-image"',
+});
+expect.addSnapshotSerializer({
+  test: (val) => typeof val === 'string' && val.match(/^[a-f0-9]+\.zip$/) !== null,
+  serialize: () => '"code.zip"',
+});
 
-describe('Deployment', () => {
+describe('cdk-nag', () => {
   let stack: DeploymentStack;
   let app: App;
 
-  beforeEach(() => {
+  beforeAll(() => {
     const appName = 'fruit-api';
-    app = new App({ context: { appName } });
+    const workloadName = 'food';
+    const environmentName = 'unit-test';
+    app = new App({ context: { appName, environmentName, workloadName } });
     stack = new DeploymentStack(app, 'TestStack', {
       env: {
         account: 'dummy',
@@ -112,15 +122,6 @@ describe('Deployment', () => {
     ]);
   });
 
-  expect.addSnapshotSerializer({
-    test: (val) => typeof val === 'string' && val.match(/^dummy.dkr.ecr.us-east.1/) !== null,
-    serialize: () => '"dummy-ecr-image"',
-  });
-  expect.addSnapshotSerializer({
-    test: (val) => typeof val === 'string' && val.match(/^[a-f0-9]+\.zip$/) !== null,
-    serialize: () => '"code.zip"',
-  });
-
   test('Snapshot', () => {
     const template = Template.fromStack(stack);
     expect(template.toJSON()).toMatchSnapshot();
@@ -140,5 +141,106 @@ describe('Deployment', () => {
       Match.stringLikeRegexp('AwsSolutions-.*'),
     ).map(synthesisMessageToString);
     expect(warnings).toHaveLength(0);
+  });
+});
+
+describe('Deployment without AppConfig', () => {
+  let stack: DeploymentStack;
+  let app: App;
+
+  beforeAll(() => {
+    const appName = 'fruit-api';
+    const environmentName = 'unit-test';
+    app = new App({ context: { appName, environmentName } });
+    stack = new DeploymentStack(app, 'TestStack', {
+      env: {
+        account: 'dummy',
+        region: 'us-east-1',
+      },
+    });
+  });
+
+  test('Snapshot', () => {
+    const template = Template.fromStack(stack);
+    expect(template.toJSON()).toMatchSnapshot();
+  });
+  test('taskdef', () => {
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties('AWS::ECS::TaskDefinition', {
+      ContainerDefinitions: [
+        {
+          Environment: [{
+            Name: 'SPRING_DATASOURCE_URL',
+          }, {
+            Name: 'APPCONFIG_AGENT_APPLICATION',
+          }, {
+            Name: 'APPCONFIG_AGENT_ENVIRONMENT',
+            Value: 'unit-test',
+          }, {
+            Name: 'APPCONFIG_AGENT_ENABLED',
+            Value: 'false',
+          }],
+        },
+      ],
+    });
+  });
+});
+
+describe('Deployment with AppConfig', () => {
+  let stack: DeploymentStack;
+  let app: App;
+
+  beforeAll(() => {
+    const appName = 'fruit-api';
+    const workloadName = 'food';
+    const environmentName = 'unit-test';
+    app = new App({ context: { appName, environmentName, workloadName } });
+    stack = new DeploymentStack(app, 'TestStack', {
+      appConfigRoleArn: 'dummy-role-arn',
+      env: {
+        account: 'dummy',
+        region: 'us-east-1',
+      },
+    });
+  });
+
+  test('Snapshot', () => {
+    const template = Template.fromStack(stack);
+    expect(template.toJSON()).toMatchSnapshot();
+  });
+  test('taskdef', () => {
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties('AWS::ECS::TaskDefinition', {
+      ContainerDefinitions: [
+        {
+          Environment: [{
+            Name: 'SPRING_DATASOURCE_URL',
+          }, {
+            Name: 'APPCONFIG_AGENT_APPLICATION',
+            Value: 'food',
+          }, {
+            Name: 'APPCONFIG_AGENT_ENVIRONMENT',
+            Value: 'unit-test',
+          }, {
+            Name: 'APPCONFIG_AGENT_ENABLED',
+            Value: 'true',
+          }],
+        },
+        {
+          Environment: [{
+            Name: 'SERVICE_REGION',
+            Value: 'us-east-1',
+          }, {
+            Name: 'ROLE_ARN',
+            Value: 'dummy-role-arn',
+          }, {
+            Name: 'ROLE_SESSION_NAME',
+          }, {
+            Name: 'LOG_LEVEL',
+            Value: 'info',
+          }],
+        },
+      ],
+    });
   });
 });

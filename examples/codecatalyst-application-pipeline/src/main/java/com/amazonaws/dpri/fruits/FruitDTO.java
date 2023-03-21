@@ -15,6 +15,11 @@ public class FruitDTO {
   private String name;
 
   /**
+   * Classification of the fruit.
+   */
+  private FruitClassification classification;
+
+  /**
    * Get the current id.
    * @return id
    */
@@ -31,6 +36,14 @@ public class FruitDTO {
   }
 
   /**
+   * Get the current classification.
+   * @return classification
+   */
+  public FruitClassification getClassification() {
+    return this.classification;
+  }
+
+  /**
    * Set id to new value.
    * @param newId
    */
@@ -44,5 +57,13 @@ public class FruitDTO {
    */
   public void setName(final String newName) {
     this.name = newName;
+  }
+
+  /**
+   * Set classification to new value.
+   * @param newClassification
+   */
+  public void setClassification(final FruitClassification newClassification) {
+    this.classification = newClassification;
   }
 }

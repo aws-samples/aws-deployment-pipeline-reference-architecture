@@ -44,10 +44,10 @@ Developers need fast-feedback for potential issues with their code. Automation s
 ???+ required "Test Source Code"
     The test source code can be found in the [src/test/java](https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/codecatalyst-application-pipeline/src/test/java) directory. It is intended to serve only as a reference and should be replaced by your own test source code.
 
-    The reference implementation includes source code for unit, integration and end-to-end testing. Unit and integration tests can be found in `src/test/java`. For example, `FruitControllerTest.java` performs unit tests of each API path with the [JUnit](https://junit.org/) testing library:
+    The reference implementation includes source code for unit, integration and end-to-end testing. Unit and integration tests can be found in `src/test/java`. For example, `FruitControllerWithoutClassificationTest.java` performs unit tests of each API path with the [JUnit](https://junit.org/) testing library:
 
     <!--codeinclude-->
-    [](../../examples/codecatalyst-application-pipeline/src/test/java/com/amazonaws/dpri/fruits/FruitControllerTest.java) block:shouldReturnList
+    [](../../examples/codecatalyst-application-pipeline/src/test/java/com/amazonaws/dpri/fruits/FruitControllerWithoutClassificationTest.java) block:shouldReturnList
     <!--/codeinclude-->
 
     Acceptance tests are preformed with [SoapUI](https://www.soapui.org/) and are defined in `fruit-api-soapui-project.xml`. They are executed by [Maven](https://maven.apache.org/) using plugins in `pom.xml`.
