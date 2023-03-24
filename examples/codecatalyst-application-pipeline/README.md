@@ -1,6 +1,6 @@
 # Overview
 
-This project includes a workflow based upon the [AWS Deployment Pipeline Reference Architecture](https://pipelines.devops.aws.dev/)(DRPA). The workflow builds an application and deploys via AWS CDK across 3 different environment accounts. The application is a Java Spring Boot API that runs as an Amazon ECS Service with an Amazon Aurora database. The deployment pipeline deploys the application across three Amazon CodeCatalyst environments.
+This project includes a workflow based upon the [AWS Deployment Pipeline Reference Architecture](https://aws-samples.github.io/aws-deployment-pipeline-reference-architecture)(DRPA). The workflow builds an application and deploys via AWS CDK across 3 different environment accounts. The application is a Java Spring Boot API that runs as an Amazon ECS Service with an Amazon Aurora database. The deployment pipeline deploys the application across three Amazon CodeCatalyst environments.
 
 ![deployment](https://d3b0zi1lejdhye.cloudfront.net/application-deployment-pipeline/deployment.png)
 

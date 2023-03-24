@@ -4,7 +4,7 @@ The **Deployment Pipeline Reference Architecture (DPRA)** describes best practic
 
 Each type of deployment pipeline also includes one or more reference implementations with source code that defines a functional pipeline based on the reference architecture.
 
-To learn more, visit [https://pipelines.devops.aws.dev](https://pipelines.devops.aws.dev)
+To learn more, visit [https://aws-samples.github.io/aws-deployment-pipeline-reference-architecture](https://aws-samples.github.io/aws-deployment-pipeline-reference-architecture)
 
 ## Local Development
 
