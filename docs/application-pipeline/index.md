@@ -224,7 +224,7 @@ digraph G {
 ???+ recommended "Database Deploy"
     Apply changes to the beta database using the *Database Source Code*. Changes should be made in a manner that [ensures rollback safety](https://aws.amazon.com/builders-library/ensuring-rollback-safety-during-deployments/). Best practice is to connect to the beta database through [cross-account IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) and [IAM database authentication for RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html) rather than long lived database credentials. If database credentials must be used, then they should be loaded from a secret manager such as [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/). Changes to the database should be incremental, only applying the changes since the prior deployment. Examples of tools that apply incremental database changes include but are not limited to [Liquibase](https://www.liquibase.org/), [VS Database Project](https://learn.microsoft.com/en-us/aspnet/web-forms/overview/deployment/web-deployment-in-the-enterprise/deploying-database-projects), and [Flyway](https://www.red-gate.com/products/flyway/).
 
-    Test data management is beyond the scope of this reference architecuture but should be addressed during `Databse Deploy` in preparation of subsequent testing activity.
+    Test data management is beyond the scope of this reference architecuture but should be addressed during `Database Deploy` in preparation of subsequent testing activity.
 
 
     ```graphviz dot db.png
