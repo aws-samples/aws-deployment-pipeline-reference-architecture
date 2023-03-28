@@ -38,7 +38,7 @@ spec:
           workspace: source-workspace
       params:
         - name: snyk-token
-          value: yourToken
+          value: dabe7d01-8f91-42c0-89c1-e86e0351177e
         - name: target-directory
           value: /examples/gitops-kubernetes-application-pipeline/src
     - name: buildpacks
