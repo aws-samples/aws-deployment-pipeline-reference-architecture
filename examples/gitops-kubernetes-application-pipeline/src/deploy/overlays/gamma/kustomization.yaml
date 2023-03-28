@@ -8,3 +8,5 @@ resources:
   - namespace.yaml
 transformers:
   - labels.yaml
+patches:
+  - frontend-patch.yaml

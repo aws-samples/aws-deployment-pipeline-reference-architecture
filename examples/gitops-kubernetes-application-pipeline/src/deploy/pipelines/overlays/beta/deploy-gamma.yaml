@@ -1,0 +1,46 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: deploy-gamma
+  namespace: tekton-runtime
+spec:
+  workspaces:
+    - name: source
+      description: Directory where application source is located.
+
+  params:
+    - name: APP_IMAGE_DIGEST
+      description: Image tag to update in gamma overlay
+  steps:
+    - name: update-image
+      image: ubuntu
+      args:
+      script: |
+        #!/usr/bin/env bash
+        set -e
+        apt-get update
+        apt-get -y install curl git wget
+        curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl
+        chmod +x ./kubectl
+        mv ./kubectl /bin/kubectl
+        mkdir -p ~/.ssh
+        export SECRET_NAME=$(kubectl get GitRepository $(params.repository) -n $(params.namespace) -o jsonpath='{.spec.secretRef.name}')
+        export GIT_URL=$(kubectl get GitRepository $(params.repository) -n $(params.namespace) -o jsonpath='{.spec.url}')
+        kubectl get secret $SECRET_NAME -n $(params.namespace) -o jsonpath='{.data.identity}' | base64 --decode > ~/.ssh/id_rsa
+        chmod 0400 ~/.ssh/id_rsa
+        kubectl get secret $SECRET_NAME -n $(params.namespace) -o jsonpath='{.data.identity\.pub}' | base64 --decode > ~/.ssh/id_rsa.pub
+        kubectl get secret $SECRET_NAME -n $(params.namespace) -o jsonpath='{.data.known_hosts}' | base64 --decode > ~/.ssh/known_hosts
+
+        wget -qO /bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+        chmod a+x /bin/yq
+        
+        cd $(workspaces.source.path)/repo/src/deploy/overlays/gamma
+        yq e -i '.spec.template.spec.containers[0].image = "$(params.APP_IMAGE_DIGEST)"' frontend-patch.yaml
+
+        cd cd $(workspaces.source.path)/repo/
+        git add -A
+        git config user.name "Automated Deployment"
+        git config user.email "automated@weave.works"
+        git commit -am "Pushing gamma to $(params.APP_IMAGE_DIGEST)"
+        git push

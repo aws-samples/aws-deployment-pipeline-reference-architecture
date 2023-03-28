@@ -56,6 +56,17 @@ spec:
           value: /examples/gitops-kubernetes-application-pipeline/src
         - name: BUILDER_IMAGE
           value: paketobuildpacks/builder:base
+    - name: deploy-gamma
+      taskRef:
+        name: deploy-gamma
+      runAfter:
+        name: buildpacks
+      workspaces:
+        - name: source
+          workspace: source-workspace
+      params:
+        - name: APP_IMAGE_DIGEST
+          value: $(tasks.buildpacks.results.APP_IMAGE_DIGEST)
     - name: display-results
       runAfter:
         - buildpacks
