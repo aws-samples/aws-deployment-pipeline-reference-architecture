@@ -40,6 +40,11 @@ describe('Pipeline', () => {
     serialize: () => '"code.zip"',
   });
 
+  expect.addSnapshotSerializer({
+    test: (val) => typeof val === 'string' && val.match(/:iam::[0-9]{12}:role\//) !== null,
+    serialize: (val) => '"'+val.replace(/[0-9]{12}/g, '000000000000')+'"',
+  });
+
   test('Snapshot', () => {
     const template = Template.fromStack(stack);
     expect(template.toJSON()).toMatchSnapshot();
