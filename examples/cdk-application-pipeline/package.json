@@ -40,6 +40,7 @@
     "@aws-sdk/credential-providers": "^3.353.0",
     "@aws-sdk/shared-ini-file-loader": "^3.347.0",
     "@cdklabs/cdk-ecs-codedeploy": "^0.0.191",
+    "@aws-cdk/aws-synthetics-alpha": "^2.71.0-alpha.0",
     "@types/aws-lambda": "^8.10.119",
     "@types/prompts": "^2.4.4",
     "aws-cdk-lib": "^2.84.0",
