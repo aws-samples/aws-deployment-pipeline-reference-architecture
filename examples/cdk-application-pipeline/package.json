@@ -5,7 +5,7 @@
     "lint": "npx eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern infrastructure/src infrastructure/test build-tools .projenrc.js",
     "test": "npx jest --passWithNoTests --all",
     "test:update": "npx jest --passWithNoTests --all --updateSnapshot",
-    "update": "ncu -u && npm install && npm run test:update"
+    "update": "ncu -u && npm install --legacy-peer-deps && npm run test:update"
   },
   "devDependencies": {
     "@types/jest": "^29.5",
