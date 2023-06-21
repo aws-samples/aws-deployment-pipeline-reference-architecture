@@ -211,6 +211,37 @@
           </plugins>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.honton.chas</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>0.0.3</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compliance</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <acceptableLicenses>
+            <license>
+              <name>MPL 2.0</name>
+              <url>https://www.mozilla.org/en-US/MPL/2.0/</url>
+            </license>
+            <license>
+              <name>EPL 1.0</name>
+              <url>https://opensource.org/licenses/eclipse-1.0.php</url>
+            </license>
+            <license>
+              <name>(The )?Apache License, Version 2.0</name>
+              <url>https://www.apache.org/licenses/LICENSE-2.0(.txt)?</url>
+            </license>
+            <license>
+              <name>The GNU General Public License, v2 with Universal FOSS Exception, v1.0</name>
+            </license>
+          </acceptableLicenses>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <repositories>
