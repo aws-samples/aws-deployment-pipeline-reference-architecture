@@ -56,7 +56,7 @@ async function deleteAppStack(accountName: string, profile: string, region: stri
     region: region,
   });
   await cfnClient.send(new DeleteStackCommand({ StackName: `${accountName}-${region}-fruit-api` }));
-  await waitUntilStackDeleteComplete({ client: cfnClient, maxWaitTime: 3600 }, { StackName: `${accountName}-${region}-fruit-api` })
+  await waitUntilStackDeleteComplete({ client: cfnClient, maxWaitTime: 3600 }, { StackName: `${accountName}-${region}-fruit-api` });
 }
 
 async function deleteCdkToolkitStack(profile: string, region: string) {
@@ -67,7 +67,7 @@ async function deleteCdkToolkitStack(profile: string, region: string) {
     region: region,
   });
   await cfnClient.send(new DeleteStackCommand({ StackName: 'CDKToolkit' }));
-  await waitUntilStackDeleteComplete({ client: cfnClient, maxWaitTime: 3600 }, { StackName: `CDKToolkit` })
+  await waitUntilStackDeleteComplete({ client: cfnClient, maxWaitTime: 3600 }, { StackName: 'CDKToolkit' });
 }
 
 async function deleteCdkToolkitEcrRepo(profile: string, region: string) {

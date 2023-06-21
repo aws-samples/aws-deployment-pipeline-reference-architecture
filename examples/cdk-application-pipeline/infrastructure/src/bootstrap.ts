@@ -55,6 +55,9 @@ async function promptAccount(message: string, initialProfile?: string): Promise<
 async function promptProfile(message: string, initialProfile?: string): Promise<string> {
   const config = await loadSharedConfigFiles();
   const profiles = Object.keys(config.configFile).sort();
+  if (profiles.length == 0) {
+    throw new Error('You must have AWS CLI profiles defined');
+  }
   let initial = initialProfile?profiles.indexOf(initialProfile):undefined;
   if (initial === -1) { initial = undefined; }
   const profile = await prompts.select({

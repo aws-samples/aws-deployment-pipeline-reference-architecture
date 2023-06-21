@@ -12,8 +12,18 @@ The easiest approach is to use the preconfigured [development container](https:/
 
 Alternatively, you can install these required dependencies manually:
 
+**Mac:**
+
 ```bash
 brew install graphviz drawio
+pip install -r requirements.txt
+```
+
+**Linux:**
+
+```bash
+sudo yum install -y graphviz gtk3 xdg-utils libnotify libXScrnSaver
+sudo rpm -i https://github.com/jgraph/drawio-desktop/releases/download/v21.5.0/drawio-x86_64-21.5.0.rpm
 pip install -r requirements.txt
 ```
 

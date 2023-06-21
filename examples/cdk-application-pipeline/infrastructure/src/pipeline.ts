@@ -184,8 +184,8 @@ class Deployment extends Stage {
     const solutionCode = this.node.tryGetContext('solutionCode');
     const workloadName = this.node.tryGetContext('workloadName');
     var appConfigRoleArn;
-    if(workloadName) {
-      appConfigRoleArn = StringParameter.valueFromLookup(scope, `/${workloadName}/dynamic_config_role-${environmentName.toLowerCase()}`)
+    if (workloadName) {
+      appConfigRoleArn = StringParameter.valueFromLookup(scope, `/${workloadName}/dynamic_config_role-${environmentName.toLowerCase()}`);
     }
     const stack = new DeploymentStack(this, appName, {
       appConfigRoleArn,
