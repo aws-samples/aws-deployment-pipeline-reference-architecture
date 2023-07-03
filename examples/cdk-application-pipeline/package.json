@@ -15,7 +15,7 @@
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
     "aws-cdk": "^2.86.0",
-    "cdk-nag": "^2.27.57",
+    "cdk-nag": "^2.27.58",
     "esbuild": "^0.18.11",
     "eslint": "^8.44.0",
     "eslint-import-resolver-node": "^0.3.7",
@@ -26,7 +26,7 @@
     "json-schema": "^0.4.0",
     "license-checker": "^25.0.1",
     "npm-check-updates": "^16.10.13",
-    "projen": "^0.71.119",
+    "projen": "^0.71.120",
     "ts-jest": "^29.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
@@ -47,7 +47,7 @@
     "@types/aws-lambda": "^8.10.119",
     "@types/prompts": "^2.4.4",
     "aws-cdk-lib": "^2.84.0",
-    "constructs": "^10.2.66",
+    "constructs": "^10.2.67",
     "prompts": "^2.4.2",
     "yaml": "^2.3.1"
   },
