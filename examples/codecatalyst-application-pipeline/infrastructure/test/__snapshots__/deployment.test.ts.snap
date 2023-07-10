@@ -248,7 +248,7 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
             "threadCount": "20",
           },
         },
-        "RuntimeVersion": "syn-nodejs-puppeteer-3.8",
+        "RuntimeVersion": "syn-nodejs-puppeteer-4.0",
         "Schedule": {
           "DurationInSeconds": "0",
           "Expression": "rate(5 minutes)",
@@ -3140,7 +3140,7 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
             "threadCount": "20",
           },
         },
-        "RuntimeVersion": "syn-nodejs-puppeteer-3.8",
+        "RuntimeVersion": "syn-nodejs-puppeteer-4.0",
         "Schedule": {
           "DurationInSeconds": "0",
           "Expression": "rate(5 minutes)",
@@ -5985,7 +5985,7 @@ exports[`cdk-nag Snapshot 1`] = `
             "threadCount": "20",
           },
         },
-        "RuntimeVersion": "syn-nodejs-puppeteer-3.8",
+        "RuntimeVersion": "syn-nodejs-puppeteer-4.0",
         "Schedule": {
           "DurationInSeconds": "0",
           "Expression": "rate(5 minutes)",
