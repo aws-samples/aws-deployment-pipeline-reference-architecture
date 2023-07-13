@@ -20,11 +20,55 @@
     "@aws-cdk/aws-sns-subscriptions:restrictSqsDescryption": true,
     "@aws-cdk/aws-apigateway:disableCloudWatchRole": true,
     "@aws-cdk/core:enablePartitionLiterals": true,
-    "@aws-cdk/core:target-partitions": ["aws", "aws-cn"],
-    "solutionCode": "dpra-1u3h2nhop"
+    "@aws-cdk/core:target-partitions": [
+      "aws",
+      "aws-cn"
+    ],
+    "solutionCode": "dpra-1u3h2nhop",
+    "dynamicConfigAccount": "111111111111",
+    "workloadEnvironments": [
+      {
+        "name": "alpha",
+        "waves": [],
+        "workloadOrganizationPath": "o-wtyjfv84ln/r-sg8d/ou-sg8d-ejjbxgod/ou-sg8d-xiaxfcr0"
+      },
+      {
+        "name": "beta",
+        "waves": [],
+        "workloadOrganizationPath": "o-wtyjfv84ln/r-sg8d/ou-sg8d-ejjbxgod/ou-sg8d-xiaxfcr0"
+      },
+      {
+        "name": "gamma",
+        "waves": [],
+        "workloadOrganizationPath": "o-wtyjfv84ln/r-sg8d/ou-sg8d-ejjbxgod/ou-sg8d-4cqhcezd"
+      },
+      {
+        "name": "prod",
+        "waves": [
+          {
+            "name": "prod-0",
+            "regions": [
+              "us-east-1",
+              "us-west-2"
+            ]
+          },
+          {
+            "name": "prod-1",
+            "regions": [
+              "eu-central-1",
+              "eu-west-2"
+            ]
+          }
+        ],
+        "workloadOrganizationPath": "o-wtyjfv84ln/r-sg8d/ou-sg8d-ejjbxgod/ou-sg8d-kbps96iq"
+      }
+    ]
   },
   "watch": {
-    "include": ["infrastructure/src/**/*.ts", "infrastructure/test/**/*.ts"],
+    "include": [
+      "infrastructure/src/**/*.ts",
+      "infrastructure/test/**/*.ts"
+    ],
     "exclude": [
       "README.md",
       "cdk*.json",
