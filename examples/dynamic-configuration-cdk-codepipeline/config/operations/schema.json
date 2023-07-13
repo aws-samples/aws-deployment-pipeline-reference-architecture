@@ -1,0 +1,8 @@
+{
+  "type": "object",
+  "properties": {
+    "logLevel": { "enum": ["FATAL", "ERROR", "WARN", "INFO", "DEBUG", "TRACE"] },
+    "environment": { "type": "string" }
+  },
+  "required": ["logLevel", "environment"]
+}

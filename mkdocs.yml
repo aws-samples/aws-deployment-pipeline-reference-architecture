@@ -41,8 +41,10 @@ nav:
   #   - Architecture: 'account-fleet-management-pipeline/index.md'
   # - Machine Learning Pipeline:
   #   - Architecture: 'machine-learning-pipeline/index.md'
-  # - Dynamic Configuration Deployment Pipeline:
-  #   - Architecture: 'dynamic-configuration-deployment-pipeline/index.md'
+  - Dynamic Configuration Pipeline:
+    - Architecture: 'dynamic-configuration-pipeline/index.md'
+    - Reference Implementations:
+      - CDK Pipelines + AppConfig: 'dynamic-configuration-pipeline/ri-cdk-codepipeline-appconfig.md'
 
 markdown_extensions:
   - def_list

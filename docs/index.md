@@ -27,7 +27,7 @@ The DPRA covers the following deployment pipelines in detail:
             Manage a fleet of AWS accounts through a pipeline.
         </p>
     </a>
-    <a href="dynamic-configuration-pipeline/motivation.html" class="card disabled">
+    <a href="dynamic-configuration-pipeline/index.html" class="card">
         <h3>Dynamic Configuration</h3>
         <p>
             Manage dynamic configuration for a workload.
@@ -59,6 +59,12 @@ Modern deployment pipelines create the following business outcomes:
 * **Measured** - Provide real-time metrics for code quality, speed (deployment frequency and deployment lead time), security (security control automation %, mean time to resolve security errors), and reliability (change failures and time to restore service). View metrics through a real-time dashboard. When instrumentation is not yet possible, create a [Likert](https://en.wikipedia.org/wiki/Likert_scale)-based questionnaire to determine these metrics across teams.
 
 ## Definitions
+
+### Component
+
+A **component** is the code, configuration, and AWS Resources that together deliver against a requirement. A component is often the unit of technical ownership, and is decoupled from other components.
+
+(source: [AWS Well-Architected Framework definitions](https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html))
 
 ### Workload
 

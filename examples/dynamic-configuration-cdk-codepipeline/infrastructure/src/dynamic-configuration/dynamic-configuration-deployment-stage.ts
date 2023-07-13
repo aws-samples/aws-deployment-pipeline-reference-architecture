@@ -1,0 +1,27 @@
+import { Stage, StageProps } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import { DynamicConfigurationDeploymentStack } from './dynamic-configuration-deployment-stack';
+import { WorkloadEnvironment } from '../config';
+
+export class DynamicConfigurationDeploymentStage extends Stage {
+  constructor(
+    scope: Construct,
+    id: string,
+    workloadName: string,
+    workloadEnvironment: WorkloadEnvironment,
+    solutionCode: string,
+    props?: StageProps,
+  ) {
+    super(scope, id, props);
+    new DynamicConfigurationDeploymentStack(
+      this,
+      'DynamicConfiguration',
+      workloadName,
+      workloadEnvironment,
+      {
+        description: `${workloadName} ${workloadEnvironment.name} (${solutionCode})`,
+        env: props?.env,
+      },
+    );
+  }
+}

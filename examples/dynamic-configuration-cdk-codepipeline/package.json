@@ -1,0 +1,97 @@
+{
+  "name": "dynamic-configuration-pipeline",
+  "scripts": {
+    "build": "npx cdk synth -q",
+    "lint": "npx eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern infrastructure/src infrastructure/test build-tools",
+    "lint-pipeline": "npx eslint --ext .ts,.tsx --no-error-on-unmatched-pattern infrastructure/src infrastructure/test build-tools",
+    "test": "npx jest --passWithNoTests --all",
+    "test:update": "npx jest --passWithNoTests --all --updateSnapshot",
+    "license-check": "npx license-checker --onlyAllow 'MIT;ISC;Apache-2.0;BSD-2-Clause;BSD-3-Clause;Python-2.0;Unlicense;CC0-1.0;CC-BY-3.0;CC-BY-4.0;BlueOak-1.0.0;0BSD'"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.2",
+    "@types/lodash": "^4.14.195",
+    "@types/node": "^20.3.1",
+    "@types/prompts": "^2.4.4",
+    "@typescript-eslint/eslint-plugin": "^5",
+    "@typescript-eslint/parser": "^5",
+    "aws-cdk": "^2.84.0",
+    "eslint": "^8",
+    "eslint-import-resolver-node": "^0.3.7",
+    "eslint-import-resolver-typescript": "^3.5.5",
+    "eslint-plugin-import": "^2.27.5",
+    "husky": "^8.0.3",
+    "jest": "^29.5.0",
+    "jest-junit": "^16",
+    "json-schema": "^0.4.0",
+    "license-checker": "^25.0.1",
+    "npm-check-updates": "^16",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-codepipeline": "^3.354.0",
+    "@aws-sdk/client-ec2": "^3.355.0",
+    "@aws-sdk/credential-providers": "^3.354.0",
+    "@types/aws-lambda": "^8.10.119",
+    "aws-cdk-lib": "^2.84.0",
+    "cdk-nag": "^2.27.43",
+    "constructs": "^10.2.55",
+    "json5": "^2.2.3",
+    "prompts": "^2.4.2",
+    "yaml": "^2.3.1"
+  },
+  "overrides": {
+    "tsconfig-paths": "^4.1.2",
+    "minimist": "^1.2.6",
+    "test-exclude": {
+      "minimatch": "^3.0.5"
+    }
+  },
+  "license": "Apache-2.0",
+  "version": "0.0.0",
+  "jest": {
+    "testMatch": [
+      "<rootDir>/infrastructure/src/**/__tests__/**/*.ts?(x)",
+      "<rootDir>/infrastructure/(test|src)/**/*(*.)@(spec|test).ts?(x)"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.dev.json"
+        }
+      ]
+    },
+    "clearMocks": true,
+    "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "clover",
+      "cobertura",
+      "text"
+    ],
+    "coverageDirectory": "coverage",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "watchPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "reporters": [
+      "default",
+      [
+        "jest-junit",
+        {
+          "outputDirectory": "test-reports"
+        }
+      ]
+    ],
+    "preset": "ts-jest"
+  }
+}

@@ -1,0 +1,15 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.3.0
+  hooks:
+  -   id: check-yaml
+  -   id: check-json
+  -   id: trailing-whitespace
+- repo: https://github.com/pre-commit/mirrors-eslint
+  rev: v8.23.0
+  hooks:
+  -   id: eslint
+- repo: https://github.com/gitleaks/gitleaks
+  rev: v8.16.2
+  hooks:
+    - id: gitleaks

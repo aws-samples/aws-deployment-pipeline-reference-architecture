@@ -1,0 +1,3360 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "serialNumber": "urn:uuid:b9feefe3-aa35-4087-b826-f84f9a24d57a",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2023-05-11T15:15:00+00:00",
+    "tools": [
+      {
+        "vendor": "aquasecurity",
+        "name": "trivy",
+        "version": "0.41.0"
+      }
+    ],
+    "component": {
+      "bom-ref": "67859fd7-1fd2-4f9b-bcb5-afa4f93d4a51",
+      "type": "application",
+      "name": ".",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:SchemaVersion",
+          "value": "2"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "bom-ref": "pkg:npm/%40aws-cdk/asset-awscli-v1@2.2.169",
+      "type": "library",
+      "name": "@aws-cdk/asset-awscli-v1",
+      "version": "2.2.169",
+      "purl": "pkg:npm/%40aws-cdk/asset-awscli-v1@2.2.169",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-cdk/asset-awscli-v1@2.2.169"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-cdk/asset-kubectl-v20@2.1.1",
+      "type": "library",
+      "name": "@aws-cdk/asset-kubectl-v20",
+      "version": "2.1.1",
+      "purl": "pkg:npm/%40aws-cdk/asset-kubectl-v20@2.1.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-cdk/asset-kubectl-v20@2.1.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-cdk/asset-node-proxy-agent-v5@2.0.142",
+      "type": "library",
+      "name": "@aws-cdk/asset-node-proxy-agent-v5",
+      "version": "2.0.142",
+      "purl": "pkg:npm/%40aws-cdk/asset-node-proxy-agent-v5@2.0.142",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-cdk/asset-node-proxy-agent-v5@2.0.142"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-crypto/ie11-detection@3.0.0",
+      "type": "library",
+      "name": "@aws-crypto/ie11-detection",
+      "version": "3.0.0",
+      "purl": "pkg:npm/%40aws-crypto/ie11-detection@3.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-crypto/ie11-detection@3.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-crypto/sha256-browser@3.0.0",
+      "type": "library",
+      "name": "@aws-crypto/sha256-browser",
+      "version": "3.0.0",
+      "purl": "pkg:npm/%40aws-crypto/sha256-browser@3.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-crypto/sha256-browser@3.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-crypto/sha256-js@3.0.0",
+      "type": "library",
+      "name": "@aws-crypto/sha256-js",
+      "version": "3.0.0",
+      "purl": "pkg:npm/%40aws-crypto/sha256-js@3.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-crypto/sha256-js@3.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-crypto/supports-web-crypto@3.0.0",
+      "type": "library",
+      "name": "@aws-crypto/supports-web-crypto",
+      "version": "3.0.0",
+      "purl": "pkg:npm/%40aws-crypto/supports-web-crypto@3.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-crypto/supports-web-crypto@3.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-crypto/util@3.0.0",
+      "type": "library",
+      "name": "@aws-crypto/util",
+      "version": "3.0.0",
+      "purl": "pkg:npm/%40aws-crypto/util@3.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-crypto/util@3.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/abort-controller@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/abort-controller",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/abort-controller@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/abort-controller@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/client-codepipeline@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/client-codepipeline",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/client-codepipeline@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/client-codepipeline@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/client-cognito-identity@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/client-cognito-identity",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/client-cognito-identity@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/client-cognito-identity@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/client-ec2@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/client-ec2",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/client-ec2@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/client-ec2@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/client-sso@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/client-sso",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/client-sso@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/client-sso@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/client-sso-oidc@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/client-sso-oidc",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/client-sso-oidc@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/client-sso-oidc@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/client-sts@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/client-sts",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/client-sts@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/client-sts@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/config-resolver@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/config-resolver",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/config-resolver@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/config-resolver@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/credential-provider-cognito-identity@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/credential-provider-cognito-identity",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/credential-provider-cognito-identity@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/credential-provider-cognito-identity@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/credential-provider-env@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/credential-provider-env",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/credential-provider-env@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/credential-provider-env@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/credential-provider-imds@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/credential-provider-imds",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/credential-provider-imds@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/credential-provider-imds@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/credential-provider-ini@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/credential-provider-ini",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/credential-provider-ini@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/credential-provider-ini@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/credential-provider-node@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/credential-provider-node",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/credential-provider-node@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/credential-provider-node@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/credential-provider-process@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/credential-provider-process",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/credential-provider-process@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/credential-provider-process@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/credential-provider-sso@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/credential-provider-sso",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/credential-provider-sso@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/credential-provider-sso@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/credential-provider-web-identity@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/credential-provider-web-identity",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/credential-provider-web-identity@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/credential-provider-web-identity@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/credential-providers@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/credential-providers",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/credential-providers@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/credential-providers@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/fetch-http-handler@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/fetch-http-handler",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/fetch-http-handler@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/fetch-http-handler@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/hash-node@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/hash-node",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/hash-node@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/hash-node@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/invalid-dependency@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/invalid-dependency",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/invalid-dependency@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/invalid-dependency@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/is-array-buffer@3.310.0",
+      "type": "library",
+      "name": "@aws-sdk/is-array-buffer",
+      "version": "3.310.0",
+      "purl": "pkg:npm/%40aws-sdk/is-array-buffer@3.310.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/is-array-buffer@3.310.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/middleware-content-length@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/middleware-content-length",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/middleware-content-length@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/middleware-content-length@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/middleware-endpoint@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/middleware-endpoint",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/middleware-endpoint@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/middleware-endpoint@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/middleware-host-header@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/middleware-host-header",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/middleware-host-header@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/middleware-host-header@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/middleware-logger@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/middleware-logger",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/middleware-logger@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/middleware-logger@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/middleware-recursion-detection@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/middleware-recursion-detection",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/middleware-recursion-detection@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/middleware-recursion-detection@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/middleware-retry@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/middleware-retry",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/middleware-retry@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/middleware-retry@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/middleware-sdk-ec2@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/middleware-sdk-ec2",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/middleware-sdk-ec2@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/middleware-sdk-ec2@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/middleware-sdk-sts@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/middleware-sdk-sts",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/middleware-sdk-sts@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/middleware-sdk-sts@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/middleware-serde@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/middleware-serde",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/middleware-serde@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/middleware-serde@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/middleware-signing@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/middleware-signing",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/middleware-signing@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/middleware-signing@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/middleware-stack@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/middleware-stack",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/middleware-stack@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/middleware-stack@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/middleware-user-agent@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/middleware-user-agent",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/middleware-user-agent@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/middleware-user-agent@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/node-config-provider@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/node-config-provider",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/node-config-provider@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/node-config-provider@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/node-http-handler@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/node-http-handler",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/node-http-handler@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/node-http-handler@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/property-provider@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/property-provider",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/property-provider@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/property-provider@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/protocol-http",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/protocol-http@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/querystring-builder@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/querystring-builder",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/querystring-builder@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/querystring-builder@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/querystring-parser@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/querystring-parser",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/querystring-parser@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/querystring-parser@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/service-error-classification@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/service-error-classification",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/service-error-classification@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/service-error-classification@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/shared-ini-file-loader@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/shared-ini-file-loader",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/shared-ini-file-loader@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/shared-ini-file-loader@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/signature-v4@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/signature-v4",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/signature-v4@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/signature-v4@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/smithy-client@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/smithy-client",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/smithy-client@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/smithy-client@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/token-providers@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/token-providers",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/token-providers@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/token-providers@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/types@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/types",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/types@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/types@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/url-parser@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/url-parser",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/url-parser@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/url-parser@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-base64@3.310.0",
+      "type": "library",
+      "name": "@aws-sdk/util-base64",
+      "version": "3.310.0",
+      "purl": "pkg:npm/%40aws-sdk/util-base64@3.310.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-base64@3.310.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-body-length-browser@3.310.0",
+      "type": "library",
+      "name": "@aws-sdk/util-body-length-browser",
+      "version": "3.310.0",
+      "purl": "pkg:npm/%40aws-sdk/util-body-length-browser@3.310.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-body-length-browser@3.310.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-body-length-node@3.310.0",
+      "type": "library",
+      "name": "@aws-sdk/util-body-length-node",
+      "version": "3.310.0",
+      "purl": "pkg:npm/%40aws-sdk/util-body-length-node@3.310.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-body-length-node@3.310.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-buffer-from@3.310.0",
+      "type": "library",
+      "name": "@aws-sdk/util-buffer-from",
+      "version": "3.310.0",
+      "purl": "pkg:npm/%40aws-sdk/util-buffer-from@3.310.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-buffer-from@3.310.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-config-provider@3.310.0",
+      "type": "library",
+      "name": "@aws-sdk/util-config-provider",
+      "version": "3.310.0",
+      "purl": "pkg:npm/%40aws-sdk/util-config-provider@3.310.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-config-provider@3.310.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-defaults-mode-browser@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/util-defaults-mode-browser",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/util-defaults-mode-browser@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-defaults-mode-browser@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-defaults-mode-node@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/util-defaults-mode-node",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/util-defaults-mode-node@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-defaults-mode-node@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-endpoints@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/util-endpoints",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/util-endpoints@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-endpoints@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-format-url@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/util-format-url",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/util-format-url@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-format-url@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-hex-encoding@3.310.0",
+      "type": "library",
+      "name": "@aws-sdk/util-hex-encoding",
+      "version": "3.310.0",
+      "purl": "pkg:npm/%40aws-sdk/util-hex-encoding@3.310.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-hex-encoding@3.310.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-locate-window@3.310.0",
+      "type": "library",
+      "name": "@aws-sdk/util-locate-window",
+      "version": "3.310.0",
+      "purl": "pkg:npm/%40aws-sdk/util-locate-window@3.310.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-locate-window@3.310.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-middleware@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/util-middleware",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/util-middleware@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-middleware@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-retry@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/util-retry",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/util-retry@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-retry@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-uri-escape@3.310.0",
+      "type": "library",
+      "name": "@aws-sdk/util-uri-escape",
+      "version": "3.310.0",
+      "purl": "pkg:npm/%40aws-sdk/util-uri-escape@3.310.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-uri-escape@3.310.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-user-agent-browser@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/util-user-agent-browser",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/util-user-agent-browser@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-user-agent-browser@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-user-agent-node@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/util-user-agent-node",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/util-user-agent-node@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-user-agent-node@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-utf8@3.310.0",
+      "type": "library",
+      "name": "@aws-sdk/util-utf8",
+      "version": "3.310.0",
+      "purl": "pkg:npm/%40aws-sdk/util-utf8@3.310.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-utf8@3.310.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-utf8-browser@3.259.0",
+      "type": "library",
+      "name": "@aws-sdk/util-utf8-browser",
+      "version": "3.259.0",
+      "purl": "pkg:npm/%40aws-sdk/util-utf8-browser@3.259.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-utf8-browser@3.259.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40aws-sdk/util-waiter@3.329.0",
+      "type": "library",
+      "name": "@aws-sdk/util-waiter",
+      "version": "3.329.0",
+      "purl": "pkg:npm/%40aws-sdk/util-waiter@3.329.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@aws-sdk/util-waiter@3.329.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40balena/dockerignore@1.0.2",
+      "type": "library",
+      "name": "@balena/dockerignore",
+      "version": "1.0.2",
+      "purl": "pkg:npm/%40balena/dockerignore@1.0.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@balena/dockerignore@1.0.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/%40types/aws-lambda@8.10.115",
+      "type": "library",
+      "name": "@types/aws-lambda",
+      "version": "8.10.115",
+      "purl": "pkg:npm/%40types/aws-lambda@8.10.115",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "@types/aws-lambda@8.10.115"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/ajv@8.12.0",
+      "type": "library",
+      "name": "ajv",
+      "version": "8.12.0",
+      "purl": "pkg:npm/ajv@8.12.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "ajv@8.12.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/ansi-regex@5.0.1",
+      "type": "library",
+      "name": "ansi-regex",
+      "version": "5.0.1",
+      "purl": "pkg:npm/ansi-regex@5.0.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "ansi-regex@5.0.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/ansi-styles@4.3.0",
+      "type": "library",
+      "name": "ansi-styles",
+      "version": "4.3.0",
+      "purl": "pkg:npm/ansi-styles@4.3.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "ansi-styles@4.3.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/astral-regex@2.0.0",
+      "type": "library",
+      "name": "astral-regex",
+      "version": "2.0.0",
+      "purl": "pkg:npm/astral-regex@2.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "astral-regex@2.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/aws-cdk-lib@2.79.0",
+      "type": "library",
+      "name": "aws-cdk-lib",
+      "version": "2.79.0",
+      "purl": "pkg:npm/aws-cdk-lib@2.79.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "aws-cdk-lib@2.79.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/balanced-match@1.0.2",
+      "type": "library",
+      "name": "balanced-match",
+      "version": "1.0.2",
+      "purl": "pkg:npm/balanced-match@1.0.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "balanced-match@1.0.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/bowser@2.11.0",
+      "type": "library",
+      "name": "bowser",
+      "version": "2.11.0",
+      "purl": "pkg:npm/bowser@2.11.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "bowser@2.11.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/brace-expansion@1.1.11",
+      "type": "library",
+      "name": "brace-expansion",
+      "version": "1.1.11",
+      "purl": "pkg:npm/brace-expansion@1.1.11",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "brace-expansion@1.1.11"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/case@1.6.3",
+      "type": "library",
+      "name": "case",
+      "version": "1.6.3",
+      "purl": "pkg:npm/case@1.6.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "case@1.6.3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/cdk-nag@2.27.1",
+      "type": "library",
+      "name": "cdk-nag",
+      "version": "2.27.1",
+      "purl": "pkg:npm/cdk-nag@2.27.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "cdk-nag@2.27.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/color-convert@2.0.1",
+      "type": "library",
+      "name": "color-convert",
+      "version": "2.0.1",
+      "purl": "pkg:npm/color-convert@2.0.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "color-convert@2.0.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/color-name@1.1.4",
+      "type": "library",
+      "name": "color-name",
+      "version": "1.1.4",
+      "purl": "pkg:npm/color-name@1.1.4",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "color-name@1.1.4"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/concat-map@0.0.1",
+      "type": "library",
+      "name": "concat-map",
+      "version": "0.0.1",
+      "purl": "pkg:npm/concat-map@0.0.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "concat-map@0.0.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/constructs@10.2.19",
+      "type": "library",
+      "name": "constructs",
+      "version": "10.2.19",
+      "purl": "pkg:npm/constructs@10.2.19",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "constructs@10.2.19"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/emoji-regex@8.0.0",
+      "type": "library",
+      "name": "emoji-regex",
+      "version": "8.0.0",
+      "purl": "pkg:npm/emoji-regex@8.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "emoji-regex@8.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/fast-deep-equal@3.1.3",
+      "type": "library",
+      "name": "fast-deep-equal",
+      "version": "3.1.3",
+      "purl": "pkg:npm/fast-deep-equal@3.1.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "fast-deep-equal@3.1.3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/fast-xml-parser@4.1.2",
+      "type": "library",
+      "name": "fast-xml-parser",
+      "version": "4.1.2",
+      "purl": "pkg:npm/fast-xml-parser@4.1.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "fast-xml-parser@4.1.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/fs-extra@11.1.1",
+      "type": "library",
+      "name": "fs-extra",
+      "version": "11.1.1",
+      "purl": "pkg:npm/fs-extra@11.1.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "fs-extra@11.1.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/graceful-fs@4.2.11",
+      "type": "library",
+      "name": "graceful-fs",
+      "version": "4.2.11",
+      "purl": "pkg:npm/graceful-fs@4.2.11",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "graceful-fs@4.2.11"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/ignore@5.2.4",
+      "type": "library",
+      "name": "ignore",
+      "version": "5.2.4",
+      "purl": "pkg:npm/ignore@5.2.4",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "ignore@5.2.4"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/is-fullwidth-code-point@3.0.0",
+      "type": "library",
+      "name": "is-fullwidth-code-point",
+      "version": "3.0.0",
+      "purl": "pkg:npm/is-fullwidth-code-point@3.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "is-fullwidth-code-point@3.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/json-schema-traverse@1.0.0",
+      "type": "library",
+      "name": "json-schema-traverse",
+      "version": "1.0.0",
+      "purl": "pkg:npm/json-schema-traverse@1.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "json-schema-traverse@1.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/json5@2.2.3",
+      "type": "library",
+      "name": "json5",
+      "version": "2.2.3",
+      "purl": "pkg:npm/json5@2.2.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "json5@2.2.3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/jsonfile@6.1.0",
+      "type": "library",
+      "name": "jsonfile",
+      "version": "6.1.0",
+      "purl": "pkg:npm/jsonfile@6.1.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "jsonfile@6.1.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/jsonschema@1.4.1",
+      "type": "library",
+      "name": "jsonschema",
+      "version": "1.4.1",
+      "purl": "pkg:npm/jsonschema@1.4.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "jsonschema@1.4.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/kleur@3.0.3",
+      "type": "library",
+      "name": "kleur",
+      "version": "3.0.3",
+      "purl": "pkg:npm/kleur@3.0.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "kleur@3.0.3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/lodash.truncate@4.4.2",
+      "type": "library",
+      "name": "lodash.truncate",
+      "version": "4.4.2",
+      "purl": "pkg:npm/lodash.truncate@4.4.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "lodash.truncate@4.4.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/lru-cache@6.0.0",
+      "type": "library",
+      "name": "lru-cache",
+      "version": "6.0.0",
+      "purl": "pkg:npm/lru-cache@6.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "lru-cache@6.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/minimatch@3.1.2",
+      "type": "library",
+      "name": "minimatch",
+      "version": "3.1.2",
+      "purl": "pkg:npm/minimatch@3.1.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "minimatch@3.1.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/prompts@2.4.2",
+      "type": "library",
+      "name": "prompts",
+      "version": "2.4.2",
+      "purl": "pkg:npm/prompts@2.4.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "prompts@2.4.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/punycode@2.3.0",
+      "type": "library",
+      "name": "punycode",
+      "version": "2.3.0",
+      "purl": "pkg:npm/punycode@2.3.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "punycode@2.3.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/require-from-string@2.0.2",
+      "type": "library",
+      "name": "require-from-string",
+      "version": "2.0.2",
+      "purl": "pkg:npm/require-from-string@2.0.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "require-from-string@2.0.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/semver@7.5.0",
+      "type": "library",
+      "name": "semver",
+      "version": "7.5.0",
+      "purl": "pkg:npm/semver@7.5.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "semver@7.5.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/sisteransi@1.0.5",
+      "type": "library",
+      "name": "sisteransi",
+      "version": "1.0.5",
+      "purl": "pkg:npm/sisteransi@1.0.5",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "sisteransi@1.0.5"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/slice-ansi@4.0.0",
+      "type": "library",
+      "name": "slice-ansi",
+      "version": "4.0.0",
+      "purl": "pkg:npm/slice-ansi@4.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "slice-ansi@4.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/string-width@4.2.3",
+      "type": "library",
+      "name": "string-width",
+      "version": "4.2.3",
+      "purl": "pkg:npm/string-width@4.2.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "string-width@4.2.3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/strip-ansi@6.0.1",
+      "type": "library",
+      "name": "strip-ansi",
+      "version": "6.0.1",
+      "purl": "pkg:npm/strip-ansi@6.0.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "strip-ansi@6.0.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/strnum@1.0.5",
+      "type": "library",
+      "name": "strnum",
+      "version": "1.0.5",
+      "purl": "pkg:npm/strnum@1.0.5",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "strnum@1.0.5"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/table@6.8.1",
+      "type": "library",
+      "name": "table",
+      "version": "6.8.1",
+      "purl": "pkg:npm/table@6.8.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "table@6.8.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/tslib@1.14.1",
+      "type": "library",
+      "name": "tslib",
+      "version": "1.14.1",
+      "purl": "pkg:npm/tslib@1.14.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "tslib@1.14.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/tslib@2.5.0",
+      "type": "library",
+      "name": "tslib",
+      "version": "2.5.0",
+      "purl": "pkg:npm/tslib@2.5.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "tslib@2.5.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/universalify@2.0.0",
+      "type": "library",
+      "name": "universalify",
+      "version": "2.0.0",
+      "purl": "pkg:npm/universalify@2.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "universalify@2.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/uri-js@4.4.1",
+      "type": "library",
+      "name": "uri-js",
+      "version": "4.4.1",
+      "purl": "pkg:npm/uri-js@4.4.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "uri-js@4.4.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/uuid@8.3.2",
+      "type": "library",
+      "name": "uuid",
+      "version": "8.3.2",
+      "purl": "pkg:npm/uuid@8.3.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "uuid@8.3.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/yallist@4.0.0",
+      "type": "library",
+      "name": "yallist",
+      "version": "4.0.0",
+      "purl": "pkg:npm/yallist@4.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "yallist@4.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/yaml@1.10.2",
+      "type": "library",
+      "name": "yaml",
+      "version": "1.10.2",
+      "purl": "pkg:npm/yaml@1.10.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "yaml@1.10.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/yaml@2.2.2",
+      "type": "library",
+      "name": "yaml",
+      "version": "2.2.2",
+      "purl": "pkg:npm/yaml@2.2.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "yaml@2.2.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "c5a9a80d-647a-451c-9b57-5fd4acf1713e",
+      "type": "application",
+      "name": "cdk.out/asset.69f80f24fbc71dcddde07b04f68b168b7665e1754dc1530e519a3d67ff7ff398/package-lock.json",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "npm"
+        },
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "lang-pkgs"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/awscli@1.27.129",
+      "type": "library",
+      "name": "awscli",
+      "version": "1.27.129",
+      "purl": "pkg:pypi/awscli@1.27.129",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pip"
+        }
+      ]
+    },
+    {
+      "bom-ref": "202b9e70-e9e4-4c2e-b666-37a326f59784",
+      "type": "application",
+      "name": "node_modules/@aws-cdk/asset-awscli-v1/layer/requirements.txt",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "pip"
+        },
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "lang-pkgs"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/punycode@2.1.0",
+      "type": "library",
+      "name": "punycode",
+      "version": "2.1.0",
+      "purl": "pkg:npm/punycode@2.1.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "punycode@2.1.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "yarn"
+        }
+      ]
+    },
+    {
+      "bom-ref": "f9524607-01bb-4fb2-aff7-a02fff95be08",
+      "type": "application",
+      "name": "node_modules/aws-cdk-lib/node_modules/uri-js/yarn.lock",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "yarn"
+        },
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "lang-pkgs"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:maven/com.myorg/%25name%25@0.1",
+      "type": "library",
+      "name": "com.myorg:%name%",
+      "version": "0.1",
+      "purl": "pkg:maven/com.myorg/%25name%25@0.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pom"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:maven/software.amazon.awscdk/aws-cdk-lib@%25cdk-version%25",
+      "type": "library",
+      "name": "software.amazon.awscdk:aws-cdk-lib",
+      "version": "%cdk-version%",
+      "purl": "pkg:maven/software.amazon.awscdk/aws-cdk-lib@%25cdk-version%25",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pom"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:maven/software.constructs/constructs@%25constructs-version%25",
+      "type": "library",
+      "name": "software.constructs:constructs",
+      "version": "%constructs-version%",
+      "purl": "pkg:maven/software.constructs/constructs@%25constructs-version%25",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pom"
+        }
+      ]
+    },
+    {
+      "bom-ref": "7e8d5645-2397-46c7-823e-5bf1f18bb96e",
+      "type": "application",
+      "name": "node_modules/aws-cdk/lib/init-templates/app/java/pom.xml",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "pom"
+        },
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "lang-pkgs"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/aws-cdk-lib@%25cdk-version%25",
+      "type": "library",
+      "name": "aws-cdk-lib",
+      "version": "%cdk-version%",
+      "purl": "pkg:pypi/aws-cdk-lib@%25cdk-version%25",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pip"
+        }
+      ]
+    },
+    {
+      "bom-ref": "a02b3ce1-63a8-4daf-a6e1-4da1fc55df07",
+      "type": "application",
+      "name": "node_modules/aws-cdk/lib/init-templates/app/python/requirements.txt",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "pip"
+        },
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "lang-pkgs"
+        }
+      ]
+    },
+    {
+      "bom-ref": "11a22b22-817b-48ee-b93d-dfed936e1335",
+      "type": "application",
+      "name": "node_modules/aws-cdk/lib/init-templates/sample-app/java/pom.xml",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "pom"
+        },
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "lang-pkgs"
+        }
+      ]
+    },
+    {
+      "bom-ref": "c6732aa1-a804-4574-9fc5-8759462b05a4",
+      "type": "application",
+      "name": "node_modules/aws-cdk/lib/init-templates/sample-app/python/requirements.txt",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "pip"
+        },
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "lang-pkgs"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/minipass@3.0.0",
+      "type": "library",
+      "name": "minipass",
+      "version": "3.0.0",
+      "purl": "pkg:npm/minipass@3.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "minipass@3.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "bom-ref": "8f353002-0f9b-4bca-a898-9b4ac4ce4516",
+      "type": "application",
+      "name": "node_modules/minipass-sized/package-lock.json",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "npm"
+        },
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "lang-pkgs"
+        }
+      ]
+    },
+    {
+      "bom-ref": "8d2abcb4-8762-489d-9a4a-f5ad75d32a42",
+      "type": "application",
+      "name": "node_modules/uri-js/yarn.lock",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "yarn"
+        },
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "lang-pkgs"
+        }
+      ]
+    },
+    {
+      "bom-ref": "ef8988b9-ab95-4650-a5ea-dea9e16f9765",
+      "type": "application",
+      "name": "package-lock.json",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "npm"
+        },
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "lang-pkgs"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "11a22b22-817b-48ee-b93d-dfed936e1335",
+      "dependsOn": [
+        "pkg:maven/com.myorg/%25name%25@0.1",
+        "pkg:maven/software.amazon.awscdk/aws-cdk-lib@%25cdk-version%25",
+        "pkg:maven/software.constructs/constructs@%25constructs-version%25"
+      ]
+    },
+    {
+      "ref": "202b9e70-e9e4-4c2e-b666-37a326f59784",
+      "dependsOn": [
+        "pkg:pypi/awscli@1.27.129"
+      ]
+    },
+    {
+      "ref": "67859fd7-1fd2-4f9b-bcb5-afa4f93d4a51",
+      "dependsOn": [
+        "c5a9a80d-647a-451c-9b57-5fd4acf1713e",
+        "202b9e70-e9e4-4c2e-b666-37a326f59784",
+        "f9524607-01bb-4fb2-aff7-a02fff95be08",
+        "7e8d5645-2397-46c7-823e-5bf1f18bb96e",
+        "a02b3ce1-63a8-4daf-a6e1-4da1fc55df07",
+        "11a22b22-817b-48ee-b93d-dfed936e1335",
+        "c6732aa1-a804-4574-9fc5-8759462b05a4",
+        "8f353002-0f9b-4bca-a898-9b4ac4ce4516",
+        "8d2abcb4-8762-489d-9a4a-f5ad75d32a42",
+        "ef8988b9-ab95-4650-a5ea-dea9e16f9765"
+      ]
+    },
+    {
+      "ref": "7e8d5645-2397-46c7-823e-5bf1f18bb96e",
+      "dependsOn": [
+        "pkg:maven/com.myorg/%25name%25@0.1",
+        "pkg:maven/software.amazon.awscdk/aws-cdk-lib@%25cdk-version%25",
+        "pkg:maven/software.constructs/constructs@%25constructs-version%25"
+      ]
+    },
+    {
+      "ref": "8d2abcb4-8762-489d-9a4a-f5ad75d32a42",
+      "dependsOn": [
+        "pkg:npm/punycode@2.1.0"
+      ]
+    },
+    {
+      "ref": "8f353002-0f9b-4bca-a898-9b4ac4ce4516",
+      "dependsOn": [
+        "pkg:npm/minipass@3.0.0"
+      ]
+    },
+    {
+      "ref": "a02b3ce1-63a8-4daf-a6e1-4da1fc55df07",
+      "dependsOn": [
+        "pkg:pypi/aws-cdk-lib@%25cdk-version%25"
+      ]
+    },
+    {
+      "ref": "c5a9a80d-647a-451c-9b57-5fd4acf1713e",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/client-codepipeline@3.329.0",
+        "pkg:npm/%40aws-sdk/client-ec2@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-providers@3.329.0",
+        "pkg:npm/%40types/aws-lambda@8.10.115",
+        "pkg:npm/aws-cdk-lib@2.79.0",
+        "pkg:npm/cdk-nag@2.27.1",
+        "pkg:npm/constructs@10.2.19",
+        "pkg:npm/json5@2.2.3",
+        "pkg:npm/prompts@2.4.2",
+        "pkg:npm/yaml@2.2.2"
+      ]
+    },
+    {
+      "ref": "c6732aa1-a804-4574-9fc5-8759462b05a4",
+      "dependsOn": [
+        "pkg:pypi/aws-cdk-lib@%25cdk-version%25"
+      ]
+    },
+    {
+      "ref": "ef8988b9-ab95-4650-a5ea-dea9e16f9765",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/client-codepipeline@3.329.0",
+        "pkg:npm/%40aws-sdk/client-ec2@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-providers@3.329.0",
+        "pkg:npm/%40types/aws-lambda@8.10.115",
+        "pkg:npm/aws-cdk-lib@2.79.0",
+        "pkg:npm/cdk-nag@2.27.1",
+        "pkg:npm/constructs@10.2.19",
+        "pkg:npm/json5@2.2.3",
+        "pkg:npm/prompts@2.4.2",
+        "pkg:npm/yaml@2.2.2"
+      ]
+    },
+    {
+      "ref": "f9524607-01bb-4fb2-aff7-a02fff95be08",
+      "dependsOn": [
+        "pkg:npm/punycode@2.1.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-crypto/ie11-detection@3.0.0",
+      "dependsOn": [
+        "pkg:npm/tslib@1.14.1"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-crypto/sha256-browser@3.0.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-crypto/ie11-detection@3.0.0",
+        "pkg:npm/%40aws-crypto/sha256-js@3.0.0",
+        "pkg:npm/%40aws-crypto/supports-web-crypto@3.0.0",
+        "pkg:npm/%40aws-crypto/util@3.0.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/util-locate-window@3.310.0",
+        "pkg:npm/%40aws-sdk/util-utf8-browser@3.259.0",
+        "pkg:npm/tslib@1.14.1"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-crypto/sha256-js@3.0.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-crypto/util@3.0.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@1.14.1"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-crypto/supports-web-crypto@3.0.0",
+      "dependsOn": [
+        "pkg:npm/tslib@1.14.1"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-crypto/util@3.0.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/util-utf8-browser@3.259.0",
+        "pkg:npm/tslib@1.14.1"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/abort-controller@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/client-codepipeline@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-crypto/sha256-browser@3.0.0",
+        "pkg:npm/%40aws-crypto/sha256-js@3.0.0",
+        "pkg:npm/%40aws-sdk/client-sts@3.329.0",
+        "pkg:npm/%40aws-sdk/config-resolver@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-node@3.329.0",
+        "pkg:npm/%40aws-sdk/fetch-http-handler@3.329.0",
+        "pkg:npm/%40aws-sdk/hash-node@3.329.0",
+        "pkg:npm/%40aws-sdk/invalid-dependency@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-content-length@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-endpoint@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-host-header@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-logger@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-recursion-detection@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-retry@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-serde@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-signing@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-stack@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-user-agent@3.329.0",
+        "pkg:npm/%40aws-sdk/node-config-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/node-http-handler@3.329.0",
+        "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+        "pkg:npm/%40aws-sdk/smithy-client@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/url-parser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-base64@3.310.0",
+        "pkg:npm/%40aws-sdk/util-body-length-browser@3.310.0",
+        "pkg:npm/%40aws-sdk/util-body-length-node@3.310.0",
+        "pkg:npm/%40aws-sdk/util-defaults-mode-browser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-defaults-mode-node@3.329.0",
+        "pkg:npm/%40aws-sdk/util-endpoints@3.329.0",
+        "pkg:npm/%40aws-sdk/util-retry@3.329.0",
+        "pkg:npm/%40aws-sdk/util-user-agent-browser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-user-agent-node@3.329.0",
+        "pkg:npm/%40aws-sdk/util-utf8@3.310.0",
+        "pkg:npm/tslib@2.5.0",
+        "pkg:npm/uuid@8.3.2"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/client-cognito-identity@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-crypto/sha256-browser@3.0.0",
+        "pkg:npm/%40aws-crypto/sha256-js@3.0.0",
+        "pkg:npm/%40aws-sdk/client-sts@3.329.0",
+        "pkg:npm/%40aws-sdk/config-resolver@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-node@3.329.0",
+        "pkg:npm/%40aws-sdk/fetch-http-handler@3.329.0",
+        "pkg:npm/%40aws-sdk/hash-node@3.329.0",
+        "pkg:npm/%40aws-sdk/invalid-dependency@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-content-length@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-endpoint@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-host-header@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-logger@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-recursion-detection@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-retry@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-serde@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-signing@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-stack@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-user-agent@3.329.0",
+        "pkg:npm/%40aws-sdk/node-config-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/node-http-handler@3.329.0",
+        "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+        "pkg:npm/%40aws-sdk/smithy-client@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/url-parser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-base64@3.310.0",
+        "pkg:npm/%40aws-sdk/util-body-length-browser@3.310.0",
+        "pkg:npm/%40aws-sdk/util-body-length-node@3.310.0",
+        "pkg:npm/%40aws-sdk/util-defaults-mode-browser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-defaults-mode-node@3.329.0",
+        "pkg:npm/%40aws-sdk/util-endpoints@3.329.0",
+        "pkg:npm/%40aws-sdk/util-retry@3.329.0",
+        "pkg:npm/%40aws-sdk/util-user-agent-browser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-user-agent-node@3.329.0",
+        "pkg:npm/%40aws-sdk/util-utf8@3.310.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/client-ec2@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-crypto/sha256-browser@3.0.0",
+        "pkg:npm/%40aws-crypto/sha256-js@3.0.0",
+        "pkg:npm/%40aws-sdk/client-sts@3.329.0",
+        "pkg:npm/%40aws-sdk/config-resolver@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-node@3.329.0",
+        "pkg:npm/%40aws-sdk/fetch-http-handler@3.329.0",
+        "pkg:npm/%40aws-sdk/hash-node@3.329.0",
+        "pkg:npm/%40aws-sdk/invalid-dependency@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-content-length@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-endpoint@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-host-header@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-logger@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-recursion-detection@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-retry@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-sdk-ec2@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-serde@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-signing@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-stack@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-user-agent@3.329.0",
+        "pkg:npm/%40aws-sdk/node-config-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/node-http-handler@3.329.0",
+        "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+        "pkg:npm/%40aws-sdk/smithy-client@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/url-parser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-base64@3.310.0",
+        "pkg:npm/%40aws-sdk/util-body-length-browser@3.310.0",
+        "pkg:npm/%40aws-sdk/util-body-length-node@3.310.0",
+        "pkg:npm/%40aws-sdk/util-defaults-mode-browser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-defaults-mode-node@3.329.0",
+        "pkg:npm/%40aws-sdk/util-endpoints@3.329.0",
+        "pkg:npm/%40aws-sdk/util-retry@3.329.0",
+        "pkg:npm/%40aws-sdk/util-user-agent-browser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-user-agent-node@3.329.0",
+        "pkg:npm/%40aws-sdk/util-utf8@3.310.0",
+        "pkg:npm/%40aws-sdk/util-waiter@3.329.0",
+        "pkg:npm/fast-xml-parser@4.1.2",
+        "pkg:npm/tslib@2.5.0",
+        "pkg:npm/uuid@8.3.2"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/client-sso-oidc@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-crypto/sha256-browser@3.0.0",
+        "pkg:npm/%40aws-crypto/sha256-js@3.0.0",
+        "pkg:npm/%40aws-sdk/config-resolver@3.329.0",
+        "pkg:npm/%40aws-sdk/fetch-http-handler@3.329.0",
+        "pkg:npm/%40aws-sdk/hash-node@3.329.0",
+        "pkg:npm/%40aws-sdk/invalid-dependency@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-content-length@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-endpoint@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-host-header@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-logger@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-recursion-detection@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-retry@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-serde@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-stack@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-user-agent@3.329.0",
+        "pkg:npm/%40aws-sdk/node-config-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/node-http-handler@3.329.0",
+        "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+        "pkg:npm/%40aws-sdk/smithy-client@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/url-parser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-base64@3.310.0",
+        "pkg:npm/%40aws-sdk/util-body-length-browser@3.310.0",
+        "pkg:npm/%40aws-sdk/util-body-length-node@3.310.0",
+        "pkg:npm/%40aws-sdk/util-defaults-mode-browser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-defaults-mode-node@3.329.0",
+        "pkg:npm/%40aws-sdk/util-endpoints@3.329.0",
+        "pkg:npm/%40aws-sdk/util-retry@3.329.0",
+        "pkg:npm/%40aws-sdk/util-user-agent-browser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-user-agent-node@3.329.0",
+        "pkg:npm/%40aws-sdk/util-utf8@3.310.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/client-sso@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-crypto/sha256-browser@3.0.0",
+        "pkg:npm/%40aws-crypto/sha256-js@3.0.0",
+        "pkg:npm/%40aws-sdk/config-resolver@3.329.0",
+        "pkg:npm/%40aws-sdk/fetch-http-handler@3.329.0",
+        "pkg:npm/%40aws-sdk/hash-node@3.329.0",
+        "pkg:npm/%40aws-sdk/invalid-dependency@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-content-length@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-endpoint@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-host-header@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-logger@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-recursion-detection@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-retry@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-serde@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-stack@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-user-agent@3.329.0",
+        "pkg:npm/%40aws-sdk/node-config-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/node-http-handler@3.329.0",
+        "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+        "pkg:npm/%40aws-sdk/smithy-client@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/url-parser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-base64@3.310.0",
+        "pkg:npm/%40aws-sdk/util-body-length-browser@3.310.0",
+        "pkg:npm/%40aws-sdk/util-body-length-node@3.310.0",
+        "pkg:npm/%40aws-sdk/util-defaults-mode-browser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-defaults-mode-node@3.329.0",
+        "pkg:npm/%40aws-sdk/util-endpoints@3.329.0",
+        "pkg:npm/%40aws-sdk/util-retry@3.329.0",
+        "pkg:npm/%40aws-sdk/util-user-agent-browser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-user-agent-node@3.329.0",
+        "pkg:npm/%40aws-sdk/util-utf8@3.310.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/client-sts@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-crypto/sha256-browser@3.0.0",
+        "pkg:npm/%40aws-crypto/sha256-js@3.0.0",
+        "pkg:npm/%40aws-sdk/config-resolver@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-node@3.329.0",
+        "pkg:npm/%40aws-sdk/fetch-http-handler@3.329.0",
+        "pkg:npm/%40aws-sdk/hash-node@3.329.0",
+        "pkg:npm/%40aws-sdk/invalid-dependency@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-content-length@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-endpoint@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-host-header@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-logger@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-recursion-detection@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-retry@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-sdk-sts@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-serde@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-signing@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-stack@3.329.0",
+        "pkg:npm/%40aws-sdk/middleware-user-agent@3.329.0",
+        "pkg:npm/%40aws-sdk/node-config-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/node-http-handler@3.329.0",
+        "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+        "pkg:npm/%40aws-sdk/smithy-client@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/url-parser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-base64@3.310.0",
+        "pkg:npm/%40aws-sdk/util-body-length-browser@3.310.0",
+        "pkg:npm/%40aws-sdk/util-body-length-node@3.310.0",
+        "pkg:npm/%40aws-sdk/util-defaults-mode-browser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-defaults-mode-node@3.329.0",
+        "pkg:npm/%40aws-sdk/util-endpoints@3.329.0",
+        "pkg:npm/%40aws-sdk/util-retry@3.329.0",
+        "pkg:npm/%40aws-sdk/util-user-agent-browser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-user-agent-node@3.329.0",
+        "pkg:npm/%40aws-sdk/util-utf8@3.310.0",
+        "pkg:npm/fast-xml-parser@4.1.2",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/config-resolver@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/util-config-provider@3.310.0",
+        "pkg:npm/%40aws-sdk/util-middleware@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/credential-provider-cognito-identity@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/client-cognito-identity@3.329.0",
+        "pkg:npm/%40aws-sdk/property-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/credential-provider-env@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/property-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/credential-provider-imds@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/node-config-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/property-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/url-parser@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/credential-provider-ini@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/credential-provider-env@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-imds@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-process@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-sso@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-web-identity@3.329.0",
+        "pkg:npm/%40aws-sdk/property-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/shared-ini-file-loader@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/credential-provider-node@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/credential-provider-env@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-imds@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-ini@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-process@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-sso@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-web-identity@3.329.0",
+        "pkg:npm/%40aws-sdk/property-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/shared-ini-file-loader@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/credential-provider-process@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/property-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/shared-ini-file-loader@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/credential-provider-sso@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/client-sso@3.329.0",
+        "pkg:npm/%40aws-sdk/property-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/shared-ini-file-loader@3.329.0",
+        "pkg:npm/%40aws-sdk/token-providers@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/credential-provider-web-identity@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/property-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/credential-providers@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/client-cognito-identity@3.329.0",
+        "pkg:npm/%40aws-sdk/client-sso@3.329.0",
+        "pkg:npm/%40aws-sdk/client-sts@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-cognito-identity@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-env@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-imds@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-ini@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-node@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-process@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-sso@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-web-identity@3.329.0",
+        "pkg:npm/%40aws-sdk/property-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/fetch-http-handler@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+        "pkg:npm/%40aws-sdk/querystring-builder@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/util-base64@3.310.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/hash-node@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/util-buffer-from@3.310.0",
+        "pkg:npm/%40aws-sdk/util-utf8@3.310.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/invalid-dependency@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/is-array-buffer@3.310.0",
+      "dependsOn": [
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/middleware-content-length@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/middleware-endpoint@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/middleware-serde@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/url-parser@3.329.0",
+        "pkg:npm/%40aws-sdk/util-middleware@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/middleware-host-header@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/middleware-logger@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/middleware-recursion-detection@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/middleware-retry@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+        "pkg:npm/%40aws-sdk/service-error-classification@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/util-middleware@3.329.0",
+        "pkg:npm/%40aws-sdk/util-retry@3.329.0",
+        "pkg:npm/tslib@2.5.0",
+        "pkg:npm/uuid@8.3.2"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/middleware-sdk-ec2@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/middleware-endpoint@3.329.0",
+        "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+        "pkg:npm/%40aws-sdk/signature-v4@3.329.0",
+        "pkg:npm/%40aws-sdk/smithy-client@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/util-format-url@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/middleware-sdk-sts@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/middleware-signing@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/middleware-serde@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/middleware-signing@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/property-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+        "pkg:npm/%40aws-sdk/signature-v4@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/util-middleware@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/middleware-stack@3.329.0",
+      "dependsOn": [
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/middleware-user-agent@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/util-endpoints@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/node-config-provider@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/property-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/shared-ini-file-loader@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/node-http-handler@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/abort-controller@3.329.0",
+        "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+        "pkg:npm/%40aws-sdk/querystring-builder@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/property-provider@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/protocol-http@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/querystring-builder@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/util-uri-escape@3.310.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/querystring-parser@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/shared-ini-file-loader@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/signature-v4@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/is-array-buffer@3.310.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/%40aws-sdk/util-hex-encoding@3.310.0",
+        "pkg:npm/%40aws-sdk/util-middleware@3.329.0",
+        "pkg:npm/%40aws-sdk/util-uri-escape@3.310.0",
+        "pkg:npm/%40aws-sdk/util-utf8@3.310.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/smithy-client@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/middleware-stack@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/token-providers@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/client-sso-oidc@3.329.0",
+        "pkg:npm/%40aws-sdk/property-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/shared-ini-file-loader@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/types@3.329.0",
+      "dependsOn": [
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/url-parser@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/querystring-parser@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-base64@3.310.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/util-buffer-from@3.310.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-body-length-browser@3.310.0",
+      "dependsOn": [
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-body-length-node@3.310.0",
+      "dependsOn": [
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-buffer-from@3.310.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/is-array-buffer@3.310.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-config-provider@3.310.0",
+      "dependsOn": [
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-defaults-mode-browser@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/property-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/bowser@2.11.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-defaults-mode-node@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/config-resolver@3.329.0",
+        "pkg:npm/%40aws-sdk/credential-provider-imds@3.329.0",
+        "pkg:npm/%40aws-sdk/node-config-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/property-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-endpoints@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-format-url@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/querystring-builder@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-hex-encoding@3.310.0",
+      "dependsOn": [
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-locate-window@3.310.0",
+      "dependsOn": [
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-middleware@3.329.0",
+      "dependsOn": [
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-retry@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/service-error-classification@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-uri-escape@3.310.0",
+      "dependsOn": [
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-user-agent-browser@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/bowser@2.11.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-user-agent-node@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/node-config-provider@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-utf8-browser@3.259.0",
+      "dependsOn": [
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-utf8@3.310.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/util-buffer-from@3.310.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40aws-sdk/util-waiter@3.329.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-sdk/abort-controller@3.329.0",
+        "pkg:npm/%40aws-sdk/types@3.329.0",
+        "pkg:npm/tslib@2.5.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/ajv@8.12.0",
+      "dependsOn": [
+        "pkg:npm/fast-deep-equal@3.1.3",
+        "pkg:npm/json-schema-traverse@1.0.0",
+        "pkg:npm/require-from-string@2.0.2",
+        "pkg:npm/uri-js@4.4.1"
+      ]
+    },
+    {
+      "ref": "pkg:npm/ansi-styles@4.3.0",
+      "dependsOn": [
+        "pkg:npm/color-convert@2.0.1"
+      ]
+    },
+    {
+      "ref": "pkg:npm/aws-cdk-lib@2.79.0",
+      "dependsOn": [
+        "pkg:npm/%40aws-cdk/asset-awscli-v1@2.2.169",
+        "pkg:npm/%40aws-cdk/asset-kubectl-v20@2.1.1",
+        "pkg:npm/%40aws-cdk/asset-node-proxy-agent-v5@2.0.142",
+        "pkg:npm/%40balena/dockerignore@1.0.2",
+        "pkg:npm/case@1.6.3",
+        "pkg:npm/fs-extra@11.1.1",
+        "pkg:npm/ignore@5.2.4",
+        "pkg:npm/jsonschema@1.4.1",
+        "pkg:npm/minimatch@3.1.2",
+        "pkg:npm/punycode@2.3.0",
+        "pkg:npm/semver@7.5.0",
+        "pkg:npm/table@6.8.1",
+        "pkg:npm/yaml@1.10.2"
+      ]
+    },
+    {
+      "ref": "pkg:npm/brace-expansion@1.1.11",
+      "dependsOn": [
+        "pkg:npm/balanced-match@1.0.2",
+        "pkg:npm/concat-map@0.0.1"
+      ]
+    },
+    {
+      "ref": "pkg:npm/color-convert@2.0.1",
+      "dependsOn": [
+        "pkg:npm/color-name@1.1.4"
+      ]
+    },
+    {
+      "ref": "pkg:npm/fast-xml-parser@4.1.2",
+      "dependsOn": [
+        "pkg:npm/strnum@1.0.5"
+      ]
+    },
+    {
+      "ref": "pkg:npm/fs-extra@11.1.1",
+      "dependsOn": [
+        "pkg:npm/graceful-fs@4.2.11",
+        "pkg:npm/jsonfile@6.1.0",
+        "pkg:npm/universalify@2.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/jsonfile@6.1.0",
+      "dependsOn": [
+        "pkg:npm/graceful-fs@4.2.11",
+        "pkg:npm/universalify@2.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/lru-cache@6.0.0",
+      "dependsOn": [
+        "pkg:npm/yallist@4.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/minimatch@3.1.2",
+      "dependsOn": [
+        "pkg:npm/brace-expansion@1.1.11"
+      ]
+    },
+    {
+      "ref": "pkg:npm/minipass@3.0.0",
+      "dependsOn": [
+        "pkg:npm/yallist@4.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/prompts@2.4.2",
+      "dependsOn": [
+        "pkg:npm/kleur@3.0.3",
+        "pkg:npm/sisteransi@1.0.5"
+      ]
+    },
+    {
+      "ref": "pkg:npm/semver@7.5.0",
+      "dependsOn": [
+        "pkg:npm/lru-cache@6.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/slice-ansi@4.0.0",
+      "dependsOn": [
+        "pkg:npm/ansi-styles@4.3.0",
+        "pkg:npm/astral-regex@2.0.0",
+        "pkg:npm/is-fullwidth-code-point@3.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/string-width@4.2.3",
+      "dependsOn": [
+        "pkg:npm/emoji-regex@8.0.0",
+        "pkg:npm/is-fullwidth-code-point@3.0.0",
+        "pkg:npm/strip-ansi@6.0.1"
+      ]
+    },
+    {
+      "ref": "pkg:npm/strip-ansi@6.0.1",
+      "dependsOn": [
+        "pkg:npm/ansi-regex@5.0.1"
+      ]
+    },
+    {
+      "ref": "pkg:npm/table@6.8.1",
+      "dependsOn": [
+        "pkg:npm/ajv@8.12.0",
+        "pkg:npm/lodash.truncate@4.4.2",
+        "pkg:npm/slice-ansi@4.0.0",
+        "pkg:npm/string-width@4.2.3",
+        "pkg:npm/strip-ansi@6.0.1"
+      ]
+    },
+    {
+      "ref": "pkg:npm/uri-js@4.4.1",
+      "dependsOn": [
+        "pkg:npm/punycode@2.3.0"
+      ]
+    }
+  ],
+  "vulnerabilities": []
+}

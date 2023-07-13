@@ -1,5 +1,6 @@
 # Architecture
 
+The term "Application" is used synonymously with the term "Component" [as defined by the Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html) and other DPRA pipelines.
 Applications are the most common use case for a deployment pipeline. This pipeline type will take source code files, tests, static analysis, database deployment, configuration, and other code to perform build, test, deploy, and release processes. The pipeline launches an environment from the compute image artifacts generated in the compute image pipeline. Automated tests are run on the environment(s) as part of the deployment pipeline.
 
 This pipeline encourages trunk based development in which developers frequently avoid long-lived branches and regulary commit their changes to the trunk. Therefore this pipeline only executes for commits to the trunk. Every commit to the trunk has a change to go to production if all steps of the pipeline complete successfully.

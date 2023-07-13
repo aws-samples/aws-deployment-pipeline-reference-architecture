@@ -1,0 +1,7 @@
+target/
+cdk.out/
+coverage/
+test-reports/
+node_modules/
+
+cdk.context.json
