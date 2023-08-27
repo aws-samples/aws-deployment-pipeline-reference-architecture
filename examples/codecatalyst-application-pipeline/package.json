@@ -15,7 +15,7 @@
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
     "aws-cdk": "^2.93.0",
-    "cdk-nag": "^2.27.112",
+    "cdk-nag": "^2.27.113",
     "esbuild": "^0.19.2",
     "eslint": "^8.48.0",
     "eslint-import-resolver-node": "^0.3.9",
@@ -26,7 +26,7 @@
     "json-schema": "^0.4.0",
     "license-checker": "^25.0.1",
     "npm-check-updates": "^16.13.1",
-    "projen": "^0.72.24",
+    "projen": "^0.72.25",
     "ts-jest": "^29.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
