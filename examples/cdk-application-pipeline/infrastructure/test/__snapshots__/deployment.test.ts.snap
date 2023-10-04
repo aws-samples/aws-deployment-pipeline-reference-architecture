@@ -873,7 +873,7 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -1014,7 +1014,7 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -1159,7 +1159,7 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -2281,6 +2281,12 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
           "Ref": "Vpc8378EB38",
         },
         "ResourceType": "VPC",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/VpcFlowLog",
+          },
+        ],
         "TrafficType": "ALL",
       },
       "Type": "AWS::EC2::FlowLog",
@@ -2299,6 +2305,12 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/VpcFlowLog",
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -2346,6 +2358,12 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
       "DeletionPolicy": "Retain",
       "Properties": {
         "RetentionInDays": 731,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/VpcFlowLog",
+          },
+        ],
       },
       "Type": "AWS::Logs::LogGroup",
       "UpdateReplacePolicy": "Retain",
@@ -3765,7 +3783,7 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -3906,7 +3924,7 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -4051,7 +4069,7 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -5109,6 +5127,12 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
           "Ref": "Vpc8378EB38",
         },
         "ResourceType": "VPC",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/VpcFlowLog",
+          },
+        ],
         "TrafficType": "ALL",
       },
       "Type": "AWS::EC2::FlowLog",
@@ -5127,6 +5151,12 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/VpcFlowLog",
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -5174,6 +5204,12 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
       "DeletionPolicy": "Retain",
       "Properties": {
         "RetentionInDays": 731,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/VpcFlowLog",
+          },
+        ],
       },
       "Type": "AWS::Logs::LogGroup",
       "UpdateReplacePolicy": "Retain",
@@ -6742,7 +6778,7 @@ exports[`cdk-nag Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -6946,7 +6982,7 @@ exports[`cdk-nag Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -7154,7 +7190,7 @@ exports[`cdk-nag Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -8400,6 +8436,12 @@ exports[`cdk-nag Snapshot 1`] = `
           "Ref": "Vpc8378EB38",
         },
         "ResourceType": "VPC",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/VpcFlowLog",
+          },
+        ],
         "TrafficType": "ALL",
       },
       "Type": "AWS::EC2::FlowLog",
@@ -8418,6 +8460,12 @@ exports[`cdk-nag Snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/VpcFlowLog",
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -8465,6 +8513,12 @@ exports[`cdk-nag Snapshot 1`] = `
       "DeletionPolicy": "Retain",
       "Properties": {
         "RetentionInDays": 731,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/VpcFlowLog",
+          },
+        ],
       },
       "Type": "AWS::Logs::LogGroup",
       "UpdateReplacePolicy": "Retain",
