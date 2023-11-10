@@ -1478,7 +1478,6 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
     },
     "ApiLB8D4BD609": {
       "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
         "ApiAccessLogBucket47540DA5",
         "VpcPublicSubnet1DefaultRoute3DA9E72A",
         "VpcPublicSubnet1RouteTableAssociation97140677",
@@ -1534,8 +1533,6 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
     },
     "ApiLBPublicListener5142AAA5": {
       "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
-        "ApiAccessLogBucket47540DA5",
         "ApiGreenTargetGroup8D009A5A",
       ],
       "Properties": {
@@ -1557,8 +1554,6 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
     },
     "ApiLBPublicListenerECSGroup45FF926A": {
       "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
-        "ApiAccessLogBucket47540DA5",
         "ApiGreenTargetGroup8D009A5A",
       ],
       "Properties": {
@@ -1586,10 +1581,6 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
     "ApiLBSecurityGroup70AC4E5C": {
-      "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
-        "ApiAccessLogBucket47540DA5",
-      ],
       "Properties": {
         "GroupDescription": "Automatically created Security Group for ELB TestStackApiLBF4CC58DF",
         "SecurityGroupIngress": [
@@ -1615,10 +1606,6 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
       "Type": "AWS::EC2::SecurityGroup",
     },
     "ApiLBSecurityGrouptoTestStackApiServiceSecurityGroup56AF4AC580804BAC35E7": {
-      "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
-        "ApiAccessLogBucket47540DA5",
-      ],
       "Properties": {
         "Description": "Load balancer to target",
         "DestinationSecurityGroupId": {
@@ -1640,10 +1627,6 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
     "ApiLBTestListener069F7CE5": {
-      "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
-        "ApiAccessLogBucket47540DA5",
-      ],
       "Properties": {
         "DefaultActions": [
           {
@@ -4388,7 +4371,6 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
     },
     "ApiLB8D4BD609": {
       "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
         "ApiAccessLogBucket47540DA5",
         "VpcPublicSubnet1DefaultRoute3DA9E72A",
         "VpcPublicSubnet1RouteTableAssociation97140677",
@@ -4444,8 +4426,6 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
     },
     "ApiLBPublicListener5142AAA5": {
       "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
-        "ApiAccessLogBucket47540DA5",
         "ApiGreenTargetGroup8D009A5A",
       ],
       "Properties": {
@@ -4467,8 +4447,6 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
     },
     "ApiLBPublicListenerECSGroup45FF926A": {
       "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
-        "ApiAccessLogBucket47540DA5",
         "ApiGreenTargetGroup8D009A5A",
       ],
       "Properties": {
@@ -4496,10 +4474,6 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
     "ApiLBSecurityGroup70AC4E5C": {
-      "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
-        "ApiAccessLogBucket47540DA5",
-      ],
       "Properties": {
         "GroupDescription": "Automatically created Security Group for ELB TestStackApiLBF4CC58DF",
         "SecurityGroupIngress": [
@@ -4525,10 +4499,6 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
       "Type": "AWS::EC2::SecurityGroup",
     },
     "ApiLBSecurityGrouptoTestStackApiServiceSecurityGroup56AF4AC580804BAC35E7": {
-      "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
-        "ApiAccessLogBucket47540DA5",
-      ],
       "Properties": {
         "Description": "Load balancer to target",
         "DestinationSecurityGroupId": {
@@ -4550,10 +4520,6 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
     "ApiLBTestListener069F7CE5": {
-      "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
-        "ApiAccessLogBucket47540DA5",
-      ],
       "Properties": {
         "DefaultActions": [
           {
@@ -7627,7 +7593,6 @@ exports[`cdk-nag Snapshot 1`] = `
     },
     "ApiLB8D4BD609": {
       "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
         "ApiAccessLogBucket47540DA5",
         "VpcPublicSubnet1DefaultRoute3DA9E72A",
         "VpcPublicSubnet1RouteTableAssociation97140677",
@@ -7683,8 +7648,6 @@ exports[`cdk-nag Snapshot 1`] = `
     },
     "ApiLBPublicListener5142AAA5": {
       "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
-        "ApiAccessLogBucket47540DA5",
         "ApiGreenTargetGroup8D009A5A",
       ],
       "Properties": {
@@ -7706,8 +7669,6 @@ exports[`cdk-nag Snapshot 1`] = `
     },
     "ApiLBPublicListenerECSGroup45FF926A": {
       "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
-        "ApiAccessLogBucket47540DA5",
         "ApiGreenTargetGroup8D009A5A",
       ],
       "Properties": {
@@ -7735,10 +7696,6 @@ exports[`cdk-nag Snapshot 1`] = `
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
     "ApiLBSecurityGroup70AC4E5C": {
-      "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
-        "ApiAccessLogBucket47540DA5",
-      ],
       "Metadata": {
         "cdk_nag": {
           "rules_to_suppress": [
@@ -7774,10 +7731,6 @@ exports[`cdk-nag Snapshot 1`] = `
       "Type": "AWS::EC2::SecurityGroup",
     },
     "ApiLBSecurityGrouptoTestStackApiServiceSecurityGroup56AF4AC580804BAC35E7": {
-      "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
-        "ApiAccessLogBucket47540DA5",
-      ],
       "Properties": {
         "Description": "Load balancer to target",
         "DestinationSecurityGroupId": {
@@ -7799,10 +7752,6 @@ exports[`cdk-nag Snapshot 1`] = `
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
     "ApiLBTestListener069F7CE5": {
-      "DependsOn": [
-        "ApiAccessLogBucketPolicy66E268A7",
-        "ApiAccessLogBucket47540DA5",
-      ],
       "Properties": {
         "DefaultActions": [
           {
