@@ -54,12 +54,12 @@
     <dependency>
       <artifactId>logback-core</artifactId>
       <groupId>ch.qos.logback</groupId>
-      <version>1.4.12</version>
+      <version>1.4.14</version>
     </dependency>
     <dependency>
       <artifactId>logback-classic</artifactId>
       <groupId>ch.qos.logback</groupId>
-      <version>1.4.12</version>
+      <version>1.4.14</version>
     </dependency>
     <dependency>
       <groupId>org.springdoc</groupId>
