@@ -14,8 +14,8 @@
     "@types/node": "^20.10.3",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
-    "aws-cdk": "^2.113.0",
-    "cdk-nag": "^2.27.208",
+    "aws-cdk": "^2.114.0",
+    "cdk-nag": "^2.27.209",
     "esbuild": "^0.19.8",
     "eslint": "^8.55.0",
     "eslint-import-resolver-node": "^0.3.9",
@@ -32,7 +32,7 @@
     "typescript": "^5.3.2"
   },
   "dependencies": {
-    "@aws-sdk/client-cloudformation": "^3.466.0",
+    "@aws-sdk/client-cloudformation": "^3.467.0",
     "@aws-sdk/client-codedeploy": "^3.465.0",
     "@aws-sdk/client-codeguru-reviewer": "^3.465.0",
     "@aws-sdk/client-codepipeline": "^3.465.0",
@@ -42,10 +42,10 @@
     "@aws-sdk/client-sts": "^3.465.0",
     "@aws-sdk/credential-providers": "^3.465.0",
     "@aws-sdk/shared-ini-file-loader": "^3.374.0",
-    "@cdklabs/cdk-ecs-codedeploy": "^0.0.217",
+    "@cdklabs/cdk-ecs-codedeploy": "^0.0.218",
     "@types/aws-lambda": "^8.10.130",
     "@types/prompts": "^2.4.9",
-    "aws-cdk-lib": "^2.113.0",
+    "aws-cdk-lib": "^2.114.0",
     "constructs": "^10.3.0",
     "prompts": "^2.4.2",
     "yaml": "^2.3.4"
