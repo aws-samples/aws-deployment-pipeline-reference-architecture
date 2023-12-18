@@ -11,11 +11,11 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5",
-    "@types/node": "^20.10.4",
+    "@types/node": "^20.10.5",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
     "@typescript-eslint/parser": "^6.14.0",
     "aws-cdk": "^2.115.0",
-    "cdk-nag": "^2.27.219",
+    "cdk-nag": "^2.27.220",
     "esbuild": "^0.19.9",
     "eslint": "^8.56.0",
     "eslint-import-resolver-node": "^0.3.9",
@@ -26,7 +26,7 @@
     "json-schema": "^0.4.0",
     "license-checker": "^25.0.1",
     "npm-check-updates": "^16.14.12",
-    "projen": "^0.77.6",
+    "projen": "^0.78.0",
     "ts-jest": "^29.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
