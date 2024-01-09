@@ -12,10 +12,10 @@
   "devDependencies": {
     "@types/jest": "^29.5",
     "@types/node": "^20.10.7",
-    "@typescript-eslint/eslint-plugin": "^6.18.0",
-    "@typescript-eslint/parser": "^6.18.0",
+    "@typescript-eslint/eslint-plugin": "^6.18.1",
+    "@typescript-eslint/parser": "^6.18.1",
     "aws-cdk": "^2.118.0",
-    "cdk-nag": "^2.28.3",
+    "cdk-nag": "^2.28.4",
     "esbuild": "^0.19.11",
     "eslint": "^8.56.0",
     "eslint-import-resolver-node": "^0.3.9",
