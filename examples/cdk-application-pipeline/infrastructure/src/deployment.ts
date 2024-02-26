@@ -95,7 +95,7 @@ export class DeploymentStack extends Stack {
       },
       deregistrationDelay: Duration.seconds(5),
       responseTimeAlarmThreshold: Duration.seconds(3),
-      healthCheck: {
+      targetHealthCheck: {
         healthyThresholdCount: 2,
         unhealthyThresholdCount: 2,
         interval: Duration.seconds(60),
