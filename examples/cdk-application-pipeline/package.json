@@ -15,7 +15,7 @@
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "aws-cdk": "^2.132.1",
-    "cdk-nag": "^2.28.61",
+    "cdk-nag": "^2.28.62",
     "esbuild": "^0.20.1",
     "eslint": "^8.57.0",
     "eslint-import-resolver-node": "^0.3.9",
@@ -32,7 +32,7 @@
     "typescript": "^5.4.2"
   },
   "dependencies": {
-    "@aws-sdk/client-cloudformation": "^3.529.1",
+    "@aws-sdk/client-cloudformation": "^3.532.0",
     "@aws-sdk/client-codedeploy": "^3.529.1",
     "@aws-sdk/client-codeguru-reviewer": "^3.529.1",
     "@aws-sdk/client-codepipeline": "^3.529.1",
