@@ -970,9 +970,4 @@ your CI/CD pipelines, enforcing least privilege access using IAM roles
 and policies, and enabling GuardDuty to quickly detect potential threats
 in CI/CD infrastructure.
 
-Finally, AWS recommends implementing the architecture best practices
-specified in the [Security Pillar of the Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/security.html). The Security Pillar contains guidance on how to
-[implement](https://docs.aws.amazon.com/wellarchitected/latest/framework/sec-11.html)
-application security controls to protect the CI/CD pipeline, implement
-regular scanning for security issues, and enable distributed ownership
-of security within development teams.  
+Finally, AWS recommends implementing the architecture best practices specified in the [Security Pillar of the Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/security.html). The Security Pillar contains guidance on how to [implement](https://docs.aws.amazon.com/wellarchitected/latest/framework/sec-11.html) application security controls to protect the CI/CD pipeline, implement regular scanning for security issues, and enable distributed ownership of security within development teams.
