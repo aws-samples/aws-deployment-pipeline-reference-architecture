@@ -42,7 +42,7 @@
     "@aws-sdk/client-sts": "^3.540.0",
     "@aws-sdk/credential-providers": "^3.540.0",
     "@aws-sdk/shared-ini-file-loader": "^3.374.0",
-    "@cdklabs/cdk-ecs-codedeploy": "^0.0.264",
+    "@cdklabs/cdk-ecs-codedeploy": "^0.0.265",
     "@types/aws-lambda": "^8.10.136",
     "@types/prompts": "^2.4.9",
     "aws-cdk-lib": "^2.133.0",
