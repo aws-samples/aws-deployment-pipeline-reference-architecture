@@ -1291,6 +1291,22 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
             ],
           ],
         },
+        "LoggingConfiguration": {
+          "Destinations": [
+            {
+              "CloudWatchLogsLogGroup": {
+                "LogGroupArn": {
+                  "Fn::GetAtt": [
+                    "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineLogGroup517DAE0D",
+                    "Arn",
+                  ],
+                },
+              },
+            },
+          ],
+          "IncludeExecutionData": false,
+          "Level": "ERROR",
+        },
         "RoleArn": {
           "Fn::GetAtt": [
             "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineRoleF348B4FE",
@@ -1299,6 +1315,26 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
         },
       },
       "Type": "AWS::StepFunctions::StateMachine",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineLogGroup517DAE0D": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/vendedlogs/states/waiter-state-machine-",
+              {
+                "Ref": "ApiDeploymentGroupDeploymentDeploymentProviderframeworkisCompleteE40E40A9",
+              },
+              "-c872fe0ca7f2ede0751abdd2a2031e06c4cebd728a",
+            ],
+          ],
+        },
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineRoleDefaultPolicy0018A70D": {
       "Properties": {
@@ -1355,6 +1391,22 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": [
+                "logs:CreateLogDelivery",
+                "logs:CreateLogStream",
+                "logs:GetLogDelivery",
+                "logs:UpdateLogDelivery",
+                "logs:DeleteLogDelivery",
+                "logs:ListLogDeliveries",
+                "logs:PutLogEvents",
+                "logs:PutResourcePolicy",
+                "logs:DescribeResourcePolicies",
+                "logs:DescribeLogGroups",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
             },
           ],
           "Version": "2012-10-17",
@@ -4184,6 +4236,22 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
             ],
           ],
         },
+        "LoggingConfiguration": {
+          "Destinations": [
+            {
+              "CloudWatchLogsLogGroup": {
+                "LogGroupArn": {
+                  "Fn::GetAtt": [
+                    "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineLogGroup517DAE0D",
+                    "Arn",
+                  ],
+                },
+              },
+            },
+          ],
+          "IncludeExecutionData": false,
+          "Level": "ERROR",
+        },
         "RoleArn": {
           "Fn::GetAtt": [
             "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineRoleF348B4FE",
@@ -4192,6 +4260,26 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
         },
       },
       "Type": "AWS::StepFunctions::StateMachine",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineLogGroup517DAE0D": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/vendedlogs/states/waiter-state-machine-",
+              {
+                "Ref": "ApiDeploymentGroupDeploymentDeploymentProviderframeworkisCompleteE40E40A9",
+              },
+              "-c872fe0ca7f2ede0751abdd2a2031e06c4cebd728a",
+            ],
+          ],
+        },
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineRoleDefaultPolicy0018A70D": {
       "Properties": {
@@ -4248,6 +4336,22 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": [
+                "logs:CreateLogDelivery",
+                "logs:CreateLogStream",
+                "logs:GetLogDelivery",
+                "logs:UpdateLogDelivery",
+                "logs:DeleteLogDelivery",
+                "logs:ListLogDeliveries",
+                "logs:PutLogEvents",
+                "logs:PutResourcePolicy",
+                "logs:DescribeResourcePolicies",
+                "logs:DescribeLogGroups",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
             },
           ],
           "Version": "2012-10-17",
@@ -7431,6 +7535,22 @@ exports[`cdk-nag Snapshot 1`] = `
             ],
           ],
         },
+        "LoggingConfiguration": {
+          "Destinations": [
+            {
+              "CloudWatchLogsLogGroup": {
+                "LogGroupArn": {
+                  "Fn::GetAtt": [
+                    "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineLogGroup517DAE0D",
+                    "Arn",
+                  ],
+                },
+              },
+            },
+          ],
+          "IncludeExecutionData": false,
+          "Level": "ERROR",
+        },
         "RoleArn": {
           "Fn::GetAtt": [
             "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineRoleF348B4FE",
@@ -7439,6 +7559,55 @@ exports[`cdk-nag Snapshot 1`] = `
         },
       },
       "Type": "AWS::StepFunctions::StateMachine",
+    },
+    "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineLogGroup517DAE0D": {
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "cdk_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF2",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "applies_to": [
+                "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+              "id": "AwsSolutions-IAM4",
+              "reason": "Allow AWSLambdaBasicExecutionRole policy",
+            },
+          ],
+        },
+      },
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/vendedlogs/states/waiter-state-machine-",
+              {
+                "Ref": "ApiDeploymentGroupDeploymentDeploymentProviderframeworkisCompleteE40E40A9",
+              },
+              "-c872fe0ca7f2ede0751abdd2a2031e06c4cebd728a",
+            ],
+          ],
+        },
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiDeploymentGroupDeploymentDeploymentProviderwaiterstatemachineRoleDefaultPolicy0018A70D": {
       "Metadata": {
@@ -7524,6 +7693,22 @@ exports[`cdk-nag Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": [
+                "logs:CreateLogDelivery",
+                "logs:CreateLogStream",
+                "logs:GetLogDelivery",
+                "logs:UpdateLogDelivery",
+                "logs:DeleteLogDelivery",
+                "logs:ListLogDeliveries",
+                "logs:PutLogEvents",
+                "logs:PutResourcePolicy",
+                "logs:DescribeResourcePolicies",
+                "logs:DescribeLogGroups",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
             },
           ],
           "Version": "2012-10-17",
