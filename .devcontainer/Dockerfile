@@ -5,9 +5,9 @@ RUN apt-get update \
                           gnupg2 software-properties-common less vim graphviz \
                           libgbm-dev libasound2 xvfb
 RUN curl -s https://api.github.com/repos/jgraph/drawio-desktop/releases/latest \
-    | grep browser_download_url | grep '\.deb' | cut -d '"' -f 4 | wget -i - \
-    && apt -f install -y ./drawio-amd64-*.deb \
-    && rm -f ./drawio-amd64-*.deb
+    | grep browser_download_url | grep '\.deb' | grep $(dpkg --print-architecture) | cut -d '"' -f 4 | wget -i - \
+    && apt -f install -y ./drawio-$(dpkg --print-architecture)-*.deb \
+    && rm -f ./drawio-$(dpkg --print-architecture)-*.deb
 
 COPY requirements.txt /tmp/
 RUN pip install -r /tmp/requirements.txt
