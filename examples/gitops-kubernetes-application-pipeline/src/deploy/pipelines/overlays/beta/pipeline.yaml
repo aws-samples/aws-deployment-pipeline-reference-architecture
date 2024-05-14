@@ -1,0 +1,85 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: buildpack-build
+  namespace: tekton-runtime
+spec:
+  params:
+    - name: repository
+      type: string
+    - name: revision
+      type: string
+    - name: namespace
+      type: string
+  workspaces:
+    - name: source-workspace
+  tasks:
+    - name: fetch-repository
+      taskRef:
+        name: flux-clone
+      workspaces:
+        - name: output
+          workspace: source-workspace
+      params:
+        - name: repository
+          value: $(params.repository)
+        - name: revision
+          value: $(params.revision)
+        - name: namespace
+          value: $(params.namespace)
+    - name: snyk-scan
+      runAfter:
+        - fetch-repository
+      taskRef:
+        name: snyk-scan
+      workspaces:
+        - name: source
+          workspace: source-workspace
+      params:
+        - name: snyk-token
+          value: dabe7d01-8f91-42c0-89c1-e86e0351177e
+        - name: target-directory
+          value: /examples/gitops-kubernetes-application-pipeline/src
+    - name: buildpacks
+      taskRef:
+        name: buildpacks
+      runAfter:
+        - snyk-scan
+      workspaces:
+        - name: source
+          workspace: source-workspace
+      params:
+        - name: APP_IMAGE
+          value: $(tasks.fetch-repository.results.imageTag)
+        - name: SOURCE_SUBPATH
+          value: /examples/gitops-kubernetes-application-pipeline/src
+        - name: BUILDER_IMAGE
+          value: paketobuildpacks/builder:base
+    - name: deploy-gamma
+      taskRef:
+        name: deploy-gamma
+      runAfter:
+        name: buildpacks
+      workspaces:
+        - name: source
+          workspace: source-workspace
+      params:
+        - name: APP_IMAGE_DIGEST
+          value: $(tasks.buildpacks.results.APP_IMAGE_DIGEST)
+    - name: display-results
+      runAfter:
+        - buildpacks
+      taskSpec:
+        steps:
+          - name: print
+            image: docker.io/library/bash:5.1.4@sha256:b208215a4655538be652b2769d82e576bc4d0a2bb132144c060efc5be8c3f5d6
+            script: |
+              #!/usr/bin/env bash
+              set -e
+              echo "Digest of created app image: $(params.DIGEST)"              
+        params:
+          - name: DIGEST
+      params:
+        - name: DIGEST
+          value: $(tasks.buildpacks.results.APP_IMAGE_DIGEST)
