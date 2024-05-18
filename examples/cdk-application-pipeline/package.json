@@ -15,7 +15,7 @@
     "@typescript-eslint/eslint-plugin": "^7.9.0",
     "@typescript-eslint/parser": "^7.9.0",
     "aws-cdk": "^2.142.1",
-    "cdk-nag": "^2.28.117",
+    "cdk-nag": "^2.28.118",
     "esbuild": "^0.20.2",
     "eslint": "^8.57.0",
     "eslint-import-resolver-node": "^0.3.9",
