@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.2.5</version>
+    <version>3.3.0</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.amazonaws.dpri</groupId>
@@ -64,7 +64,7 @@
     <dependency>
       <groupId>org.liquibase</groupId>
       <artifactId>liquibase-core</artifactId>
-      <version>4.27.0</version>
+      <version>4.28.0</version>
     </dependency>
     <dependency>
       <groupId>com.h2database</groupId>
@@ -95,7 +95,7 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-framework-bom</artifactId>
-        <version>6.1.7</version>
+        <version>6.1.8</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
