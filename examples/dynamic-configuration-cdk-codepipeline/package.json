@@ -46,6 +46,8 @@
   "overrides": {
     "tsconfig-paths": "^4.1.2",
     "minimist": "^1.2.6",
+    "braces": ">=3.0.3",
+    "ip": "2.0.1",
     "test-exclude": {
       "minimatch": "^3.0.5"
     }
