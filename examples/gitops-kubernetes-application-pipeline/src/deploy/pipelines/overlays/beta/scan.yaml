@@ -1,0 +1,38 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: snyk-scan
+  namespace: tekton-runtime
+  labels:
+    app.kubernetes.io/version: "0.3"
+spec:
+  workspaces:
+    - name: source
+      description: Directory where application source is located.
+
+  params:
+    - name: snyk-token
+      description: Token required for Snyk integration.
+    - name: target-directory
+      description: Directory to perform snyk scan against
+
+  steps:
+    - name: scan
+      image: ubuntu
+      args:
+      script: |
+        #!/usr/bin/env bash
+        set -e
+
+        apt-get update
+        apt-get -y install curl golang-go git
+
+        curl https://static.snyk.io/cli/latest/snyk-linux -o snyk
+        chmod +x ./snyk
+        mv ./snyk /usr/local/bin/
+
+        export SNYK_TOKEN=$(params.snyk-token)
+        
+        cd $(workspaces.source.path)/repo/$(params.target-directory)
+        snyk monitor --all-projects
