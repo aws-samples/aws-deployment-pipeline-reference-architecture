@@ -79,9 +79,6 @@ plugins:
         text: "#ff9900"
         fill: "#d4dada"
 
-extra_javascript:
-  - https://cdn.jsdelivr.net/gh/rod2ik/cdn@main/mkdocs/javascripts/mkdocs-graphviz.js
-
 extra_css:
   - stylesheets/extra.css
 
