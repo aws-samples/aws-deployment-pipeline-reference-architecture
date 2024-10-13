@@ -15,7 +15,7 @@
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "aws-cdk": "^2.162.1",
-    "cdk-nag": "^2.29.4",
+    "cdk-nag": "^2.29.5",
     "esbuild": "^0.20.2",
     "eslint": "^8.57.1",
     "eslint-import-resolver-node": "^0.3.9",
@@ -48,7 +48,7 @@
     "aws-cdk-lib": "^2.162.1",
     "constructs": "^10.4.1",
     "prompts": "^2.4.2",
-    "yaml": "^2.5.1"
+    "yaml": "^2.6.0"
   },
   "license": "Apache-2.0",
   "version": "0.0.0",
