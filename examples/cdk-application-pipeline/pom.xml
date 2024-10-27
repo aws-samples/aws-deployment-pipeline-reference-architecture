@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.3.4</version>
+    <version>3.3.5</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.amazonaws.dpri</groupId>
@@ -49,12 +49,12 @@
     <dependency>
       <artifactId>logback-core</artifactId>
       <groupId>ch.qos.logback</groupId>
-      <version>1.5.11</version>
+      <version>1.5.12</version>
     </dependency>
     <dependency>
       <artifactId>logback-classic</artifactId>
       <groupId>ch.qos.logback</groupId>
-      <version>1.5.11</version>
+      <version>1.5.12</version>
     </dependency>
     <dependency>
       <groupId>org.springdoc</groupId>
