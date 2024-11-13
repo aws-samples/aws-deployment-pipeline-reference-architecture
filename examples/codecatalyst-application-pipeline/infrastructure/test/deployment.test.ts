@@ -51,7 +51,7 @@ describe('cdk-nag', () => {
     // Suppress CDK-NAG for RDS Serverless
     NagSuppressions.addResourceSuppressionsByPath(
       stack,
-      `/${stack.stackName}/AuroraCluster/Resource`,
+      `/${stack.stackName}/Database/Resource`,
       [
         { id: 'AwsSolutions-RDS6', reason: 'IAM authentication not supported on Serverless v1' },
         { id: 'AwsSolutions-RDS10', reason: 'Disable delete protection to simplify cleanup of Reference Implementation' },
