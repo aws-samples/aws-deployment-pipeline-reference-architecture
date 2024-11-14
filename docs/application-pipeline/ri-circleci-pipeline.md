@@ -163,7 +163,7 @@ Actions in this stage are designed to complete in under 3 minutes, allowing deve
 ???+ required "Unit Tests"
     The unit tests are run by [Maven](https://maven.apache.org/) simultaneously with the `Build Code` step. The results of the unit tests are then uploaded to [CircleCI Test Insights](https://circleci.com/docs/insights) to track test performance and trends over time. CircleCI Test Insights provides visibility into test results, helping you monitor for any regressions and improve the efficiency of your testing process.
 
-    ![](assets/circleci-unit-test-report.png)
+  ![](assets/circleci-unit-test-report.png)
 
 ???+ required "Code Quality"
     Code quality is enforced through the [PMD](https://maven.apache.org/plugins/maven-pmd-plugin/) and [Checkstyle](https://maven.apache.org/plugins/maven-checkstyle-plugin/) Maven plugins:
@@ -626,8 +626,9 @@ Actions in this stage are designed to complete in under 3 minutes, allowing deve
     For manual approvals, you can use CircleCI’s [hold job](https://circleci.com/docs/workflows/#holding-a-workflow-for-a-manual-approval), which pauses the pipeline and waits for someone to approve it before proceeding. In this reference architecture, manual approvals are used to gate deployments to production. 
 
     If code is pushed to a development or non-production branch, the pipeline will run all jobs up to the Gamma deployment stage. For production branches (in this case, `main`), the pipeline will deploy to Gamma, and if successful, a manual approval gate will activate. Once a designated individual or group approves this job, the pipeline will continue to deploy to production.
+    
+![Approval](assets/circleci-manual-approval.png)
 
-    ![](assets/circleci-manual-apporval.png)
 
 ???+ required "Database Deploy"
     Spring Boot is configured to run [Liquibase](https://www.liquibase.org/) on startup. This reads the configuration in `src/main/resources/db/changelog/db.changelog-master.yml` to define the tables and initial data for the database:
