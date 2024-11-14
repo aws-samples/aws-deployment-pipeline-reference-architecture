@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Fruit API</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"/>
+    </head>
+    <body>
+        <main>
+          <div class="px-4 py-5 my-5 text-center">
+            <h1 class="display-5 fw-bold">Fruit API</h1>
+            <div class="col-lg-6 mx-auto">
+              <p class="lead mb-4">Demo API for managing a list of fruits.</p>
+              <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <button type="button" class="btn btn-primary btn-lg px-4 gap-3" onclick="refreshFruits()">Refresh</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#addFruitModal">Add New...</button>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="addFruitModal" tabindex="-1" aria-labelledby="addFruitModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="addFruitModalLabel">Add New Fruit</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="mb-3">
+                      <label for="fruitName" class="form-label">Name</label>
+                      <input type="text" class="form-control" id="fruitName" aria-describedby="fruitNameHelp">
+                      <div id="fruitNameHelp" class="form-text">Name of the new fruit to add</div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="fruitClassification" class="form-label">Classification</label>
+                      <select class="form-control" id="fruitClassification" aria-describedby="fruitClassificationHelp">
+                        <option>berry</option>
+                        <option>drupe</option>
+                        <option>pome</option>
+                      </select>
+                      <div id="fruitClassificationHelp" class="form-text">Classification of the new fruit to add</div>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addFruit(document.getElementById('fruitName').value, document.getElementById('fruitClassification').value)">Add</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="fruitTable" class="d-flex align-items-center justify-content-center">
+          </div>
+        </main>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/mithril@2.2.2/mithril.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+        <script>
+        var fruits = [];
+        var refreshFruits = function() {
+          m.request({
+              method: "GET",
+              url: "/api/fruits",
+          })
+          .then(function(data) {
+            fruits = data;
+          });
+        };
+        var addFruit = function(name, classification) {
+          if(name) {
+            m.request({
+                method: "POST",
+                url: "/api/fruits",
+                body: { name, classification },
+            })
+            .then(refreshFruits);
+          }
+        };
+        var deleteFruit = function(id) {
+          m.request({
+              method: "DELETE",
+              url: `/api/fruits/${id}`,
+          })
+          .then(refreshFruits);
+        };
+
+        var FruitTable = {
+          view: function() {
+            let enableClassification = fruits.filter(f => f.classification).length > 0;
+            let rows = fruits.map(f => {
+              return m("tr", [
+                m("th", f.id),
+                m("td", f.name),
+                enableClassification ? m("td", f.classification) : undefined,
+                m("td", {class: "text-end"},
+                  m("button", {
+                    type: "button",
+                    class: "btn btn-danger",
+                    onclick: function() {deleteFruit(f.id)},
+                  }, m("i", {"data-feather":"trash"})),
+                ),
+              ]);
+            });
+            return m("table", {class:"table table-striped w-50"}, [
+              m("thead", {class:"table-dark"}, [
+                m("tr", [
+                  m("th", {scope:"col"}, "ID"),
+                  m("th", {scope:"col"}, "Name"),
+                  enableClassification ? m("th", {scope:"col"}, "Classification") : undefined,
+                  m("th", {scope:"col"}),
+                ]),
+              ]),
+              m("tbody", {onupdate: feather.replace}, rows),
+            ])
+          }
+        };
+        refreshFruits();
+        m.mount(document.getElementById('fruitTable'), FruitTable);
+        </script>
+    </body>
+</html>

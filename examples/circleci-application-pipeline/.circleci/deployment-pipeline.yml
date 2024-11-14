@@ -1,0 +1,376 @@
+version: 2.1
+
+
+orbs:
+  node: circleci/node@6.3.0
+  trivy: cci-labs/trivy@1.0.0
+  aws-cli: circleci/aws-cli@5.1.1
+  ggshield: gitguardian/ggshield@1.1.4
+
+
+parameters:
+  aws-account-id:
+    type: integer
+    default: 202533496439
+  aws-role-arn:
+    type: string
+    default: arn:aws:iam::202533496439:role/cci-oidc-role-aws-deployment-pipeline-reference-architecture
+  working-dir:
+    type: string
+    default: ~/aws-deployment-pipeline-reference-architecture/examples/circleci-application-pipeline
+
+
+commands:
+  install-cdk:
+    parameters:
+      version:
+        type: string
+        default: latest
+      cdk-lib:
+        type: boolean
+        default: true
+    steps:
+      - run:
+          name: "Install AWS CDK"
+          command: sudo npm install -g aws-cdk@<< parameters.version >>
+      - when:
+          condition:
+            and:
+              - equal: [ true, << parameters.cdk-lib >> ]
+          steps:
+            - run:
+                name: "Installing AWS CDK Lib"
+                command: sudo npm install aws-cdk-lib
+
+
+jobs:
+  synth:
+    docker:
+      - image: cimg/node:23.1.0
+    working_directory: << pipeline.parameters.working-dir >>
+    steps:
+      - checkout:
+          path: ~/aws-deployment-pipeline-reference-architecture
+      - node/install-packages:
+          with-cache: true
+          cache-path: << pipeline.parameters.working-dir >>/node_modules
+      - run:
+          name: Run Test
+          command: npm test
+      - run:
+          name: Lint Code
+          command: npm run lint
+      - run:
+          name: Build Project
+          command: npm run build
+      - store_test_results:
+          path: << pipeline.parameters.working-dir >>/test-reports
+      - store_artifacts:
+          path: << pipeline.parameters.working-dir >>/test-reports
+
+  trivy:
+    docker:
+      - image: cimg/base:2024.11
+    working_directory: << pipeline.parameters.working-dir >>
+    steps:
+      - checkout:
+          path: ~/aws-deployment-pipeline-reference-architecture
+      - trivy/scan:
+          scan-type: fs
+          ignore-unfixed: true
+          format: sarif
+          output: << pipeline.parameters.working-dir >>/report.sarif
+          scanners: vuln,secret,misconfig,license
+      - store_artifacts:
+          path: << pipeline.parameters.working-dir >>/report.sarif
+    environment:
+      TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db
+
+  package:
+    docker:
+      - image: cimg/openjdk:17.0
+    working_directory: << pipeline.parameters.working-dir >>
+    environment:
+      TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db
+    steps:
+      - checkout:
+          path: ~/aws-deployment-pipeline-reference-architecture
+      - restore_cache:
+          keys:
+            - maven-repo-v1-{{ checksum "pom.xml" }}
+      - run:
+          name: Run Maven Verify
+          command: mvn verify --batch-mode --no-transfer-progress
+      - save_cache:
+          paths:
+            - ~/.m2/repository
+          key: maven-repo-v1-{{ checksum "pom.xml" }}
+      - trivy/scan:
+          scan-type: fs
+          ignore-unfixed: true
+          format: spdx-json
+          output: << pipeline.parameters.working-dir >>/dependency-results.sbom.json
+      - store_test_results:
+          path: << pipeline.parameters.working-dir >>/target/surefire-reports
+      - store_test_results:
+          path: << pipeline.parameters.working-dir >>/target/soapui-reports
+      - store_artifacts:
+          path: << pipeline.parameters.working-dir >>/dependency-results.sbom.json
+      - store_artifacts:
+          path: << pipeline.parameters.working-dir >>/target/spotbugsXml.xml    
+      - store_artifacts:
+          path: << pipeline.parameters.working-dir >>/target/jmeter/results
+      - store_artifacts:
+          path: << pipeline.parameters.working-dir >>/target/fruit-api.jar
+      - persist_to_workspace:
+          root: << pipeline.parameters.working-dir >>
+          paths:
+            - target/fruit-api.jar
+  
+  deploy:
+    docker:
+      - image: cimg/aws:2024.03
+    parameters:
+      environment:
+        type: string
+        default: Beta
+      stack-name:
+        type: string
+        default: fruit-api
+      region:
+        type: string
+        default: us-east-1
+      cdk-context:
+        type: string
+        default: deploymentConfigurationName=CodeDeployDefault.ECSCanary10Percent5Minutes
+    working_directory: << pipeline.parameters.working-dir >>
+    steps:
+      - checkout:
+          path: ~/aws-deployment-pipeline-reference-architecture
+      - attach_workspace:
+          at: << pipeline.parameters.working-dir >>
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - aws-cli/setup:
+          profile_name: default
+          role_arn: << pipeline.parameters.aws-role-arn >>
+          role_session_name: default
+      - install-cdk
+      - run:
+          name: Set CDK Env Vars
+          command: |
+            echo "export CDK_DEFAULT_ACCOUNT=<< pipeline.parameters.aws-account-id >>" >> $BASH_ENV
+            echo "export CDK_DEFAULT_REGION=<< parameters.region >>" >> $BASH_ENV
+      - run:
+          name: Bootstrap CDK Environment
+          command: cdk bootstrap aws://$CDK_DEFAULT_ACCOUNT/$CDK_DEFAULT_REGION
+      - run:
+          name: Deploy CDK Stack << parameters.stack-name >>
+          command: |
+            cdk deploy << parameters.stack-name >> \
+              --region << parameters.region >> \
+              --outputs-file cdk-output.json \
+              --context << parameters.cdk-context >> \
+              --require-approval never
+          no_output_timeout: 20m
+      - run:
+          command: cat cdk-output.json
+      - store_artifacts:
+          path: << pipeline.parameters.working-dir >>/cdk-output.json
+      - persist_to_workspace:
+          root: << pipeline.parameters.working-dir >>
+          paths:
+            - cdk-output.json
+
+  test:
+    docker:
+      - image: cimg/openjdk:17.0
+    parameters:
+      environment:
+        type: string
+        default: Beta
+      region:
+        type: string
+        default: us-east-1
+      threads:
+        type: integer
+        default: 300
+      duration:
+        type: integer
+        default: 300
+      throughput:
+        type: integer
+        default: 6000
+    working_directory: << pipeline.parameters.working-dir >>
+    steps:
+      - checkout:
+          path: ~/aws-deployment-pipeline-reference-architecture
+      - attach_workspace:
+          at: << pipeline.parameters.working-dir >>
+      - run:
+          name: Extract endpointUrl from CDK Output
+          command: |
+            # Extract the endpointUrl from the CDK output JSON
+            if [ -f cdk-output.json ]; then
+              endpoint_url=$(jq -r '.["fruit-api"].endpointUrl' cdk-output.json)
+              echo "export ENDPOINT_URL=$endpoint_url" >> $BASH_ENV
+              echo "Endpoint URL extracted: $endpoint_url"
+            else
+              echo "CDK output file not found."
+              exit 1
+            fi
+      - restore_cache:
+          keys:
+            - maven-repo-v1-{{ checksum "pom.xml" }}
+      - run:
+          name: Run SoapUI Tests against << parameters.environment >>
+          command: mvn --batch-mode --no-transfer-progress soapui:test -Dsoapui.endpoint=${ENDPOINT_URL}
+      - run:
+          name: Run JMeter Tests against << parameters.environment >>
+          command: mvn --batch-mode --no-transfer-progress compile jmeter:jmeter jmeter:results -Djmeter.endpoint=${ENDPOINT_URL} -Djmeter.threads=<< parameters.threads >> -Djmeter.duration=<< parameters.duration >> -Djmeter.throughput=<< parameters.throughput >>
+      - save_cache:
+          paths:
+            - ~/.m2/repository
+          key: maven-repo-v1-{{ checksum "pom.xml" }}      
+      - store_test_results:
+          path: << pipeline.parameters.working-dir >>/target/soapui-reports
+      - store_artifacts:
+          path: << pipeline.parameters.working-dir >>/target/jmeter/results
+
+  check-pr:
+    docker:
+      - image: cimg/base:current-22.04
+    resource_class: small
+    environment:
+      WEBHOOK_BODY: << pipeline.trigger_parameters.webhook.body >>
+    steps:
+      - run:
+          name: Check PR Event Type
+          command: |
+            echo "Received WEBHOOK_BODY: $WEBHOOK_BODY"
+
+            # Parse the 'action' from the GitHub webhook body
+            PR_ACTION=$(echo "$WEBHOOK_BODY" | jq -r '.action')
+
+            # Only continue if the action is 'opened', 'reopened', or 'synchronize'
+            if [[ "$PR_ACTION" == "opened" || "$PR_ACTION" == "reopened" ]]; then
+              echo "PR action is $PR_ACTION. Proceeding with the pipeline."
+            else
+              echo "Event action '$PR_ACTION' does not match required events (opened or reopened). Exiting job."
+              curl -X POST https://circleci.com/api/v1.1/project/circleci/${ORG_SLUG}/${PROJECT_SLUG}/${CIRCLE_BUILD_NUM}/cancel -H "Circle-Token: ${CANCEL_JOB}"
+            fi
+
+
+workflows:
+  pr_pipeline:
+    when:
+      and:
+        - equal: ["webhook", "<< pipeline.trigger_parameters.circleci.trigger_type >>"]
+    jobs:
+      - check-pr:
+          name: Checking PR Event
+          context: dpra-cancel
+      - ggshield/scan:
+          name: Scanning for Secrets with GitGuardian
+          revision: <<pipeline.git.revision>>
+          context: dpra-gitguardian
+          requires:
+            - Checking PR Event
+      - synth:
+          name: Verify CDK Synth
+          requires:
+            - Checking PR Event
+      - trivy:
+          name: Run Trivy Scan
+          requires:
+            - Checking PR Event
+      - package:
+          name: Build Application
+          requires:
+            - Checking PR Event
+
+  deployment_pipeline:
+    when:
+      and:
+        - equal: ["github_app", "<< pipeline.trigger_parameters.circleci.trigger_type >>"]
+    jobs:
+      - ggshield/scan:
+          name: Scanning for Secrets with GitGuardian
+          revision: <<pipeline.git.revision>>
+          context: dpra-gitguardian
+      - synth:
+          name: Verify CDK Synth
+      - trivy:
+          name: Run Trivy Scan
+      - package:
+          name: Build Application
+      - deploy:
+          name: Beta Deploy
+          requires:
+            - Verify CDK Synth
+            - Run Trivy Scan
+            - Build Application
+            - Scanning for Secrets with GitGuardian
+      - test:
+          name: Beta Test
+          environment: Beta
+          requires:
+            - "Beta Deploy"
+      - deploy:
+          name: "<< matrix.environment >> << matrix.region>> Deploy"
+          matrix:
+            parameters:
+              environment: [Gamma]
+              region: [us-east-1, us-west-2]
+          requires:
+            - "Beta Test"
+          filters:
+            branches:
+              only:
+                - main
+      - test:
+          name: "<< matrix.environment >> << matrix.region>> Test"
+          matrix:
+            parameters:
+              environment: [Gamma]
+              region: [us-east-1, us-west-2]
+          requires:
+            - << matrix.environment >> << matrix.region>> Deploy
+          filters:
+            branches:
+              only:
+                - main
+      - hold:
+          type: approval
+          name: Approval for Production Deploy
+          requires:
+            - "Gamma us-east-1 Test"
+            - "Gamma us-west-2 Test"
+          filters:
+            branches:
+              only:
+                - main
+      - deploy:
+          name: "<< matrix.environment >> << matrix.region>> Deploy"
+          matrix:
+            parameters:
+              environment: [Production]
+              region: [us-east-1, us-west-2]
+          requires:
+            - "Approval for Production Deploy"
+          filters:
+            branches:
+              only:
+                - main
+      - test:
+          name: "<< matrix.environment >> << matrix.region>> Test"
+          matrix:
+            parameters:
+              environment: [Production]
+              region: [us-east-1, us-west-2]
+          requires:
+            - << matrix.environment >> << matrix.region>> Deploy
+          filters:
+            branches:
+              only:
+                - main
