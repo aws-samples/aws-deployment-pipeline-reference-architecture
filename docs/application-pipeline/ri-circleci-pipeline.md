@@ -623,9 +623,7 @@ Actions in this stage are designed to complete in under 3 minutes, allowing deve
 ## Prod
 
 ???+ required "Manual Approval"
-    For manual approvals, you can use CircleCI’s [hold job](https://circleci.com/docs/workflows/#holding-a-workflow-for-a-manual-approval), which pauses the pipeline and waits for someone to approve it before proceeding. In this reference architecture, manual approvals are used to gate deployments to production. 
-
-    If code is pushed to a development or non-production branch, the pipeline will run all jobs up to the Gamma deployment stage. For production branches (in this case, `main`), the pipeline will deploy to Gamma, and if successful, a manual approval gate will activate. Once a designated individual or group approves this job, the pipeline will continue to deploy to production.
+    For manual approvals, you can use CircleCI’s [hold job](https://circleci.com/docs/workflows/#holding-a-workflow-for-a-manual-approval), which pauses the pipeline and waits for someone to approve it before proceeding. In this reference architecture, manual approvals are used to gate deployments to production. If code is pushed to a development or non-production branch, the pipeline will run all jobs up to the Gamma deployment stage. For production branches (in this case, `main`), the pipeline will deploy to Gamma, and if successful, a manual approval gate will activate. Once a designated individual or group approves this job, the pipeline will continue to deploy to production.
     
 ![Approval](assets/circleci-manual-approval.png)
 
