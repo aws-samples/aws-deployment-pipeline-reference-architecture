@@ -11,10 +11,10 @@ orbs:
 parameters:
   aws-account-id:
     type: integer
-    default: 992382483259
+    default: 202533496439
   aws-role-arn:
     type: string
-    default: arn:aws:iam::992382483259:role/aws-DPRA
+    default: arn:aws:iam::202533496439:role/cci-oidc-role-aws-deployment-pipeline-reference-architecture
   working-dir:
     type: string
     default: ~/aws-deployment-pipeline-reference-architecture/examples/circleci-application-pipeline
