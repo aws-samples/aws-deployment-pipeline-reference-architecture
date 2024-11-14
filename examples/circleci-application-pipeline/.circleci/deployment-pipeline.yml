@@ -169,18 +169,16 @@ jobs:
           command: |
             cdk deploy << parameters.stack-name >> \
               --region << parameters.region >> \
-              --outputs-file cdk-output.json \
+              --outputs-file << parameters.environment >>-<< parameters.region >>-cdk-output.json \
               --context << parameters.cdk-context >> \
               --require-approval never
           no_output_timeout: 20m
-      - run:
-          command: cat cdk-output.json
       - store_artifacts:
-          path: << pipeline.parameters.working-dir >>/cdk-output.json
+          path: << pipeline.parameters.working-dir >>/<< parameters.environment >>-<< parameters.region >>-cdk-output.json
       - persist_to_workspace:
           root: << pipeline.parameters.working-dir >>
           paths:
-            - cdk-output.json
+            - << parameters.environment >>-<< parameters.region >>-cdk-output.json
 
   test:
     docker:
@@ -211,8 +209,8 @@ jobs:
           name: Extract endpointUrl from CDK Output
           command: |
             # Extract the endpointUrl from the CDK output JSON
-            if [ -f cdk-output.json ]; then
-              endpoint_url=$(jq -r '.["fruit-api"].endpointUrl' cdk-output.json)
+            if [ -f << parameters.environment >>-<< parameters.region >>-cdk-output.json ]; then
+              endpoint_url=$(jq -r '.["fruit-api"].endpointUrl' << parameters.environment >>-<< parameters.region >>-cdk-output.json)
               echo "export ENDPOINT_URL=$endpoint_url" >> $BASH_ENV
               echo "Endpoint URL extracted: $endpoint_url"
             else
