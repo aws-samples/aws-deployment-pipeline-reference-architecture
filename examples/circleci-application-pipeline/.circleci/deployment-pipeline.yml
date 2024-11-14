@@ -159,16 +159,15 @@ jobs:
       - run:
           name: Set CDK Env Vars
           command: |
-            echo "export CDK_DEFAULT_ACCOUNT=<< pipeline.parameters.aws-account-id >>" >> $BASH_ENV
-            echo "export CDK_DEFAULT_REGION=<< parameters.region >>" >> $BASH_ENV
+            echo "export CDK_DEPLOY_ACCOUNT=<< pipeline.parameters.aws-account-id >>" >> $BASH_ENV
+            echo "export CDK_DEPLOY_REGION=<< parameters.region >>" >> $BASH_ENV
       - run:
           name: Bootstrap CDK Environment
-          command: cdk bootstrap aws://$CDK_DEFAULT_ACCOUNT/$CDK_DEFAULT_REGION
+          command: cdk bootstrap aws://$CDK_DEPLOY_ACCOUNT/$CDK_DEPLOY_REGION
       - run:
           name: Deploy CDK Stack << parameters.stack-name >>
           command: |
             cdk deploy << parameters.stack-name >> \
-              --region << parameters.region >> \
               --outputs-file << parameters.environment >>-<< parameters.region >>-cdk-output.json \
               --context << parameters.cdk-context >> \
               --require-approval never
