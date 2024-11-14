@@ -172,6 +172,9 @@ jobs:
               --context << parameters.cdk-context >> \
               --require-approval never
           no_output_timeout: 20m
+      - run:
+          name: Track Release in CircleCI
+          command: circleci run release log --environment-name=<< parameters.environment >> --component-name=<< parameters.stack-name >> --target-version=<< parameters.region >>-${CIRCLE_BUILD_NUM}
       - store_artifacts:
           path: << pipeline.parameters.working-dir >>/<< parameters.environment >>-<< parameters.region >>-cdk-output.json
       - persist_to_workspace:

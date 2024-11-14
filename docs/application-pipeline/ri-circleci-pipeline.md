@@ -627,6 +627,8 @@ Actions in this stage are designed to complete in under 3 minutes, allowing deve
 
     If code is pushed to a development or non-production branch, the pipeline will run all jobs up to the Gamma deployment stage. For production branches (in this case, `main`), the pipeline will deploy to Gamma, and if successful, a manual approval gate will activate. Once a designated individual or group approves this job, the pipeline will continue to deploy to production.
 
+    ![](assets/circleci-manual-apporval.png)
+
 ???+ required "Database Deploy"
     Spring Boot is configured to run [Liquibase](https://www.liquibase.org/) on startup. This reads the configuration in `src/main/resources/db/changelog/db.changelog-master.yml` to define the tables and initial data for the database:
 
