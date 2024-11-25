@@ -10,7 +10,7 @@ orbs:
 
 parameters:
   aws-account-id:
-    type: integer
+    type: string
     default: CHANGE_ME
   aws-role-arn:
     type: string
@@ -54,6 +54,11 @@ jobs:
       - node/install-packages:
           with-cache: true
           cache-path: << pipeline.parameters.working-dir >>/node_modules
+      - run:
+          name: Audit and Fix Dependencies
+          command: |
+            npm audit || true # Log vulnerabilities but don't fail the build
+            npm audit fix     # Attempt to fix vulnerabilities
       - run:
           name: Run Test
           command: npm test
