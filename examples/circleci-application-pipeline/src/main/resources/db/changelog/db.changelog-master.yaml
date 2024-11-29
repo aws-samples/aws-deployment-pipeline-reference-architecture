@@ -1,0 +1,106 @@
+databaseChangeLog:
+   - changeSet:
+       id: "1"
+       author: AWS
+       changes:
+       - createTable:
+           tableName: fruit
+           columns:
+           - column:
+               name: id
+               type: bigint
+               autoIncrement: true
+               constraints:
+                   primaryKey:  true
+                   nullable:  false
+           - column:
+               name: name
+               type: varchar(250)
+
+       - insert:
+           tableName: fruit
+           columns:
+           - column:
+               name: name
+               value: Apple
+
+       - insert:
+           tableName: fruit
+           columns:
+           - column:
+               name: name
+               value: Orange
+
+       - insert:
+           tableName: fruit
+           columns:
+           - column:
+               name: name
+               value: Banana
+
+       - insert:
+           tableName: fruit
+           columns:
+           - column:
+               name: name
+               value: Cherry
+
+       - insert:
+           tableName: fruit
+           columns:
+           - column:
+               name: name
+               value: Grape
+
+   - changeSet:
+       id: "2"
+       author: AWS
+       changes:
+       - addColumn:
+           tableName: fruit
+           columns:
+           - column:
+               name: classification
+               type: varchar(250)
+               constraints:
+                 nullable: true
+
+       - update:
+           tableName: fruit
+           columns:
+           - column:
+               name: classification
+               value: pome
+           where: name='Apple'
+
+       - update:
+           tableName: fruit
+           columns:
+           - column:
+               name: classification
+               value: berry
+           where: name='Orange'
+
+       - update:
+           tableName: fruit
+           columns:
+           - column:
+               name: classification
+               value: berry
+           where: name='Banana'
+
+       - update:
+           tableName: fruit
+           columns:
+           - column:
+               name: classification
+               value: drupe
+           where: name='Cherry'
+
+       - update:
+           tableName: fruit
+           columns:
+           - column:
+               name: classification
+               value: berry
+           where: name='Grape'

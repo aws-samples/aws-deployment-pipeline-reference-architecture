@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: fruit-api
+  main:
+    banner-mode: "off"
+  jackson:
+    default-property-inclusion: non_null
+
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+
+appconfig-agent:
+  environment: alpha
+  log-level-from:
+    configuration: operations
