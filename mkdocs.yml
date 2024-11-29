@@ -34,6 +34,7 @@ nav:
     - Reference Implementations:
       - AWS CDK Pipelines: 'application-pipeline/ri-cdk-pipeline.md'
       - Amazon CodeCatalyst: 'application-pipeline/ri-codecatalyst-pipeline.md'
+      - CircleCI: 'application-pipeline/ri-circleci-pipeline.md'
     - Additional Sources: 'application-pipeline/additional-sources.md'
   # - Compute Image Pipeline:
   #   - Architecture: 'compute-image-pipeline/index.md'
