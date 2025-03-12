@@ -527,6 +527,8 @@ Resources:
               - codepipeline:StartPipelineExecution
               - codepipeline:GetPipeline
               - codepipeline:GetPipelineState
+              - codepipeline:Tagrole
+              - codepipeline:Tagresource
               - ec2:*Address
               - ec2:RevokeSecurityGroupIngress
               - ec2:*Tags
@@ -612,6 +614,7 @@ Resources:
               - iam:ListUsers
               - iam:PassRole
               - iam:PutRolePolicy
+              - iam:TagRole
               - kms:CancelKeyDeletion
               - kms:Create*
               - kms:Decrypt
