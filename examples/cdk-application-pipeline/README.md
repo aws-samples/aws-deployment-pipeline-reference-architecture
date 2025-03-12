@@ -105,9 +105,15 @@ To learn more about the CDK boostrapping process, see: https://docs.aws.amazon.c
 To deploy the pipeline to the toolchain AWS account run:
 
 ```bash
-npx cdk deploy --profile toolchain --all --require-approval never
+npx ts-node infrastructure/src/setup.ts   
 ```
+If you choose CodeCommit as the source, no additional inputs required
 
+If you choose Github as source, then provide following parameters as asked:
+1. profile
+2. owner
+3. repositoryName
+4. branchName
 ![Pipeline-1 Diagram](docs/pipeline-1.png)
 
 Using AWS management console, login to `toolchain` account and click [AWS CodePipeline](https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/home?region=us-east-1) to check the different stages of the pipeline.
@@ -138,7 +144,7 @@ Here is the application running in production in us-east-1 region.
 
 ![App Diagram](docs/app-1.png)
 
-(OPTIONAL) If you'd like to make changes and deploy with the pipeline, you'll need to [setup Git for AWS CodeCommit](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up.html) and then clone the new CodeCommit repository:
+(OPTIONAL) If you'd like to make changes and deploy with the pipeline, you'll need to [setup Git for AWS CodeCommit](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up.html) and then clone the new CodeCommit repository or your Git Repository configure during setup:
 
 ```bash
 git clone https://git-codecommit.us-west-2.amazonaws.com/v1/repos/fruit-api
