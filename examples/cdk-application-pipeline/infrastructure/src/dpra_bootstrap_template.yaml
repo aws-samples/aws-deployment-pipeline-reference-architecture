@@ -529,6 +529,7 @@ Resources:
               - codepipeline:GetPipelineState
               - codepipeline:Tagrole
               - codepipeline:Tagresource
+              - codestar-connections:PassConnection
               - ec2:*Address
               - ec2:RevokeSecurityGroupIngress
               - ec2:*Tags

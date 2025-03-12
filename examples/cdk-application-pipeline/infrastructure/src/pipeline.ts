@@ -6,7 +6,7 @@ import { CodePipeline, CodeBuildStep, ManualApprovalStep, StageDeployment, Wave 
 import { Construct } from 'constructs';
 
 import { Account, Accounts } from './accounts';
-import { CodeCommitSource } from './codecommit-source';
+import { CodeCommitSource,ExternalSource } from './pipeline-source';
 import { CodeGuruReviewCheck, CodeGuruReviewFilter } from './codeguru-review-check';
 import { DeploymentStack } from './deployment';
 import { JMeterTest } from './jmeter-test';
@@ -53,7 +53,31 @@ export class PipelineStack extends Stack {
     super(scope, id, props);
 
     const appName = this.node.tryGetContext('appName');
-    const source = new CodeCommitSource(this, 'Source', { repositoryName: appName });
+    
+    const providerType = this.node.tryGetContext("providerType")==undefined?"codecommit":this.node.tryGetContext("providerType");
+    let source: any;
+    if (providerType == 'codecommit') {
+      source = new CodeCommitSource(this, 'Source', { repositoryName: appName });
+
+    } else {
+      
+      console.log("github")
+      const repoParameters = {
+        "owner": this.node.tryGetContext('owner'),
+        "repositoryName": this.node.tryGetContext('repositoryName'),
+        "trunkBranchName": this.node.tryGetContext('trunkBranchName'),
+        "connectionArn": this.node.tryGetContext('connectionArn'),
+      };
+      source = new ExternalSource(this, 'Source', repoParameters);
+    }
+
+    // const repoParameters = {
+    //   "owner": this.node.tryGetContext('owner'),
+    //   "repositoryName": this.node.tryGetContext('repositoryName'),
+    //   "trunkBranchName": this.node.tryGetContext('trunkBranchName'),
+    //   "connectionArn": this.node.tryGetContext('connectionArn'),
+    // };
+
 
     const cacheBucket = new Bucket(this, 'CacheBucket', {
       encryption: BucketEncryption.S3_MANAGED,
@@ -66,21 +90,25 @@ export class PipelineStack extends Stack {
       reviewRequired: false,
       filter: CodeGuruReviewFilter.defaultCodeSecurityFilter(),
     });
+ 
     const codeGuruQuality = new CodeGuruReviewCheck('CodeGuruQuality', {
       source: source.codePipelineSource,
       reviewRequired: false,
       filter: CodeGuruReviewFilter.defaultCodeQualityFilter(),
     });
+
     const trivyScan = new TrivyScan('TrivyScan', {
       source: source.codePipelineSource,
       severity: ['CRITICAL', 'HIGH'],
       checks: ['vuln', 'config', 'secret'],
     });
 
+
     const buildAction = new MavenBuild('Build', {
       source: source.codePipelineSource,
       cacheBucket,
     });
+    
 
     buildAction.addStepDependency(codeGuruQuality);
     buildAction.addStepDependency(codeGuruSecurity);
@@ -142,6 +170,8 @@ export class PipelineStack extends Stack {
 
     new PipelineEnvironment(pipeline, Prod);
   }
+
+
 }
 
 type PipelineEnvironmentStageProcessor = (deployment: Deployment, stage: StageDeployment) => void;
