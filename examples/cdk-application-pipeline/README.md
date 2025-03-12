@@ -114,6 +114,7 @@ If you choose Github as source, then provide following parameters as asked:
 2. owner
 3. repositoryName
 4. branchName
+
 ![Pipeline-1 Diagram](docs/pipeline-1.png)
 
 Using AWS management console, login to `toolchain` account and click [AWS CodePipeline](https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/home?region=us-east-1) to check the different stages of the pipeline.
