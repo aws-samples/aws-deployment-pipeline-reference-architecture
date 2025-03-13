@@ -59,9 +59,8 @@ export class PipelineStack extends Stack {
     if (providerType == 'codecommit') {
       source = new CodeCommitSource(this, 'Source', { repositoryName: appName });
 
-    } else {
-      
-      console.log("github")
+    } 
+    else {
       const repoParameters = {
         "owner": this.node.tryGetContext('owner'),
         "repositoryName": this.node.tryGetContext('repositoryName'),
@@ -70,14 +69,6 @@ export class PipelineStack extends Stack {
       };
       source = new ExternalSource(this, 'Source', repoParameters);
     }
-
-    // const repoParameters = {
-    //   "owner": this.node.tryGetContext('owner'),
-    //   "repositoryName": this.node.tryGetContext('repositoryName'),
-    //   "trunkBranchName": this.node.tryGetContext('trunkBranchName'),
-    //   "connectionArn": this.node.tryGetContext('connectionArn'),
-    // };
-
 
     const cacheBucket = new Bucket(this, 'CacheBucket', {
       encryption: BucketEncryption.S3_MANAGED,
@@ -103,12 +94,10 @@ export class PipelineStack extends Stack {
       checks: ['vuln', 'config', 'secret'],
     });
 
-
     const buildAction = new MavenBuild('Build', {
       source: source.codePipelineSource,
       cacheBucket,
     });
-    
 
     buildAction.addStepDependency(codeGuruQuality);
     buildAction.addStepDependency(codeGuruSecurity);
@@ -170,7 +159,6 @@ export class PipelineStack extends Stack {
 
     new PipelineEnvironment(pipeline, Prod);
   }
-
 
 }
 

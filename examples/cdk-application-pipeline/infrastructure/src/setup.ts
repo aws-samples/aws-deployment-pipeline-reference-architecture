@@ -76,7 +76,6 @@ async function promptExternalSourceParamters(source :string) {
 
 async function setupCodeConnection( source: String, repoParameters: any){
     const client = new CodeConnectionsClient({ region: process.env.AWS_REGION ,profile:repoParameters.profile });
-    console.log(client);
     let input = {
         ProviderType: source as ProviderType,
         ConnectionName: `dpri-${source}-${repoParameters.owner}`,

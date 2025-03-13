@@ -21,7 +21,6 @@ export interface ExternalSourceProps {
 }
 
 export class CodeCommitSource extends Construct {
-  //repository: Repository;
   trunkBranchName: string;
   codePipelineSource: CodePipelineSource;
   constructor(scope: Construct, id: string, props: CodeCommitSourceProps) {
@@ -64,14 +63,11 @@ export class ExternalSource extends Construct {
     console.log(props.owner, props.repositoryName);
     // Create CodePipeline source from GitHub using CodeStar Connection
     this.codePipelineSource = CodePipelineSource.connection(
-      `${props.owner}/${props.repositoryName}`, // GitHub repository path
-      this.trunkBranchName,                     // Branch name
+      `${props.owner}/${props.repositoryName}`,
+      this.trunkBranchName,
       {
-        connectionArn: props.connectionArn,      // CodeStar Connection ARN
+        connectionArn: props.connectionArn,
       },
-    
     );
-    
-
   }
 }
