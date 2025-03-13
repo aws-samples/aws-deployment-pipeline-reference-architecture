@@ -153,6 +153,7 @@
         <executions>
           <!-- Generate JMeter configuration -->
           <execution>
+            <?m2e execute onConfiguration?>
             <id>configuration</id>
             <goals>
               <goal>configure</goal>
@@ -234,6 +235,7 @@
         <version>0.0.3</version>
         <executions>
           <execution>
+            <?m2e execute onConfiguration?>
             <goals>
               <goal>compliance</goal>
             </goals>
