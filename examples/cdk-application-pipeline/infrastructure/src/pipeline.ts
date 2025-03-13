@@ -81,13 +81,11 @@ export class PipelineStack extends Stack {
       reviewRequired: false,
       filter: CodeGuruReviewFilter.defaultCodeSecurityFilter(),
     });
- 
     const codeGuruQuality = new CodeGuruReviewCheck('CodeGuruQuality', {
       source: source.codePipelineSource,
       reviewRequired: false,
       filter: CodeGuruReviewFilter.defaultCodeQualityFilter(),
     });
-
     const trivyScan = new TrivyScan('TrivyScan', {
       source: source.codePipelineSource,
       severity: ['CRITICAL', 'HIGH'],
@@ -159,7 +157,6 @@ export class PipelineStack extends Stack {
 
     new PipelineEnvironment(pipeline, Prod);
   }
-
 }
 
 type PipelineEnvironmentStageProcessor = (deployment: Deployment, stage: StageDeployment) => void;

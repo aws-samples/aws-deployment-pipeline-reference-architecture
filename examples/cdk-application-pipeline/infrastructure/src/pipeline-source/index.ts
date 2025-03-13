@@ -1,10 +1,10 @@
+import * as fs from 'fs';
+import { IgnoreMode } from 'aws-cdk-lib';
+import { Code, Repository } from 'aws-cdk-lib/aws-codecommit';
+import { CfnRepositoryAssociation } from 'aws-cdk-lib/aws-codegurureviewer';
+import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { CodePipelineSource } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
-import { Repository, Code } from 'aws-cdk-lib/aws-codecommit';
-import { Asset } from 'aws-cdk-lib/aws-s3-assets';
-import { IgnoreMode } from 'aws-cdk-lib';
-import { CfnRepositoryAssociation } from 'aws-cdk-lib/aws-codegurureviewer';
-import * as fs from 'fs';
 
 export interface CodeCommitSourceProps {
   repositoryName: string;
@@ -21,6 +21,7 @@ export interface ExternalSourceProps {
 }
 
 export class CodeCommitSource extends Construct {
+  repository: Repository;
   trunkBranchName: string;
   codePipelineSource: CodePipelineSource;
   constructor(scope: Construct, id: string, props: CodeCommitSourceProps) {
@@ -39,29 +40,26 @@ export class CodeCommitSource extends Construct {
       ignoreMode: IgnoreMode.GIT,
       exclude: gitignore,
     });
-    const repository = new Repository(this, 'CodeCommitRepo', {
+    this.repository = new Repository(this, 'CodeCommitRepo', {
       repositoryName: props.repositoryName,
       code: Code.fromAsset(codeAsset, this.trunkBranchName),
     });
 
     if (props.associateCodeGuru !== false) {
       new CfnRepositoryAssociation(this, 'CfnRepositoryAssociation', {
-        name: repository.repositoryName,
+        name: this.repository.repositoryName,
         type: 'CodeCommit',
       });
     }
-    this.codePipelineSource = CodePipelineSource.codeCommit(repository, this.trunkBranchName);
+    this.codePipelineSource = CodePipelineSource.codeCommit(this.repository, this.trunkBranchName);
   }
 }
 export class ExternalSource extends Construct {
   codePipelineSource: CodePipelineSource;
   trunkBranchName: string;
-
   constructor(scope: Construct, id: string, props: ExternalSourceProps) {
     super(scope, id);
     this.trunkBranchName = props?.trunkBranchName || 'main';
-    console.log(props.owner, props.repositoryName);
-    // Create CodePipeline source from GitHub using CodeStar Connection
     this.codePipelineSource = CodePipelineSource.connection(
       `${props.owner}/${props.repositoryName}`,
       this.trunkBranchName,

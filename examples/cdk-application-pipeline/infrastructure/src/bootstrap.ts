@@ -33,6 +33,7 @@ async function main() {
   }
 
   for (let command of commands) {
+    console.log(command);
     const commandParts = command.split(/\s+/);
     const resp = child.spawnSync(commandParts[0], commandParts.slice(1), { stdio: 'inherit' });
     if (resp.status !== 0) {
