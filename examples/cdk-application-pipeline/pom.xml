@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.3.5</version>
+    <version>3.3.7</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.amazonaws.dpri</groupId>
@@ -153,7 +153,6 @@
         <executions>
           <!-- Generate JMeter configuration -->
           <execution>
-            <?m2e execute onConfiguration?>
             <id>configuration</id>
             <goals>
               <goal>configure</goal>
@@ -235,7 +234,6 @@
         <version>0.0.3</version>
         <executions>
           <execution>
-            <?m2e execute onConfiguration?>
             <goals>
               <goal>compliance</goal>
             </goals>

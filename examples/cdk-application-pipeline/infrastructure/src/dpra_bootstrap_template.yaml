@@ -198,6 +198,8 @@ Resources:
     Type: AWS::ECR::Repository
     Properties:
       ImageTagMutability: IMMUTABLE
+      ImageScanningConfiguration:
+        ScanOnPush: true 
       RepositoryName:
         Fn::If:
           - HasCustomContainerAssetsRepositoryName
