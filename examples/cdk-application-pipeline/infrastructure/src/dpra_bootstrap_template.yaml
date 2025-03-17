@@ -514,9 +514,11 @@ Resources:
               - codecommit:TagResource
               - codecommit:UnTagResource
               - codedeploy:CreateApplication
+              - codedeploy:GetApplication
               - codedeploy:*DeploymentGroup
               - codedeploy:DeleteApplication
               - codedeploy:GetDeployment*
+              - codedeploy:TagResource
               - codeguru-reviewer:*TagResource
               - codeguru-reviewer:AssociateRepository
               - codeguru-reviewer:CreateCodeReview
@@ -577,6 +579,7 @@ Resources:
               - ecs:Describe*
               - ecs:DeregisterTaskDefinition
               - ecs:RegisterTaskDefinition
+              - ecs:TagResource
               - elasticloadbalancing:AddTags
               - elasticloadbalancing:CreateListener
               - elasticloadbalancing:CreateLoadBalancer
@@ -655,6 +658,8 @@ Resources:
               - ram:ListResources
               - rds:AddTagsToResource
               - rds:CreateDBCluster
+              - rds:CreateDBInstance
+              - rds:DescribeDBInstances
               - rds:CreateDBSubnetGroup
               - rds:DeleteDBCluster
               - rds:DeleteDBSubnetGroup
