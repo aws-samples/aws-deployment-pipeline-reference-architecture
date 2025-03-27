@@ -14,6 +14,9 @@ async function main() {
             const command = await setupCodeConnection(source, repoParameters);
             console.log("The connection is created to connect the external version control system");
             await checkForCodeConnectionAvailable(repoParameters, 30, 10, command.ConnectionArn);
+            repoParameters["connectionArn"]=command.ConnectionArn
+            repoParameters["providerType"]=source
+            await updateCdkJson(repoParameters)
             cmd=cmd.concat(` -c owner=${repoParameters.owner} -c repositoryName=${repoParameters.repositoryName} -c trunckBranchname=${repoParameters.trunkBranchName} -c connectionArn=${command.ConnectionArn} -c providerType=${source}`)
         }
         else {
@@ -123,6 +126,19 @@ async function checkForCodeConnectionAvailable(
         }
     } 
     throw new Error(`Connection not available after ${maxRetries} attempts`);
+}
+
+// create function to read cdk.json and add update context values as per prompt response
+function updateCdkJson(repoParameters: any) {
+    const fs = require('fs');
+    const cdkJson = JSON.parse(fs.readFileSync('cdk.json', 'utf8'));
+    cdkJson.context.owner = repoParameters.owner;
+    cdkJson.context.repositoryName = repoParameters.repositoryName;
+    cdkJson.context.trunkBranchName = repoParameters.trunkBranchName;
+    cdkJson.context.connectionArn = repoParameters.connectionArn;
+    cdkJson.context.providerType = repoParameters.providerType;
+    fs.writeFileSync('cdk.json', JSON.stringify(cdkJson, null, 2));
+   
 }
 
 main().catch(console.error);

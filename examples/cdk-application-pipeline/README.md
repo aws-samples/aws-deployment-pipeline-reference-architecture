@@ -107,7 +107,11 @@ To deploy the pipeline to the toolchain AWS account run:
 ```bash
 npx ts-node infrastructure/src/setup.ts   
 ```
-If you choose CodeCommit as the source, no additional inputs required
+Make a selection for your source:
+1. CodeCommit
+2. Github
+
+If you choose CodeCommit as the source, no additional inputs required.
 
 If you choose Github as source, then provide following parameters as asked:
 1. profile

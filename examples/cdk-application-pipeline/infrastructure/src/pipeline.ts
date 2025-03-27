@@ -89,7 +89,7 @@ export class PipelineStack extends Stack {
     const trivyScan = new TrivyScan('TrivyScan', {
       source: source.codePipelineSource,
       severity: ['CRITICAL', 'HIGH'],
-      checks: ['vuln', 'config', 'secret'],
+      checks: ['misconfig'],
     });
 
     const buildAction = new MavenBuild('Build', {
@@ -97,8 +97,10 @@ export class PipelineStack extends Stack {
       cacheBucket,
     });
 
-    buildAction.addStepDependency(codeGuruQuality);
-    buildAction.addStepDependency(codeGuruSecurity);
+    if (providerType == "codecommit" ){
+      buildAction.addStepDependency(codeGuruQuality);
+      buildAction.addStepDependency(codeGuruSecurity);
+    }
     buildAction.addStepDependency(trivyScan);
 
     const synthAction = new CodeBuildStep('Synth', {

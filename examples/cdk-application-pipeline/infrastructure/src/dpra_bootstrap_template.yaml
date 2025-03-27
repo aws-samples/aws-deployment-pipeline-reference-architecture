@@ -493,6 +493,7 @@ Resources:
               - cloudformation:GetTemplate
               - cloudformation:ListStackResources
               - cloudformation:ListStacks
+              - cloudformation:TagResource
               - cloudtrail:DescribeTrails
               - cloudtrail:ListTags
               - cloudtrail:LookupEvents
@@ -649,6 +650,7 @@ Resources:
               - lambda:ListFunctions
               - lambda:PublishVersion
               - lambda:TagResource
+              - lambda:UpdateFunctionCode
               - lambda:UpdateFunctionConfiguration
               - logs:Tag*
               - logs:PutRetentionPolicy
@@ -662,6 +664,7 @@ Resources:
               - rds:DescribeDBInstances
               - rds:CreateDBSubnetGroup
               - rds:DeleteDBCluster
+              - rds:DeleteDBInstance
               - rds:DeleteDBSubnetGroup
               - rds:DescribeDBClusters
               - rds:DescribeDBSubnetGroups
