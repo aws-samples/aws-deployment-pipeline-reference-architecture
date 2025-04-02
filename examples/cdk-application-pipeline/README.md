@@ -135,10 +135,6 @@ Log into the console, search for Codepipeline in the search bar, in the left pan
 
 There you can see the codeconnection starting with (dpri-****), it is in pending status, Click on Update Pending Connection status and login with the credentials.
 
-![Pipeline-1 Diagram](docs/pipeline-1.png)
-
-Using AWS management console, login to `toolchain` account and click [AWS CodePipeline](https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/home?region=us-east-1) to check the different stages of the pipeline.
-
 ![Fruit API Diagram](docs/fruit-api.png)
 
 Here is the deployment to `Beta` environment.
