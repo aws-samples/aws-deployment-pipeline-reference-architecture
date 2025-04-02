@@ -110,14 +110,30 @@ npx ts-node infrastructure/src/setup.ts
 Make a selection for your source:
 1. CodeCommit
 2. Github
+3. BitBucket
+4. Github Enterprise Server
+
+![Version Control System Source](docs/SelectSource.png)
 
 If you choose CodeCommit as the source, no additional inputs required.
 
-If you choose Github as source, then provide following parameters as asked:
+If you choose Github/BitBucket/GithubEnterpiseServer as source, then provide following parameters as asked:
 1. profile
 2. owner
 3. repositoryName
 4. branchName
+
+![Version Control System Source](docs/parametersofExternalSource.png)
+
+Once the parameters are setup it will prompt you to update to codeconnection in the console.
+
+![Updating CodeConnection](docs/updatingCodeconnection.png)
+
+To connect the external suorce to the AWS account, a codeconnetion is setup and it is in the pending status.
+
+Log into the console, search for Codepipeline in the search bar, in the left panel go to setting: go to codeconnections.
+
+There you can see the codeconnection starting with (dpri-****), it is in pending status, Click on Update Pending Connection status and login with the credentials.
 
 ![Pipeline-1 Diagram](docs/pipeline-1.png)
 

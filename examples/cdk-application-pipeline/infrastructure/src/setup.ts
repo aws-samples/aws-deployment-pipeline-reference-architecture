@@ -36,14 +36,16 @@ async function main() {
 }
 
 async function promptSourceType() {
-  const source = await prompts.select({
-    type: 'select',
-    name: 'source',
-    message: 'Select pipeline source',
-    choices: [
-      { title: 'GitHub', value: ProviderType.GITHUB.toString()},
-      { title: 'CodeCommit', value: 'codecommit' },
-    ],
+  const source = prompts.select({
+      type: 'select',
+      name: 'source',
+      message: 'Select pipeline source',
+      choices: [
+          { title: 'GitHub', value: ProviderType.GITHUB.toString() },
+          { title: 'BitBucket', value: ProviderType.BITBUCKET.toString() },
+          { title: 'Github Enterprise Server', value: ProviderType.GITHUB_ENTERPRISE_SERVER.toString() },
+          { title: 'CodeCommit', value: 'codecommit' },
+      ],
   }) as unknown as string;
   return source;
 }
