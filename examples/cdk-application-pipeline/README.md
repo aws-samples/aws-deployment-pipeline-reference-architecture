@@ -123,7 +123,7 @@ If you choose Github/BitBucket/GithubEnterpiseServer as source, then provide fol
 3. repositoryName
 4. branchName
 
-![Version Control System Source](docs/parametersofExternalSource.png)
+![Version Control System Source](docs/parametersExternalSource.png)
 
 Once the parameters are setup it will prompt you to update to codeconnection in the console.
 
