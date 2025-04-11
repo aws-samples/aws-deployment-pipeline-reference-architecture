@@ -5,6 +5,12 @@ export interface Account {
   profile: string;
 }
 
+export enum AccountType {
+  Toolchain = 'toolchain',
+  Beta = 'beta',
+  Gamma = 'gamma',
+  Production = 'production',
+}
 export class Accounts {
   static readonly PATH = '.accounts.json';
 
@@ -14,10 +20,15 @@ export class Accounts {
       const jsonData = JSON.parse(fs.readFileSync(Accounts.PATH).toString());
       
       // Explicitly assign only known properties with type checking
-      if (jsonData.toolchain) accounts.setAccount('toolchain', jsonData.toolchain);
-      if (jsonData.beta) accounts.setAccount('beta', jsonData.beta);
-      if (jsonData.gamma) accounts.setAccount('gamma', jsonData.gamma);
-      if (jsonData.production) accounts.setAccount('production', jsonData.production);
+      // if (jsonData.toolchain) accounts.setAccount('toolchain', jsonData.toolchain);
+      // if (jsonData.beta) accounts.setAccount('beta', jsonData.beta);
+      // if (jsonData.gamma) accounts.setAccount('gamma', jsonData.gamma);
+      // if (jsonData.production) accounts.setAccount('production', jsonData.production);
+
+      if (jsonData.toolchain) accounts.setAccount(AccountType.Toolchain, jsonData.toolchain);
+      if (jsonData.beta) accounts.setAccount(AccountType.Beta, jsonData.beta);
+      if (jsonData.gamma) accounts.setAccount(AccountType.Gamma, jsonData.gamma);
+      if (jsonData.production) accounts.setAccount(AccountType.Production, jsonData.production);
 
       return accounts;
     } catch (e) {
@@ -25,35 +36,58 @@ export class Accounts {
     }
   }
 
-  toolchain?: Account;
-  beta?: Account;
-  gamma?: Account;
-  production?: Account;
+  _toolchain?: Account;
+  _beta?: Account;
+  _gamma?: Account;
+  _production?: Account;
+  
 
-  // Getter methods for controlled access
-  getToolchain(): Account | undefined { return this.toolchain; }
-  getBeta(): Account | undefined { return this.beta; }
-  getGamma(): Account | undefined { return this.gamma; }
-  getProduction(): Account | undefined { return this.production; }
+  get toolchain(): Account | undefined {
+    return this._toolchain;
+  }
+  get beta(): Account | undefined {
+    return this._beta;
+  }
+  get gamma(): Account | undefined {
+    return this._toolchain;
+  }
+  get production(): Account | undefined {
+    return this._production;
+  }
+  // Added setters
+  set toolchain(value: Account | undefined) {
+    this._toolchain = value;
+  }
 
+  set beta(value: Account | undefined) {
+    this._beta = value;
+  }
+
+  set gamma(value: Account | undefined) {
+    this._gamma = value;
+  }
+
+  set production(value: Account | undefined) {
+    this._production = value;
+  }
   // Setter method with validation
-  private setAccount(type: 'toolchain' | 'beta' | 'gamma' | 'production', account: unknown): void {
+  private setAccount(type: AccountType, account: unknown): void {
     if (!this.isValidAccount(account)) {
       throw new Error(`Invalid account data for ${type}`);
     }
     
     switch (type) {
-      case 'toolchain':
-        this.toolchain = account;
+      case AccountType.Toolchain:
+        this.toolchain=account;
         break;
-      case 'beta':
-        this.beta = account;
+      case AccountType.Beta:
+        this.beta=account;
         break;
-      case 'gamma':
-        this.gamma = account;
+      case AccountType.Gamma:
+        this.gamma=account;
         break;
-      case 'production':
-        this.production = account;
+      case AccountType.Production:
+        this.production=account;
         break;
     }
   }
