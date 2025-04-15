@@ -49,7 +49,7 @@
     <dependency>
       <artifactId>logback-core</artifactId>
       <groupId>ch.qos.logback</groupId>
-      <version>1.5.12</version>
+      <version>1.5.13</version>
     </dependency>
     <dependency>
       <artifactId>logback-classic</artifactId>
