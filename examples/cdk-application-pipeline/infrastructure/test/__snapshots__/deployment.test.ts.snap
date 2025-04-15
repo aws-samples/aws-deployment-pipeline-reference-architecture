@@ -909,6 +909,16 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -933,6 +943,16 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",
@@ -1081,6 +1101,16 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -1105,6 +1135,16 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
             },
             {
               "Action": "states:StartExecution",
@@ -1226,6 +1266,16 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -1250,6 +1300,16 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",
@@ -3826,6 +3886,16 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -3850,6 +3920,16 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",
@@ -3998,6 +4078,16 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -4022,6 +4112,16 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
             },
             {
               "Action": "states:StartExecution",
@@ -4143,6 +4243,16 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -4167,6 +4277,16 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",
@@ -6865,6 +6985,16 @@ exports[`cdk-nag Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -6889,6 +7019,16 @@ exports[`cdk-nag Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",
@@ -7153,6 +7293,16 @@ exports[`cdk-nag Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -7177,6 +7327,16 @@ exports[`cdk-nag Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
             },
             {
               "Action": "states:StartExecution",
@@ -7385,6 +7545,16 @@ exports[`cdk-nag Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -7409,6 +7579,16 @@ exports[`cdk-nag Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",

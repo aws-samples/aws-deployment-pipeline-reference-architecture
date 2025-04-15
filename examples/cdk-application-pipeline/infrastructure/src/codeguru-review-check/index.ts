@@ -97,7 +97,7 @@ export class CodeGuruReviewCheck extends Step implements ICodePipelineActionFact
   public produceAction(stage: IStage, options: ProduceActionOptions): CodePipelineActionFactoryResult {
     const codeGuruLambda = new NodejsFunction(stage.pipeline, `${this.id}CodeGuruLambda`, {
       timeout: Duration.seconds(60),
-      runtime: Runtime.NODEJS_18_X,
+      runtime: Runtime.NODEJS_22_X,
       handler: 'main',
       entry: path.join(__dirname, 'lambda/index.ts'),
     });

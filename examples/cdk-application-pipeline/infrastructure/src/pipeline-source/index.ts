@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { IgnoreMode } from 'aws-cdk-lib';
+import { IgnoreMode, Stack } from 'aws-cdk-lib';
 import { Code, Repository } from 'aws-cdk-lib/aws-codecommit';
 import { CfnRepositoryAssociation } from 'aws-cdk-lib/aws-codegurureviewer';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
@@ -46,5 +46,32 @@ export class CodeCommitSource extends Construct {
     this.codePipelineSource = CodePipelineSource.codeCommit(this.repository, this.trunkBranchName);
   }
 }
+export class CodePipelineSourceFactory{  
+  static createCodePipelineSource(pipelineStack: Stack){  
+    const providerType = pipelineStack.node.tryGetContext("providerType")==undefined?"codecommit":pipelineStack.node.tryGetContext("providerType");  
 
+    switch(providerType){  
+      case 'codecommit':  
+        const appName = pipelineStack.node.tryGetContext('appName')  
+        if(!appName){  
+          throw new Error('appName is required')  
+        }  
+        // CodeCommitSource is an instance of Construct  
+        return new CodeCommitSource(pipelineStack, 'Source', {repositoryName: appName}).codePipelineSource
+      default:  
+        const repoParameters = {  
+          "owner": pipelineStack.node.tryGetContext('owner'),  
+          "repositoryName": pipelineStack.node.tryGetContext('repositoryName'),  
+          "trunkBranchName": pipelineStack.node.tryGetContext('trunkBranchName'),  
+          "connectionArn": pipelineStack.node.tryGetContext('connectionArn'),  
+        };  
 
+        // CodePipelineSource is not an instance of Construct  
+        return CodePipelineSource.connection(  
+          `${repoParameters.owner}/${repoParameters.repositoryName}`,  
+          repoParameters.trunkBranchName ?? 'main',  
+          { connectionArn: repoParameters.connectionArn }  
+        )
+    }  
+  }
+}
