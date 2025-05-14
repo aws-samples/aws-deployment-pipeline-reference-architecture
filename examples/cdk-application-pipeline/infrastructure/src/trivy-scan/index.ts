@@ -11,7 +11,8 @@ export interface TrivyScanProps {
 export class TrivyScan extends CodeBuildStep {
   constructor(id: string, props: TrivyScanProps) {
     const trivyArgs = [
-      'filesystem',
+      'fs',
+      '--quiet',
       '--exit-code',
       '1',
       '--no-progress',
@@ -26,7 +27,7 @@ export class TrivyScan extends CodeBuildStep {
       trivyArgs.push(props.severity.join(','));
     }
     if (props.checks) {
-      trivyArgs.push('--security-checks');
+      trivyArgs.push('--scanners');
       trivyArgs.push(props.checks.join(','));
     }
 

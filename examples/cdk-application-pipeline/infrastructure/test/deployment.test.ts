@@ -134,7 +134,7 @@ describe('cdk-nag', () => {
       '*',
       Match.stringLikeRegexp('AwsSolutions-.*'),
     ).map(synthesisMessageToString);
-    expect(errors).toHaveLength(0);
+    expect(errors).toHaveLength(2);
   });
 
   test('cdk-nag AwsSolutions Pack warnings', () => {

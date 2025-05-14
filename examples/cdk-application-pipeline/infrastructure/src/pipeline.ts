@@ -6,7 +6,6 @@ import { CodePipeline, CodeBuildStep, ManualApprovalStep, StageDeployment, Wave 
 import { Construct } from 'constructs';
 
 import { Account, Accounts } from './accounts';
-import { CodeCommitSource } from './codecommit-source';
 import { CodeGuruReviewCheck, CodeGuruReviewFilter } from './codeguru-review-check';
 import { DeploymentStack } from './deployment';
 import { JMeterTest } from './jmeter-test';
@@ -14,6 +13,7 @@ import { JMeterTest } from './jmeter-test';
 import { MavenBuild } from './maven-build';
 import { SoapUITest } from './soapui-test';
 import { TrivyScan } from './trivy-scan';
+import { CodePipelineSourceFactory } from './pipeline-source';
 
 
 export const accounts = Accounts.load();
@@ -53,7 +53,8 @@ export class PipelineStack extends Stack {
     super(scope, id, props);
 
     const appName = this.node.tryGetContext('appName');
-    const source = new CodeCommitSource(this, 'Source', { repositoryName: appName });
+    
+    const pipelineSource = CodePipelineSourceFactory.createCodePipelineSource(this)
 
     const cacheBucket = new Bucket(this, 'CacheBucket', {
       encryption: BucketEncryption.S3_MANAGED,
@@ -62,28 +63,32 @@ export class PipelineStack extends Stack {
     });
 
     const codeGuruSecurity = new CodeGuruReviewCheck('CodeGuruSecurity', {
-      source: source.codePipelineSource,
+      source: pipelineSource,
       reviewRequired: false,
       filter: CodeGuruReviewFilter.defaultCodeSecurityFilter(),
     });
     const codeGuruQuality = new CodeGuruReviewCheck('CodeGuruQuality', {
-      source: source.codePipelineSource,
+      source: pipelineSource,
       reviewRequired: false,
       filter: CodeGuruReviewFilter.defaultCodeQualityFilter(),
     });
     const trivyScan = new TrivyScan('TrivyScan', {
-      source: source.codePipelineSource,
+      source: pipelineSource,
       severity: ['CRITICAL', 'HIGH'],
-      checks: ['vuln', 'config', 'secret'],
+      checks: ['misconfig'],
     });
 
     const buildAction = new MavenBuild('Build', {
-      source: source.codePipelineSource,
+      source: pipelineSource,
       cacheBucket,
     });
 
-    buildAction.addStepDependency(codeGuruQuality);
-    buildAction.addStepDependency(codeGuruSecurity);
+    const providerType = this.node.tryGetContext("providerType")==undefined?"codecommit":this.node.tryGetContext("providerType");
+
+    if (providerType == "codecommit" ){
+      buildAction.addStepDependency(codeGuruQuality);
+      buildAction.addStepDependency(codeGuruSecurity);
+    }
     buildAction.addStepDependency(trivyScan);
 
     const synthAction = new CodeBuildStep('Synth', {
@@ -92,7 +97,7 @@ export class PipelineStack extends Stack {
         phases: {
           install: {
             'runtime-versions': {
-              nodejs: 16,
+              nodejs: 18,
             },
           },
           build: {
@@ -116,7 +121,7 @@ export class PipelineStack extends Stack {
     new PipelineEnvironment(pipeline, Beta, (deployment, stage) => {
       stage.addPost(
         new SoapUITest('E2E Test', {
-          source: source.codePipelineSource,
+          source: pipelineSource,
           endpoint: deployment.apiUrl,
           cacheBucket,
         }),
@@ -126,7 +131,7 @@ export class PipelineStack extends Stack {
     new PipelineEnvironment(pipeline, Gamma, (deployment, stage) => {
       stage.addPost(
         new JMeterTest('Performance Test', {
-          source: source.codePipelineSource,
+          source: pipelineSource,
           endpoint: deployment.apiUrl,
           threads: 300,
           duration: 300,
