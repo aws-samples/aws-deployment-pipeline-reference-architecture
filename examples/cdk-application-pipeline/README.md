@@ -115,7 +115,8 @@ Make a selection for your source:
 
 ![Version Control System Source](docs/SelectSource.png)
 
-***If you choose CodeCommit as the source, no additional inputs required.**
+**If you choose CodeCommit as the source, no additional inputs required.**
+
 _Note: AWS CodeCommit is no longer available to new customers. Existing customers of AWS CodeCommit can continue to use the service as normal. [Learn more](https://aws.amazon.com/blogs/devops/how-to-migrate-your-aws-codecommit-repository-to-another-git-provider/)_
 
 **If you choose Github/BitBucket/GithubEnterpiseServer as source, then provide following parameters as asked:**
