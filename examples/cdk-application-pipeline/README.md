@@ -108,16 +108,17 @@ To deploy the pipeline to the toolchain AWS account run:
 npx ts-node infrastructure/src/setup.ts   
 ```
 Make a selection for your source:
-1. CodeCommit
-2. Github
-3. BitBucket
-4. Github Enterprise Server
+1. Github
+2. BitBucket
+3. Github Enterprise Server
+4. CodeCommit
 
 ![Version Control System Source](docs/SelectSource.png)
 
-If you choose CodeCommit as the source, no additional inputs required.
+***If you choose CodeCommit as the source, no additional inputs required.**
+_Note: AWS CodeCommit is no longer available to new customers. Existing customers of AWS CodeCommit can continue to use the service as normal. [Learn more](https://aws.amazon.com/blogs/devops/how-to-migrate-your-aws-codecommit-repository-to-another-git-provider/)_
 
-If you choose Github/BitBucket/GithubEnterpiseServer as source, then provide following parameters as asked:
+**If you choose Github/BitBucket/GithubEnterpiseServer as source, then provide following parameters as asked:**
 1. profile
 2. owner
 3. repositoryName
