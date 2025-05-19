@@ -1,4 +1,4 @@
-FROM python:3.9-bullseye
+FROM public.ecr.aws/docker/library/python:3.13-bullseye
 
 RUN apt-get update \
     && apt-get install -y apt-transport-https ca-certificates wget curl \
