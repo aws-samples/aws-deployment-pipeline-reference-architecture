@@ -39,7 +39,7 @@ Developers need fast-feedback for potential issues with their code. Automation s
     The application source code is stored in [AWS CodeCommit](https://aws.amazon.com/codecommit/) repository that is created and initialized from the CDK application in the `CodeCommitSource` construct:
 
     <!--codeinclude-->
-    [](../../examples/cdk-application-pipeline/infrastructure/src/codecommit-source/index.ts) inside_block:constructor
+    [](../../examples/cdk-application-pipeline/infrastructure/src/setup.ts) inside_block:constructor
     <!--/codeinclude-->
 
 ???+ required "Test Source Code"
