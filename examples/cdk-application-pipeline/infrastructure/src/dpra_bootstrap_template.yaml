@@ -198,6 +198,8 @@ Resources:
     Type: AWS::ECR::Repository
     Properties:
       ImageTagMutability: IMMUTABLE
+      ImageScanningConfiguration:
+        ScanOnPush: true 
       RepositoryName:
         Fn::If:
           - HasCustomContainerAssetsRepositoryName
@@ -491,6 +493,7 @@ Resources:
               - cloudformation:GetTemplate
               - cloudformation:ListStackResources
               - cloudformation:ListStacks
+              - cloudformation:TagResource
               - cloudtrail:DescribeTrails
               - cloudtrail:ListTags
               - cloudtrail:LookupEvents
@@ -512,9 +515,11 @@ Resources:
               - codecommit:TagResource
               - codecommit:UnTagResource
               - codedeploy:CreateApplication
+              - codedeploy:GetApplication
               - codedeploy:*DeploymentGroup
               - codedeploy:DeleteApplication
               - codedeploy:GetDeployment*
+              - codedeploy:TagResource
               - codeguru-reviewer:*TagResource
               - codeguru-reviewer:AssociateRepository
               - codeguru-reviewer:CreateCodeReview
@@ -527,6 +532,9 @@ Resources:
               - codepipeline:StartPipelineExecution
               - codepipeline:GetPipeline
               - codepipeline:GetPipelineState
+              - codepipeline:Tagrole
+              - codepipeline:Tagresource
+              - codestar-connections:PassConnection
               - ec2:*Address
               - ec2:RevokeSecurityGroupIngress
               - ec2:*Tags
@@ -572,6 +580,7 @@ Resources:
               - ecs:Describe*
               - ecs:DeregisterTaskDefinition
               - ecs:RegisterTaskDefinition
+              - ecs:TagResource
               - elasticloadbalancing:AddTags
               - elasticloadbalancing:CreateListener
               - elasticloadbalancing:CreateLoadBalancer
@@ -612,6 +621,7 @@ Resources:
               - iam:ListUsers
               - iam:PassRole
               - iam:PutRolePolicy
+              - iam:TagRole
               - kms:CancelKeyDeletion
               - kms:Create*
               - kms:Decrypt
@@ -640,6 +650,7 @@ Resources:
               - lambda:ListFunctions
               - lambda:PublishVersion
               - lambda:TagResource
+              - lambda:UpdateFunctionCode
               - lambda:UpdateFunctionConfiguration
               - logs:Tag*
               - logs:PutRetentionPolicy
@@ -649,8 +660,11 @@ Resources:
               - ram:ListResources
               - rds:AddTagsToResource
               - rds:CreateDBCluster
+              - rds:CreateDBInstance
+              - rds:DescribeDBInstances
               - rds:CreateDBSubnetGroup
               - rds:DeleteDBCluster
+              - rds:DeleteDBInstance
               - rds:DeleteDBSubnetGroup
               - rds:DescribeDBClusters
               - rds:DescribeDBSubnetGroups

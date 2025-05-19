@@ -4,6 +4,7 @@ site/
 .vscode/
 .idea
 *.iml
+.venv/
 acat-output.json
 acat_report/
 jmeter.log

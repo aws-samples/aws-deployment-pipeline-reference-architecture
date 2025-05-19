@@ -105,12 +105,37 @@ To learn more about the CDK boostrapping process, see: https://docs.aws.amazon.c
 To deploy the pipeline to the toolchain AWS account run:
 
 ```bash
-npx cdk deploy --profile toolchain --all --require-approval never
+npx ts-node infrastructure/src/setup.ts   
 ```
+Make a selection for your source:
+1. Github
+2. BitBucket
+3. Github Enterprise Server
+4. CodeCommit
 
-![Pipeline-1 Diagram](docs/pipeline-1.png)
+![Version Control System Source](docs/SelectSource.png)
 
-Using AWS management console, login to `toolchain` account and click [AWS CodePipeline](https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/home?region=us-east-1) to check the different stages of the pipeline.
+**If you choose CodeCommit as the source, no additional inputs required.**
+
+_Note: AWS CodeCommit is no longer available to new customers. Existing customers of AWS CodeCommit can continue to use the service as normal. [Learn more](https://aws.amazon.com/blogs/devops/how-to-migrate-your-aws-codecommit-repository-to-another-git-provider/)_
+
+**If you choose Github/BitBucket/GithubEnterpiseServer as source, then provide following parameters as asked:**
+1. profile
+2. owner
+3. repositoryName
+4. branchName
+
+![Version Control System Source](docs/parametersExternalSource.png)
+
+Once the parameters are setup it will prompt you to update to codeconnection in the console.
+
+![Updating CodeConnection](docs/updatingCodeconnection.png)
+
+To connect the external suorce to the AWS account, a codeconnetion is setup and it is in the pending status.
+
+Log into the console, search for Codepipeline in the search bar, in the left panel go to setting: go to codeconnections.
+
+There you can see the codeconnection starting with (dpri-****), it is in pending status, Click on Update Pending Connection status and login with the credentials.
 
 ![Fruit API Diagram](docs/fruit-api.png)
 
@@ -138,7 +163,7 @@ Here is the application running in production in us-east-1 region.
 
 ![App Diagram](docs/app-1.png)
 
-(OPTIONAL) If you'd like to make changes and deploy with the pipeline, you'll need to [setup Git for AWS CodeCommit](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up.html) and then clone the new CodeCommit repository:
+(OPTIONAL) If you'd like to make changes and deploy with the pipeline, you'll need to [setup Git for AWS CodeCommit](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up.html) and then clone the new CodeCommit repository or your Git Repository configure during setup:
 
 ```bash
 git clone https://git-codecommit.us-west-2.amazonaws.com/v1/repos/fruit-api

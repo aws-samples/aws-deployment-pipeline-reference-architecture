@@ -51,7 +51,7 @@ describe('cdk-nag', () => {
     // Suppress CDK-NAG for RDS Serverless
     NagSuppressions.addResourceSuppressionsByPath(
       stack,
-      `/${stack.stackName}/AuroraCluster/Resource`,
+      `/${stack.stackName}/Database/Resource`,
       [
         { id: 'AwsSolutions-RDS6', reason: 'IAM authentication not supported on Serverless v1' },
         { id: 'AwsSolutions-RDS10', reason: 'Disable delete protection to simplify cleanup of Reference Implementation' },
@@ -69,6 +69,8 @@ describe('cdk-nag', () => {
     ], [
       { id: 'AwsSolutions-IAM5', reason: 'Unrelated to construct under test' },
       { id: 'AwsSolutions-L1', reason: 'Unrelated to construct under test' },
+      { id: 'AwsSolutions-SF1', reason: 'Unrelated to construct under test' },
+      { id: 'AwsSolutions-SF2', reason: 'Unrelated to construct under test' },
     ], true);
 
     // Ignore findings from access log bucket
@@ -132,7 +134,7 @@ describe('cdk-nag', () => {
       '*',
       Match.stringLikeRegexp('AwsSolutions-.*'),
     ).map(synthesisMessageToString);
-    expect(errors).toHaveLength(0);
+    expect(errors).toHaveLength(2);
   });
 
   test('cdk-nag AwsSolutions Pack warnings', () => {

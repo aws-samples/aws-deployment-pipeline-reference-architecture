@@ -248,7 +248,7 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
             "threadCount": "20",
           },
         },
-        "RuntimeVersion": "syn-nodejs-puppeteer-4.0",
+        "RuntimeVersion": "syn-nodejs-puppeteer-6.2",
         "Schedule": {
           "DurationInSeconds": "0",
           "Expression": "rate(5 minutes)",
@@ -873,7 +873,7 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -909,6 +909,16 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -933,6 +943,16 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",
@@ -1014,7 +1034,7 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -1081,6 +1101,16 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -1105,6 +1135,16 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
             },
             {
               "Action": "states:StartExecution",
@@ -1159,7 +1199,7 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -1226,6 +1266,16 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -1250,6 +1300,16 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",
@@ -1376,7 +1436,7 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": "states.us-east-1.amazonaws.com",
+                "Service": "states.amazonaws.com",
               },
             },
           ],
@@ -1393,7 +1453,7 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": "codedeploy.us-east-1.amazonaws.com",
+                "Service": "codedeploy.amazonaws.com",
               },
             },
           ],
@@ -1799,14 +1859,14 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
                       "jdbc:mysql://",
                       {
                         "Fn::GetAtt": [
-                          "AuroraCluster23D869C0",
+                          "DatabaseB269D8BB",
                           "Endpoint.Address",
                         ],
                       },
                       ":",
                       {
                         "Fn::GetAtt": [
-                          "AuroraCluster23D869C0",
+                          "DatabaseB269D8BB",
                           "Endpoint.Port",
                         ],
                       },
@@ -2070,120 +2130,6 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
       "Type": "AWS::Logs::LogGroup",
       "UpdateReplacePolicy": "Delete",
     },
-    "AuroraCluster23D869C0": {
-      "DeletionPolicy": "Snapshot",
-      "Properties": {
-        "CopyTagsToSnapshot": true,
-        "DBClusterIdentifier": "teststack",
-        "DBClusterParameterGroupName": "default.aurora-mysql5.7",
-        "DBSubnetGroupName": {
-          "Ref": "AuroraClusterSubnetsF3E9E6AD",
-        },
-        "DatabaseName": "fruits",
-        "DeletionProtection": false,
-        "Engine": "aurora-mysql",
-        "EngineMode": "serverless",
-        "MasterUserPassword": {
-          "Fn::Join": [
-            "",
-            [
-              "{{resolve:secretsmanager:",
-              {
-                "Ref": "AuroraSecret41E6E877",
-              },
-              ":SecretString:password::}}",
-            ],
-          ],
-        },
-        "MasterUsername": {
-          "Fn::Join": [
-            "",
-            [
-              "{{resolve:secretsmanager:",
-              {
-                "Ref": "AuroraSecret41E6E877",
-              },
-              ":SecretString:username::}}",
-            ],
-          ],
-        },
-        "StorageEncrypted": true,
-        "VpcSecurityGroupIds": [
-          {
-            "Fn::GetAtt": [
-              "AuroraClusterSecurityGroupD85BF9CB",
-              "GroupId",
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::RDS::DBCluster",
-      "UpdateReplacePolicy": "Snapshot",
-    },
-    "AuroraClusterSecurityGroupD85BF9CB": {
-      "Properties": {
-        "GroupDescription": "RDS security group",
-        "SecurityGroupEgress": [
-          {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "AuroraClusterSecurityGroupfromTestStackApiServiceSecurityGroup56AF4AC5IndirectPort7B73ECC0": {
-      "Properties": {
-        "Description": "from TestStackApiServiceSecurityGroup56AF4AC5:{IndirectPort}",
-        "FromPort": {
-          "Fn::GetAtt": [
-            "AuroraCluster23D869C0",
-            "Endpoint.Port",
-          ],
-        },
-        "GroupId": {
-          "Fn::GetAtt": [
-            "AuroraClusterSecurityGroupD85BF9CB",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "SourceSecurityGroupId": {
-          "Fn::GetAtt": [
-            "ApiServiceSecurityGroupB2E30D06",
-            "GroupId",
-          ],
-        },
-        "ToPort": {
-          "Fn::GetAtt": [
-            "AuroraCluster23D869C0",
-            "Endpoint.Port",
-          ],
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroupIngress",
-    },
-    "AuroraClusterSubnetsF3E9E6AD": {
-      "Properties": {
-        "DBSubnetGroupDescription": "Subnets for AuroraCluster database",
-        "SubnetIds": [
-          {
-            "Ref": "VpcPrivateSubnet1Subnet536B997A",
-          },
-          {
-            "Ref": "VpcPrivateSubnet2Subnet3788AAA1",
-          },
-          {
-            "Ref": "VpcPrivateSubnet3SubnetF258B56E",
-          },
-        ],
-      },
-      "Type": "AWS::RDS::DBSubnetGroup",
-    },
     "AuroraSecret41E6E877": {
       "DeletionPolicy": "Delete",
       "Properties": {
@@ -2215,7 +2161,7 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
           "Ref": "AuroraSecret41E6E877",
         },
         "TargetId": {
-          "Ref": "AuroraCluster23D869C0",
+          "Ref": "DatabaseB269D8BB",
         },
         "TargetType": "AWS::RDS::DBCluster",
       },
@@ -2232,6 +2178,144 @@ exports[`Deployment with AppConfig Snapshot 1`] = `
         ],
       },
       "Type": "AWS::ECS::Cluster",
+    },
+    "DatabaseB269D8BB": {
+      "DeletionPolicy": "Snapshot",
+      "Properties": {
+        "CopyTagsToSnapshot": true,
+        "DBClusterIdentifier": "teststack",
+        "DBClusterParameterGroupName": "default.aurora-mysql8.0",
+        "DBSubnetGroupName": {
+          "Ref": "DatabaseSubnets56F17B9A",
+        },
+        "DatabaseName": "fruits",
+        "Engine": "aurora-mysql",
+        "EngineVersion": "8.0.mysql_aurora.3.07.1",
+        "MasterUserPassword": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              {
+                "Ref": "AuroraSecret41E6E877",
+              },
+              ":SecretString:password::}}",
+            ],
+          ],
+        },
+        "MasterUsername": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              {
+                "Ref": "AuroraSecret41E6E877",
+              },
+              ":SecretString:username::}}",
+            ],
+          ],
+        },
+        "ServerlessV2ScalingConfiguration": {
+          "MaxCapacity": 2,
+          "MinCapacity": 0.5,
+        },
+        "StorageEncrypted": true,
+        "VpcSecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "DatabaseSecurityGroup5C91FDCB",
+              "GroupId",
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBCluster",
+      "UpdateReplacePolicy": "Snapshot",
+    },
+    "DatabaseSecurityGroup5C91FDCB": {
+      "Properties": {
+        "GroupDescription": "RDS security group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "DatabaseSecurityGroupfromTestStackApiServiceSecurityGroup56AF4AC5IndirectPort605EA7CC": {
+      "Properties": {
+        "Description": "from TestStackApiServiceSecurityGroup56AF4AC5:{IndirectPort}",
+        "FromPort": {
+          "Fn::GetAtt": [
+            "DatabaseB269D8BB",
+            "Endpoint.Port",
+          ],
+        },
+        "GroupId": {
+          "Fn::GetAtt": [
+            "DatabaseSecurityGroup5C91FDCB",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "ApiServiceSecurityGroupB2E30D06",
+            "GroupId",
+          ],
+        },
+        "ToPort": {
+          "Fn::GetAtt": [
+            "DatabaseB269D8BB",
+            "Endpoint.Port",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "DatabaseSubnets56F17B9A": {
+      "Properties": {
+        "DBSubnetGroupDescription": "Subnets for Database database",
+        "SubnetIds": [
+          {
+            "Ref": "VpcPrivateSubnet1Subnet536B997A",
+          },
+          {
+            "Ref": "VpcPrivateSubnet2Subnet3788AAA1",
+          },
+          {
+            "Ref": "VpcPrivateSubnet3SubnetF258B56E",
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBSubnetGroup",
+    },
+    "Databasewriter2462CC03": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "VpcPrivateSubnet1DefaultRouteBE02A9ED",
+        "VpcPrivateSubnet1RouteTableAssociation70C59FA6",
+        "VpcPrivateSubnet2DefaultRoute060D2087",
+        "VpcPrivateSubnet2RouteTableAssociationA89CAD56",
+        "VpcPrivateSubnet3DefaultRoute94B74F0D",
+        "VpcPrivateSubnet3RouteTableAssociation16BDDC43",
+      ],
+      "Properties": {
+        "DBClusterIdentifier": {
+          "Ref": "DatabaseB269D8BB",
+        },
+        "DBInstanceClass": "db.serverless",
+        "Engine": "aurora-mysql",
+        "PromotionTier": 0,
+      },
+      "Type": "AWS::RDS::DBInstance",
+      "UpdateReplacePolicy": "Delete",
     },
     "Vpc8378EB38": {
       "Properties": {
@@ -3141,7 +3225,7 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
             "threadCount": "20",
           },
         },
-        "RuntimeVersion": "syn-nodejs-puppeteer-4.0",
+        "RuntimeVersion": "syn-nodejs-puppeteer-6.2",
         "Schedule": {
           "DurationInSeconds": "0",
           "Expression": "rate(5 minutes)",
@@ -3766,7 +3850,7 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -3802,6 +3886,16 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -3826,6 +3920,16 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",
@@ -3907,7 +4011,7 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -3974,6 +4078,16 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -3998,6 +4112,16 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
             },
             {
               "Action": "states:StartExecution",
@@ -4052,7 +4176,7 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -4119,6 +4243,16 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -4143,6 +4277,16 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",
@@ -4269,7 +4413,7 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": "states.us-east-1.amazonaws.com",
+                "Service": "states.amazonaws.com",
               },
             },
           ],
@@ -4286,7 +4430,7 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": "codedeploy.us-east-1.amazonaws.com",
+                "Service": "codedeploy.amazonaws.com",
               },
             },
           ],
@@ -4689,14 +4833,14 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
                       "jdbc:mysql://",
                       {
                         "Fn::GetAtt": [
-                          "AuroraCluster23D869C0",
+                          "DatabaseB269D8BB",
                           "Endpoint.Address",
                         ],
                       },
                       ":",
                       {
                         "Fn::GetAtt": [
-                          "AuroraCluster23D869C0",
+                          "DatabaseB269D8BB",
                           "Endpoint.Port",
                         ],
                       },
@@ -4899,120 +5043,6 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
       "Type": "AWS::Logs::LogGroup",
       "UpdateReplacePolicy": "Delete",
     },
-    "AuroraCluster23D869C0": {
-      "DeletionPolicy": "Snapshot",
-      "Properties": {
-        "CopyTagsToSnapshot": true,
-        "DBClusterIdentifier": "teststack",
-        "DBClusterParameterGroupName": "default.aurora-mysql5.7",
-        "DBSubnetGroupName": {
-          "Ref": "AuroraClusterSubnetsF3E9E6AD",
-        },
-        "DatabaseName": "fruits",
-        "DeletionProtection": false,
-        "Engine": "aurora-mysql",
-        "EngineMode": "serverless",
-        "MasterUserPassword": {
-          "Fn::Join": [
-            "",
-            [
-              "{{resolve:secretsmanager:",
-              {
-                "Ref": "AuroraSecret41E6E877",
-              },
-              ":SecretString:password::}}",
-            ],
-          ],
-        },
-        "MasterUsername": {
-          "Fn::Join": [
-            "",
-            [
-              "{{resolve:secretsmanager:",
-              {
-                "Ref": "AuroraSecret41E6E877",
-              },
-              ":SecretString:username::}}",
-            ],
-          ],
-        },
-        "StorageEncrypted": true,
-        "VpcSecurityGroupIds": [
-          {
-            "Fn::GetAtt": [
-              "AuroraClusterSecurityGroupD85BF9CB",
-              "GroupId",
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::RDS::DBCluster",
-      "UpdateReplacePolicy": "Snapshot",
-    },
-    "AuroraClusterSecurityGroupD85BF9CB": {
-      "Properties": {
-        "GroupDescription": "RDS security group",
-        "SecurityGroupEgress": [
-          {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "AuroraClusterSecurityGroupfromTestStackApiServiceSecurityGroup56AF4AC5IndirectPort7B73ECC0": {
-      "Properties": {
-        "Description": "from TestStackApiServiceSecurityGroup56AF4AC5:{IndirectPort}",
-        "FromPort": {
-          "Fn::GetAtt": [
-            "AuroraCluster23D869C0",
-            "Endpoint.Port",
-          ],
-        },
-        "GroupId": {
-          "Fn::GetAtt": [
-            "AuroraClusterSecurityGroupD85BF9CB",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "SourceSecurityGroupId": {
-          "Fn::GetAtt": [
-            "ApiServiceSecurityGroupB2E30D06",
-            "GroupId",
-          ],
-        },
-        "ToPort": {
-          "Fn::GetAtt": [
-            "AuroraCluster23D869C0",
-            "Endpoint.Port",
-          ],
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroupIngress",
-    },
-    "AuroraClusterSubnetsF3E9E6AD": {
-      "Properties": {
-        "DBSubnetGroupDescription": "Subnets for AuroraCluster database",
-        "SubnetIds": [
-          {
-            "Ref": "VpcPrivateSubnet1Subnet536B997A",
-          },
-          {
-            "Ref": "VpcPrivateSubnet2Subnet3788AAA1",
-          },
-          {
-            "Ref": "VpcPrivateSubnet3SubnetF258B56E",
-          },
-        ],
-      },
-      "Type": "AWS::RDS::DBSubnetGroup",
-    },
     "AuroraSecret41E6E877": {
       "DeletionPolicy": "Delete",
       "Properties": {
@@ -5044,7 +5074,7 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
           "Ref": "AuroraSecret41E6E877",
         },
         "TargetId": {
-          "Ref": "AuroraCluster23D869C0",
+          "Ref": "DatabaseB269D8BB",
         },
         "TargetType": "AWS::RDS::DBCluster",
       },
@@ -5061,6 +5091,144 @@ exports[`Deployment without AppConfig Snapshot 1`] = `
         ],
       },
       "Type": "AWS::ECS::Cluster",
+    },
+    "DatabaseB269D8BB": {
+      "DeletionPolicy": "Snapshot",
+      "Properties": {
+        "CopyTagsToSnapshot": true,
+        "DBClusterIdentifier": "teststack",
+        "DBClusterParameterGroupName": "default.aurora-mysql8.0",
+        "DBSubnetGroupName": {
+          "Ref": "DatabaseSubnets56F17B9A",
+        },
+        "DatabaseName": "fruits",
+        "Engine": "aurora-mysql",
+        "EngineVersion": "8.0.mysql_aurora.3.07.1",
+        "MasterUserPassword": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              {
+                "Ref": "AuroraSecret41E6E877",
+              },
+              ":SecretString:password::}}",
+            ],
+          ],
+        },
+        "MasterUsername": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              {
+                "Ref": "AuroraSecret41E6E877",
+              },
+              ":SecretString:username::}}",
+            ],
+          ],
+        },
+        "ServerlessV2ScalingConfiguration": {
+          "MaxCapacity": 2,
+          "MinCapacity": 0.5,
+        },
+        "StorageEncrypted": true,
+        "VpcSecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "DatabaseSecurityGroup5C91FDCB",
+              "GroupId",
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBCluster",
+      "UpdateReplacePolicy": "Snapshot",
+    },
+    "DatabaseSecurityGroup5C91FDCB": {
+      "Properties": {
+        "GroupDescription": "RDS security group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "DatabaseSecurityGroupfromTestStackApiServiceSecurityGroup56AF4AC5IndirectPort605EA7CC": {
+      "Properties": {
+        "Description": "from TestStackApiServiceSecurityGroup56AF4AC5:{IndirectPort}",
+        "FromPort": {
+          "Fn::GetAtt": [
+            "DatabaseB269D8BB",
+            "Endpoint.Port",
+          ],
+        },
+        "GroupId": {
+          "Fn::GetAtt": [
+            "DatabaseSecurityGroup5C91FDCB",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "ApiServiceSecurityGroupB2E30D06",
+            "GroupId",
+          ],
+        },
+        "ToPort": {
+          "Fn::GetAtt": [
+            "DatabaseB269D8BB",
+            "Endpoint.Port",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "DatabaseSubnets56F17B9A": {
+      "Properties": {
+        "DBSubnetGroupDescription": "Subnets for Database database",
+        "SubnetIds": [
+          {
+            "Ref": "VpcPrivateSubnet1Subnet536B997A",
+          },
+          {
+            "Ref": "VpcPrivateSubnet2Subnet3788AAA1",
+          },
+          {
+            "Ref": "VpcPrivateSubnet3SubnetF258B56E",
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBSubnetGroup",
+    },
+    "Databasewriter2462CC03": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "VpcPrivateSubnet1DefaultRouteBE02A9ED",
+        "VpcPrivateSubnet1RouteTableAssociation70C59FA6",
+        "VpcPrivateSubnet2DefaultRoute060D2087",
+        "VpcPrivateSubnet2RouteTableAssociationA89CAD56",
+        "VpcPrivateSubnet3DefaultRoute94B74F0D",
+        "VpcPrivateSubnet3RouteTableAssociation16BDDC43",
+      ],
+      "Properties": {
+        "DBClusterIdentifier": {
+          "Ref": "DatabaseB269D8BB",
+        },
+        "DBInstanceClass": "db.serverless",
+        "Engine": "aurora-mysql",
+        "PromotionTier": 0,
+      },
+      "Type": "AWS::RDS::DBInstance",
+      "UpdateReplacePolicy": "Delete",
     },
     "Vpc8378EB38": {
       "Properties": {
@@ -5987,7 +6155,7 @@ exports[`cdk-nag Snapshot 1`] = `
             "threadCount": "20",
           },
         },
-        "RuntimeVersion": "syn-nodejs-puppeteer-4.0",
+        "RuntimeVersion": "syn-nodejs-puppeteer-6.2",
         "Schedule": {
           "DurationInSeconds": "0",
           "Expression": "rate(5 minutes)",
@@ -6706,6 +6874,14 @@ exports[`cdk-nag Snapshot 1`] = `
               "reason": "Unrelated to construct under test",
             },
             {
+              "id": "AwsSolutions-SF1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF2",
+              "reason": "Unrelated to construct under test",
+            },
+            {
               "applies_to": [
                 "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
               ],
@@ -6744,7 +6920,7 @@ exports[`cdk-nag Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -6759,6 +6935,14 @@ exports[`cdk-nag Snapshot 1`] = `
             },
             {
               "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF2",
               "reason": "Unrelated to construct under test",
             },
             {
@@ -6801,6 +6985,16 @@ exports[`cdk-nag Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -6826,6 +7020,16 @@ exports[`cdk-nag Snapshot 1`] = `
                 },
               ],
             },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
+            },
           ],
           "Version": "2012-10-17",
         },
@@ -6848,6 +7052,14 @@ exports[`cdk-nag Snapshot 1`] = `
             },
             {
               "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF2",
               "reason": "Unrelated to construct under test",
             },
             {
@@ -6907,6 +7119,14 @@ exports[`cdk-nag Snapshot 1`] = `
               "reason": "Unrelated to construct under test",
             },
             {
+              "id": "AwsSolutions-SF1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF2",
+              "reason": "Unrelated to construct under test",
+            },
+            {
               "applies_to": [
                 "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
               ],
@@ -6948,7 +7168,7 @@ exports[`cdk-nag Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -6963,6 +7183,14 @@ exports[`cdk-nag Snapshot 1`] = `
             },
             {
               "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF2",
               "reason": "Unrelated to construct under test",
             },
             {
@@ -7018,6 +7246,14 @@ exports[`cdk-nag Snapshot 1`] = `
               "reason": "Unrelated to construct under test",
             },
             {
+              "id": "AwsSolutions-SF1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF2",
+              "reason": "Unrelated to construct under test",
+            },
+            {
               "applies_to": [
                 "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
               ],
@@ -7057,6 +7293,16 @@ exports[`cdk-nag Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -7081,6 +7327,16 @@ exports[`cdk-nag Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
             },
             {
               "Action": "states:StartExecution",
@@ -7115,6 +7371,14 @@ exports[`cdk-nag Snapshot 1`] = `
             },
             {
               "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF2",
               "reason": "Unrelated to construct under test",
             },
             {
@@ -7156,7 +7420,7 @@ exports[`cdk-nag Snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -7171,6 +7435,14 @@ exports[`cdk-nag Snapshot 1`] = `
             },
             {
               "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF2",
               "reason": "Unrelated to construct under test",
             },
             {
@@ -7226,6 +7498,14 @@ exports[`cdk-nag Snapshot 1`] = `
               "reason": "Unrelated to construct under test",
             },
             {
+              "id": "AwsSolutions-SF1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF2",
+              "reason": "Unrelated to construct under test",
+            },
+            {
               "applies_to": [
                 "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
               ],
@@ -7265,6 +7545,16 @@ exports[`cdk-nag Snapshot 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderOnEventLambda5A2C1C2E",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -7289,6 +7579,16 @@ exports[`cdk-nag Snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiDeploymentGroupDeploymentDeploymentProviderIsCompleteLambda7EC5A4CF",
+                  "Arn",
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",
@@ -7316,6 +7616,14 @@ exports[`cdk-nag Snapshot 1`] = `
             },
             {
               "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF2",
               "reason": "Unrelated to construct under test",
             },
             {
@@ -7370,6 +7678,14 @@ exports[`cdk-nag Snapshot 1`] = `
             },
             {
               "id": "AwsSolutions-L1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF2",
               "reason": "Unrelated to construct under test",
             },
             {
@@ -7462,6 +7778,14 @@ exports[`cdk-nag Snapshot 1`] = `
               "reason": "Unrelated to construct under test",
             },
             {
+              "id": "AwsSolutions-SF1",
+              "reason": "Unrelated to construct under test",
+            },
+            {
+              "id": "AwsSolutions-SF2",
+              "reason": "Unrelated to construct under test",
+            },
+            {
               "applies_to": [
                 "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
               ],
@@ -7478,7 +7802,7 @@ exports[`cdk-nag Snapshot 1`] = `
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": "states.us-east-1.amazonaws.com",
+                "Service": "states.amazonaws.com",
               },
             },
           ],
@@ -7508,7 +7832,7 @@ exports[`cdk-nag Snapshot 1`] = `
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": "codedeploy.us-east-1.amazonaws.com",
+                "Service": "codedeploy.amazonaws.com",
               },
             },
           ],
@@ -7931,14 +8255,14 @@ exports[`cdk-nag Snapshot 1`] = `
                       "jdbc:mysql://",
                       {
                         "Fn::GetAtt": [
-                          "AuroraCluster23D869C0",
+                          "DatabaseB269D8BB",
                           "Endpoint.Address",
                         ],
                       },
                       ":",
                       {
                         "Fn::GetAtt": [
-                          "AuroraCluster23D869C0",
+                          "DatabaseB269D8BB",
                           "Endpoint.Port",
                         ],
                       },
@@ -8155,146 +8479,6 @@ exports[`cdk-nag Snapshot 1`] = `
       "Type": "AWS::Logs::LogGroup",
       "UpdateReplacePolicy": "Delete",
     },
-    "AuroraCluster23D869C0": {
-      "DeletionPolicy": "Snapshot",
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-RDS6",
-              "reason": "IAM authentication not supported on Serverless v1",
-            },
-            {
-              "id": "AwsSolutions-RDS10",
-              "reason": "Disable delete protection to simplify cleanup of Reference Implementation",
-            },
-            {
-              "id": "AwsSolutions-RDS11",
-              "reason": "Custom port not supported on Serverless v1",
-            },
-            {
-              "id": "AwsSolutions-RDS14",
-              "reason": "Backtrack not supported on Serverless v1",
-            },
-            {
-              "id": "AwsSolutions-RDS16",
-              "reason": "CloudWatch Log Export not supported on Serverless v1",
-            },
-          ],
-        },
-      },
-      "Properties": {
-        "CopyTagsToSnapshot": true,
-        "DBClusterIdentifier": "teststack",
-        "DBClusterParameterGroupName": "default.aurora-mysql5.7",
-        "DBSubnetGroupName": {
-          "Ref": "AuroraClusterSubnetsF3E9E6AD",
-        },
-        "DatabaseName": "fruits",
-        "DeletionProtection": false,
-        "Engine": "aurora-mysql",
-        "EngineMode": "serverless",
-        "MasterUserPassword": {
-          "Fn::Join": [
-            "",
-            [
-              "{{resolve:secretsmanager:",
-              {
-                "Ref": "AuroraSecret41E6E877",
-              },
-              ":SecretString:password::}}",
-            ],
-          ],
-        },
-        "MasterUsername": {
-          "Fn::Join": [
-            "",
-            [
-              "{{resolve:secretsmanager:",
-              {
-                "Ref": "AuroraSecret41E6E877",
-              },
-              ":SecretString:username::}}",
-            ],
-          ],
-        },
-        "StorageEncrypted": true,
-        "VpcSecurityGroupIds": [
-          {
-            "Fn::GetAtt": [
-              "AuroraClusterSecurityGroupD85BF9CB",
-              "GroupId",
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::RDS::DBCluster",
-      "UpdateReplacePolicy": "Snapshot",
-    },
-    "AuroraClusterSecurityGroupD85BF9CB": {
-      "Properties": {
-        "GroupDescription": "RDS security group",
-        "SecurityGroupEgress": [
-          {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "AuroraClusterSecurityGroupfromTestStackApiServiceSecurityGroup56AF4AC5IndirectPort7B73ECC0": {
-      "Properties": {
-        "Description": "from TestStackApiServiceSecurityGroup56AF4AC5:{IndirectPort}",
-        "FromPort": {
-          "Fn::GetAtt": [
-            "AuroraCluster23D869C0",
-            "Endpoint.Port",
-          ],
-        },
-        "GroupId": {
-          "Fn::GetAtt": [
-            "AuroraClusterSecurityGroupD85BF9CB",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "SourceSecurityGroupId": {
-          "Fn::GetAtt": [
-            "ApiServiceSecurityGroupB2E30D06",
-            "GroupId",
-          ],
-        },
-        "ToPort": {
-          "Fn::GetAtt": [
-            "AuroraCluster23D869C0",
-            "Endpoint.Port",
-          ],
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroupIngress",
-    },
-    "AuroraClusterSubnetsF3E9E6AD": {
-      "Properties": {
-        "DBSubnetGroupDescription": "Subnets for AuroraCluster database",
-        "SubnetIds": [
-          {
-            "Ref": "VpcPrivateSubnet1Subnet536B997A",
-          },
-          {
-            "Ref": "VpcPrivateSubnet2Subnet3788AAA1",
-          },
-          {
-            "Ref": "VpcPrivateSubnet3SubnetF258B56E",
-          },
-        ],
-      },
-      "Type": "AWS::RDS::DBSubnetGroup",
-    },
     "AuroraSecret41E6E877": {
       "DeletionPolicy": "Delete",
       "Metadata": {
@@ -8336,7 +8520,7 @@ exports[`cdk-nag Snapshot 1`] = `
           "Ref": "AuroraSecret41E6E877",
         },
         "TargetId": {
-          "Ref": "AuroraCluster23D869C0",
+          "Ref": "DatabaseB269D8BB",
         },
         "TargetType": "AWS::RDS::DBCluster",
       },
@@ -8353,6 +8537,170 @@ exports[`cdk-nag Snapshot 1`] = `
         ],
       },
       "Type": "AWS::ECS::Cluster",
+    },
+    "DatabaseB269D8BB": {
+      "DeletionPolicy": "Snapshot",
+      "Metadata": {
+        "cdk_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "AwsSolutions-RDS6",
+              "reason": "IAM authentication not supported on Serverless v1",
+            },
+            {
+              "id": "AwsSolutions-RDS10",
+              "reason": "Disable delete protection to simplify cleanup of Reference Implementation",
+            },
+            {
+              "id": "AwsSolutions-RDS11",
+              "reason": "Custom port not supported on Serverless v1",
+            },
+            {
+              "id": "AwsSolutions-RDS14",
+              "reason": "Backtrack not supported on Serverless v1",
+            },
+            {
+              "id": "AwsSolutions-RDS16",
+              "reason": "CloudWatch Log Export not supported on Serverless v1",
+            },
+          ],
+        },
+      },
+      "Properties": {
+        "CopyTagsToSnapshot": true,
+        "DBClusterIdentifier": "teststack",
+        "DBClusterParameterGroupName": "default.aurora-mysql8.0",
+        "DBSubnetGroupName": {
+          "Ref": "DatabaseSubnets56F17B9A",
+        },
+        "DatabaseName": "fruits",
+        "Engine": "aurora-mysql",
+        "EngineVersion": "8.0.mysql_aurora.3.07.1",
+        "MasterUserPassword": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              {
+                "Ref": "AuroraSecret41E6E877",
+              },
+              ":SecretString:password::}}",
+            ],
+          ],
+        },
+        "MasterUsername": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              {
+                "Ref": "AuroraSecret41E6E877",
+              },
+              ":SecretString:username::}}",
+            ],
+          ],
+        },
+        "ServerlessV2ScalingConfiguration": {
+          "MaxCapacity": 2,
+          "MinCapacity": 0.5,
+        },
+        "StorageEncrypted": true,
+        "VpcSecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "DatabaseSecurityGroup5C91FDCB",
+              "GroupId",
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBCluster",
+      "UpdateReplacePolicy": "Snapshot",
+    },
+    "DatabaseSecurityGroup5C91FDCB": {
+      "Properties": {
+        "GroupDescription": "RDS security group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "DatabaseSecurityGroupfromTestStackApiServiceSecurityGroup56AF4AC5IndirectPort605EA7CC": {
+      "Properties": {
+        "Description": "from TestStackApiServiceSecurityGroup56AF4AC5:{IndirectPort}",
+        "FromPort": {
+          "Fn::GetAtt": [
+            "DatabaseB269D8BB",
+            "Endpoint.Port",
+          ],
+        },
+        "GroupId": {
+          "Fn::GetAtt": [
+            "DatabaseSecurityGroup5C91FDCB",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "ApiServiceSecurityGroupB2E30D06",
+            "GroupId",
+          ],
+        },
+        "ToPort": {
+          "Fn::GetAtt": [
+            "DatabaseB269D8BB",
+            "Endpoint.Port",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "DatabaseSubnets56F17B9A": {
+      "Properties": {
+        "DBSubnetGroupDescription": "Subnets for Database database",
+        "SubnetIds": [
+          {
+            "Ref": "VpcPrivateSubnet1Subnet536B997A",
+          },
+          {
+            "Ref": "VpcPrivateSubnet2Subnet3788AAA1",
+          },
+          {
+            "Ref": "VpcPrivateSubnet3SubnetF258B56E",
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBSubnetGroup",
+    },
+    "Databasewriter2462CC03": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "VpcPrivateSubnet1DefaultRouteBE02A9ED",
+        "VpcPrivateSubnet1RouteTableAssociation70C59FA6",
+        "VpcPrivateSubnet2DefaultRoute060D2087",
+        "VpcPrivateSubnet2RouteTableAssociationA89CAD56",
+        "VpcPrivateSubnet3DefaultRoute94B74F0D",
+        "VpcPrivateSubnet3RouteTableAssociation16BDDC43",
+      ],
+      "Properties": {
+        "DBClusterIdentifier": {
+          "Ref": "DatabaseB269D8BB",
+        },
+        "DBInstanceClass": "db.serverless",
+        "Engine": "aurora-mysql",
+        "PromotionTier": 0,
+      },
+      "Type": "AWS::RDS::DBInstance",
+      "UpdateReplacePolicy": "Delete",
     },
     "Vpc8378EB38": {
       "Properties": {

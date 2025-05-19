@@ -34,6 +34,7 @@ nav:
     - Reference Implementations:
       - AWS CDK Pipelines: 'application-pipeline/ri-cdk-pipeline.md'
       - Amazon CodeCatalyst: 'application-pipeline/ri-codecatalyst-pipeline.md'
+      - CircleCI: 'application-pipeline/ri-circleci-pipeline.md'
     - Additional Sources: 'application-pipeline/additional-sources.md'
   # - Compute Image Pipeline:
   #   - Architecture: 'compute-image-pipeline/index.md'
@@ -59,8 +60,8 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - mkdocs_graphviz
 plugins:
   - search
@@ -78,9 +79,6 @@ plugins:
       cards_color:
         text: "#ff9900"
         fill: "#d4dada"
-
-extra_javascript:
-  - https://cdn.jsdelivr.net/gh/rod2ik/cdn@main/mkdocs/javascripts/mkdocs-graphviz.js
 
 extra_css:
   - stylesheets/extra.css

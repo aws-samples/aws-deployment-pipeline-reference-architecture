@@ -4,7 +4,12 @@
     "deploymentConfigurationName": "CodeDeployDefault.ECSCanary10Percent5Minutes",
     "natGateways": 3,
     "workloadName": "",
-    "solutionCode": "dpra-app-1tub7ocne"
+    "solutionCode": "dpra-app-1tub7ocne",
+    "owner": "placeholder",
+    "repositoryName": "placeholder",
+    "trunkBranchName": "main",
+    "providerType": "Github",
+    "connectionArn": ""
   },
   "output": "cdk.out",
   "watch": {

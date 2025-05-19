@@ -102,7 +102,7 @@ export class PipelineStack extends cdk.Stack {
       crossAccountKeys: true,
       dockerEnabledForSynth: true,
       synth: synthStep,
-      enableKeyRotation:true,
+      enableKeyRotation: true,
     });
 
     const allRegions = config.getUniqueRegions();
