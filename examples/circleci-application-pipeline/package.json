@@ -45,7 +45,7 @@
     "@cdklabs/cdk-ecs-codedeploy": "^0.0.310",
     "@types/aws-lambda": "^8.10.145",
     "@types/prompts": "^2.4.9",
-    "aws-cdk-lib": "^2.166.0",
+    "aws-cdk-lib": "^2.196.0",
     "constructs": "^10.4.2",
     "prompts": "^2.4.2",
     "yaml": "^2.6.0"
