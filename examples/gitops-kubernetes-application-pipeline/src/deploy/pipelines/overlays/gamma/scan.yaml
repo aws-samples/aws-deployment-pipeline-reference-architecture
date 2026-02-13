@@ -1,0 +1,23 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: checkov-scan
+  namespace: tekton-runtime
+spec:
+  workspaces:
+    - name: source
+      description: Directory where application source is located.
+  params:
+    - name: target-directory
+      description: Directory to perform snyk scan against
+  steps:
+    - name: echo
+      image: ubuntu
+      script: |
+        #!/bin/sh
+        apt-get update
+        apt-get -y install curl git python3 python3-pip
+        pip3 install checkov
+        checkov --directory $(workspaces.source.path)/repo/$(params.target-directory)
+...

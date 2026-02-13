@@ -1,0 +1,32 @@
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: flux-triggertemplate
+  namespace: tekton-runtime
+spec:
+  params:
+    - name: revision
+    - name: repository
+    - name: namespace
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: scan-$(tt.params.repository)-
+      spec:
+        serviceAccountName: build-pipeline
+        pipelineRef:
+          name: gamma-scan
+        workspaces:
+        - name: source-workspace
+          subPath: source
+          persistentVolumeClaim:
+            claimName: tekton-pvc
+        params:
+          - name: repository
+            value: '$(tt.params.repository)'
+          - name: revision
+            value: '$(tt.params.revision)'
+          - name: namespace
+            value: '$(tt.params.namespace)'

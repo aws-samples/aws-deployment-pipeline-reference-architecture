@@ -1,0 +1,54 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: flux-clone
+  namespace: tekton-runtime
+spec:
+  workspaces:
+    - name: output
+      description: The git repo will be cloned onto the volume backing this Workspace.
+  params:
+    - name: repository
+      type: string
+    - name: revision
+      type: string
+    - name: namespace
+      type: string
+    - name: dockerHubUsername
+      type: string
+      default: "murillodigital"
+  results:
+    - name: imageTag
+      description: "Image repo and tag to push"
+  steps:
+    - name: flux-clone
+      image: ubuntu
+      script: |
+        #!/bin/sh
+        apt-get update
+        apt-get -y install curl git
+        curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl
+        chmod +x ./kubectl
+        mv ./kubectl /bin/kubectl
+        mkdir -p ~/.ssh
+        export SECRET_NAME=$(kubectl get GitRepository $(params.repository) -n $(params.namespace) -o jsonpath='{.spec.secretRef.name}')
+        export GIT_URL=$(kubectl get GitRepository $(params.repository) -n $(params.namespace) -o jsonpath='{.spec.url}')
+        kubectl get secret $SECRET_NAME -n $(params.namespace) -o jsonpath='{.data.identity}' | base64 --decode > ~/.ssh/id_rsa
+        chmod 0400 ~/.ssh/id_rsa
+        kubectl get secret $SECRET_NAME -n $(params.namespace) -o jsonpath='{.data.identity\.pub}' | base64 --decode > ~/.ssh/id_rsa.pub
+        kubectl get secret $SECRET_NAME -n $(params.namespace) -o jsonpath='{.data.known_hosts}' | base64 --decode > ~/.ssh/known_hosts
+        echo "Deleting anything previously checked out"
+        rm -rf $(workspaces.output.path)/repo
+        echo "Adding output path as safe directory"
+        git config --global --add safe.directory $(workspaces.output.path)/repo
+        echo "Cloning repository"
+        git clone $GIT_URL $(workspaces.output.path)/repo
+        cd $(workspaces.output.path)/repo
+        git fetch
+        git checkout $(echo "$(params.revision)" | cut -d "/" -f 2)
+        DOCKERHUB_USERNAME=$(params.dockerHubUsername)
+        DOCKERHUB_REPOSITORY=$(params.repository)
+        DOCKERHUB_TAG=$(echo "$(params.revision)" | cut -d "/" -f 2 | awk '{ print substr($0, 0, 6) }')
+        echo -n "${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${DOCKERHUB_TAG}" | tee $(results.imageTag.path)
+...
