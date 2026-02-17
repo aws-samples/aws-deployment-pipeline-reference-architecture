@@ -1,5 +1,5 @@
 mkdocs==1.5.3
-mkdocs-material==9.5.17
+mkdocs-material==9.5.32
 mkdocs-graphviz==1.5.3
 mkdocs-with-pdf==0.9.3
 mkdocs-codeinclude-plugin==0.2.1
