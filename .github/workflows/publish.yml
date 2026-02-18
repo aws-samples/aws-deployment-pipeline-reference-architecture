@@ -38,6 +38,11 @@ jobs:
           sudo apt -f install -y ./drawio-amd64-*.deb
       - name: Install dependencies
         run: pip install -r requirements.txt
+      
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+      
       - name: Install markdownlint-cli
         run: npm install -g markdownlint-cli
       - name: Lint Markdown
