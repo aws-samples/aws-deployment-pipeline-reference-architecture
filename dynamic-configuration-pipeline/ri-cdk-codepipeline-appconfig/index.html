@@ -1,0 +1,1236 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../">
+      
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.32">
+    
+    
+      
+        <title>CDK Pipelines + AppConfig - Deployment Pipeline Reference Architecture</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.3cba04c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-Z5XE517K9W"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-Z5XE517K9W",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-Z5XE517K9W",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+      
+        <meta  property="og:type"  content="website" >
+      
+        <meta  property="og:title"  content="CDK Pipelines + AppConfig - Deployment Pipeline Reference Architecture" >
+      
+        <meta  property="og:description"  content="None" >
+      
+        <meta  property="og:image"  content="./assets/images/social/dynamic-configuration-pipeline/ri-cdk-codepipeline-appconfig.png" >
+      
+        <meta  property="og:image:type"  content="image/png" >
+      
+        <meta  property="og:image:width"  content="1200" >
+      
+        <meta  property="og:image:height"  content="630" >
+      
+        <meta  property="og:url"  content="None" >
+      
+        <meta  name="twitter:card"  content="summary_large_image" >
+      
+        <meta  name="twitter:title"  content="CDK Pipelines + AppConfig - Deployment Pipeline Reference Architecture" >
+      
+        <meta  name="twitter:description"  content="None" >
+      
+        <meta  name="twitter:image"  content="./assets/images/social/dynamic-configuration-pipeline/ri-cdk-codepipeline-appconfig.png" >
+      
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dynamic-config-pipeline-reference-implementation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Deployment Pipeline Reference Architecture" class="md-header__button md-logo" aria-label="Deployment Pipeline Reference Architecture" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Deployment Pipeline Reference Architecture
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CDK Pipelines + AppConfig
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    aws-deployment-pipeline-reference-architecture
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Deployment Pipeline Reference Architecture" class="md-nav__button md-logo" aria-label="Deployment Pipeline Reference Architecture" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    Deployment Pipeline Reference Architecture
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    aws-deployment-pipeline-reference-architecture
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Application Pipeline
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Application Pipeline
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../application-pipeline/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Reference Implementations
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Reference Implementations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../application-pipeline/ri-cdk-pipeline/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AWS CDK Pipelines
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../application-pipeline/ri-codecatalyst-pipeline/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Amazon CodeCatalyst
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../application-pipeline/ri-circleci-pipeline/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CircleCI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../application-pipeline/additional-sources/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Additional Sources
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Dynamic Configuration Pipeline
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Dynamic Configuration Pipeline
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Reference Implementations
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Reference Implementations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    CDK Pipelines + AppConfig
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    CDK Pipelines + AppConfig
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#local-development" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local Development
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source" class="md-nav__link">
+    <span class="md-ellipsis">
+      Source
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build" class="md-nav__link">
+    <span class="md-ellipsis">
+      Build
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployments" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployments
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployments">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#service-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      Service Discovery
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Environment
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="dynamic-config-pipeline-reference-implementation">Dynamic Config Pipeline reference implementation<a class="headerlink" href="#dynamic-config-pipeline-reference-implementation" title="Permanent link">&para;</a></h1>
+<p>This presents a reference implementation of the <a href="..">Dynamic Configuration Pipeline</a> reference architecture. All infrastructure for this reference implementation is defined using the <a href="https://aws.amazon.com/cdk/">AWS Cloud Development Kit (CDK)</a>. The pipeline is defined using <a href="https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.pipelines-readme.html">CDK Pipelines</a>, which provisions the pipeline in <a href="https://aws.amazon.com/codepipeline/">AWS CodePipeline</a>. The source code for this reference implementation is available in <a href="https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/dynamic-configuration-cdk-codepipeline">GitHub</a> for running in your own AWS accounts.</p>
+<p>This reference implementation follows the following architecture:
+<img alt="Architecture" src="../ri-cdk-codepipeline-appconfig.drawio-0.svg" /></p>
+<h2 id="local-development">Local Development<a class="headerlink" href="#local-development" title="Permanent link">&para;</a></h2>
+<p>Developers need fast feedback for potential issues with their code. Automation should run in their developer workspace to give them feedback before the deployment pipeline runs.</p>
+<details class="required" open="open">
+<summary>Pre-Commit Hooks</summary>
+<p>Pre-Commit hooks are scripts that are executed on the developer's workstation when they try to create a new commit. These hooks have an opportunity to inspect the state of the code before the commit occurs and abort the commit if tests fail. An example of pre-commit hooks are <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks#_git_hooks">Git hooks</a>.  Examples of tools to configure and store pre-commit hooks as code include but are not limited to <a href="https://github.com/typicode/husky">husky</a> and <a href="https://pre-commit.com/#install">pre-commit</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">repos</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/pre-commit/pre-commit-hooks</span>
+<span class="w">  </span><span class="nt">rev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v2.3.0</span>
+<span class="w">  </span><span class="nt">hooks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w">   </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">check-yaml</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w">   </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">check-json</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w">   </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">trailing-whitespace</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/pre-commit/mirrors-eslint</span>
+<span class="w">  </span><span class="nt">rev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v8.23.0</span>
+<span class="w">  </span><span class="nt">hooks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w">   </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eslint</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/gitleaks/gitleaks</span>
+<span class="w">  </span><span class="nt">rev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v8.16.2</span>
+<span class="w">  </span><span class="nt">hooks</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gitleaks</span>
+</code></pre></div>
+</details>
+<h2 id="source">Source<a class="headerlink" href="#source" title="Permanent link">&para;</a></h2>
+<details class="required" open="open">
+<summary>Infrastructure Source Code</summary>
+<p>The infrastructure source code can be found in the <a href="https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/dynamic-configuration-cdk-codepipeline/infrastructure">infrastructure</a> directory. It is intended to serve as a reference, but much of the code can also be reused in your own CDK applications.</p>
+<p>The infrastructure source code defines both the deployment pipeline (<a href="https://aws.amazon.com/codepipeline/">AWS CodePipeline</a> and the infrastructure that allows to store, manage and access the configuration (<a href="https://docs.aws.amazon.com/appconfig/">AWS AppConfig</a>. </p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Stack</span><span class="p">,</span><span class="w"> </span><span class="nx">StackProps</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;aws-cdk-lib&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">ManagedPolicy</span><span class="p">,</span><span class="w"> </span><span class="nx">Role</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;aws-cdk-lib/aws-iam&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Construct</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;constructs&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">OrgPathsPrincipal</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./org-paths-principal&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Config</span><span class="p">,</span><span class="w"> </span><span class="nx">WorkloadEnvironment</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../config&#39;</span><span class="p">;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">DynamicConfigurationGlobalStack</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Stack</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span>
+<span class="w">    </span><span class="nx">scope</span><span class="o">:</span><span class="w"> </span><span class="kt">Construct</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">workloadName</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">workloadEnvironments</span><span class="o">:</span><span class="w"> </span><span class="kt">WorkloadEnvironment</span><span class="p">[],</span>
+<span class="w">    </span><span class="nx">props?</span><span class="o">:</span><span class="w"> </span><span class="kt">StackProps</span><span class="p">,</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">super</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="nx">props</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">workloadEnvironments</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">workloadEnvironment</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kd">const</span><span class="w"> </span><span class="nx">role</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Role</span><span class="p">(</span>
+<span class="w">        </span><span class="k">this</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">Config</span><span class="p">.</span><span class="nx">generateName</span><span class="p">(</span><span class="nx">workloadName</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;DynamicConfigRole&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">workloadEnvironment</span><span class="p">.</span><span class="nx">name</span><span class="p">),</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nx">roleName</span><span class="o">:</span><span class="w"> </span><span class="kt">Config.generateName</span><span class="p">(</span>
+<span class="w">            </span><span class="nx">workloadName</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;DynamicConfigRole&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">workloadEnvironment</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
+<span class="w">          </span><span class="p">),</span>
+<span class="w">          </span><span class="nx">assumedBy</span><span class="o">:</span><span class="w"> </span><span class="kt">new</span><span class="w"> </span><span class="nx">OrgPathsPrincipal</span><span class="p">([</span>
+<span class="w">            </span><span class="c1">// This is set to &#39;*&#39; all accounts in the workload organization path are expected to need access to the Dynamic Config</span>
+<span class="w">            </span><span class="p">[</span><span class="nx">workloadEnvironment</span><span class="p">.</span><span class="nx">workloadOrganizationPath</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;*&#39;</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">),</span>
+<span class="w">          </span><span class="p">]),</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">      </span><span class="p">);</span>
+
+<span class="w">      </span><span class="nx">workloadEnvironment</span><span class="p">.</span><span class="nx">getUniqueRegions</span><span class="p">().</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">region</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ManagedPolicy</span><span class="p">.</span><span class="nx">fromManagedPolicyName</span><span class="p">(</span>
+<span class="w">          </span><span class="k">this</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">Config</span><span class="p">.</span><span class="nx">generateName</span><span class="p">(</span>
+<span class="w">            </span><span class="s1">&#39;DynamicConfigPolicy&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">workloadName</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">workloadEnvironment</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">region</span><span class="p">,</span>
+<span class="w">          </span><span class="p">),</span>
+<span class="w">          </span><span class="nx">Config</span><span class="p">.</span><span class="nx">generateName</span><span class="p">(</span><span class="s1">&#39;DynamicConfigPolicy&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">workloadName</span><span class="p">,</span><span class="w"> </span><span class="nx">workloadEnvironment</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="nx">region</span><span class="p">),</span>
+<span class="w">        </span><span class="p">);</span>
+<span class="w">        </span><span class="nx">role</span><span class="p">.</span><span class="nx">addManagedPolicy</span><span class="p">(</span><span class="nx">policy</span><span class="p">);</span>
+<span class="w">      </span><span class="p">});</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Please note that the infrastructure code is written in <a href="https://www.typescriptlang.org/">Typescript</a>, which is one of six (as of April 2023) programming languages supported by CDK.</p>
+</details>
+<details class="required" open="open">
+<summary>IaC Unit Test Code</summary>
+<p>The infrastructure as code unit test source code can be found in the <a href="https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/dynamic-configuration-cdk-codepipeline/infrastructure/test">infrastructure/test</a> directory. It is intended to serve as a reference but much of the code can also be reused in your own CDK applications.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;Environments are generated on us-west-2&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">cdk</span><span class="p">.</span><span class="nx">App</span><span class="p">({</span><span class="w"> </span><span class="nx">context</span><span class="o">:</span><span class="w"> </span><span class="kt">context</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Config</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">node</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">DynamicConfigurationCoreStack</span><span class="p">(</span>
+<span class="w">    </span><span class="nx">app</span><span class="p">,</span>
+<span class="w">    </span><span class="s1">&#39;Core&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">config</span><span class="p">.</span><span class="nx">workloadName</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">config</span><span class="p">.</span><span class="nx">workloadEnvironments</span><span class="p">,</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">env</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">account</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;123456789012&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">region</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;us-west-2&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">template</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Template</span><span class="p">.</span><span class="nx">fromStack</span><span class="p">(</span><span class="nx">stack</span><span class="p">);</span>
+
+<span class="w">  </span><span class="nx">template</span><span class="p">.</span><span class="nx">resourceCountIs</span><span class="p">(</span><span class="s1">&#39;AWS::AppConfig::Environment&#39;</span><span class="p">,</span><span class="w"> </span><span class="mf">3</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">template</span><span class="p">.</span><span class="nx">hasResourceProperties</span><span class="p">(</span><span class="s1">&#39;AWS::AppConfig::Environment&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;alpha&#39;</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="nx">template</span><span class="p">.</span><span class="nx">hasResourceProperties</span><span class="p">(</span><span class="s1">&#39;AWS::AppConfig::Environment&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;beta&#39;</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="nx">template</span><span class="p">.</span><span class="nx">hasResourceProperties</span><span class="p">(</span><span class="s1">&#39;AWS::AppConfig::Environment&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;prod&#39;</span><span class="w"> </span><span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div>
+</details>
+<details class="required" open="open">
+<summary>Feature Flags</summary>
+<p><a href="https://aws.amazon.com/blogs/mt/using-aws-appconfig-feature-flags/">Feature Flags</a> are stored in <a href="https://docs.aws.amazon.com/appconfig/">AWS AppConfig</a>, which is part of <a href="https://aws.amazon.com/systems-manager/">AWS Systems Manager</a>. Feature Flags are defined in the <a href="https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/dynamic-configuration-cdk-codepipeline/config/features">config/features</a> directory. Within that directory you will see 2 files, one for the feature flag definitions and the other for the values:</p>
+<p><strong>definitions.yaml:</strong> defines all feature flag and their types.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">classification</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">boolean</span>
+</code></pre></div>
+<p><strong>values.yaml:</strong> Defines the values of all feature flags. Feature Flags are not intended to be used for environment- or region-specific configuration, e.g. enabling a feature only in production or enabling specific features in specific regions. Feature Flags are intended to enable separating release from deployment, so feature flag changes are released in the same way a software release version would be released. For every change to the Feature Flag values in this file, AppConfig creates a new version, which resembles the sum of all feature flag values. This version is deployed to the environments following the Software Development Lifecycle, i.e. to Beta first, then to Gamma and then to Production.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">classification</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+</details>
+<details class="required" open="open">
+<summary>Operational Configuration</summary>
+<p>Operational Configuration is stored in <a href="https://docs.aws.amazon.com/appconfig/">AWS AppConfig</a> as well. Operational Configuration is defined in the <a href="https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/dynamic-configuration-cdk-codepipeline/config/operations">config/operations</a> directory. Within that directory, there is a JSON Schema file that defines the requires structure of operational configuration in every environment as well as environment-specific YAML files defining the configuration values per environment.</p>
+<p><strong>schema.json:</strong> defines the JSON schema that the Operational Configuration for each environment needs to satisfy.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;logLevel&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;FATAL&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ERROR&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;WARN&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;TRACE&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;environment&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;logLevel&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;environment&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>{environmentName}.yaml:</strong> stores the operational configuration values, whereas<code>{environmentName}</code> matches the <code>name</code> parameter of the <code>workloadEnvironments</code> within the <code>cdk.json</code> file.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">logLevel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ERROR</span>
+</code></pre></div>
+</details>
+<h2 id="build">Build<a class="headerlink" href="#build" title="Permanent link">&para;</a></h2>
+<p>Actions in this stage all run in less than 10 minutes so that developers can take action on fast feedback before moving on to their next task. Each of the actions below are defined as code with <a href="https://aws.amazon.com/cdk/">AWS Cloud Development Kit</a>.</p>
+<details class="required" open="open">
+<summary>Synthesize Code</summary>
+<p>Uses your <a href="https://aws.amazon.com/cdk/">AWS Cloud Development Kit</a> code to generate the <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a> templates for your pipeline and resources.</p>
+</details>
+<details class="required" open="open">
+<summary>IaC Unit Tests</summary>
+<p>The unit tests are run by <a href="https://docs.npmjs.com/">npm</a> at the same time the <code>synth</code> action occurs. The results of the unit tests are uploaded to <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html">AWS Code Build Test Reports</a> to be able to track them over time.</p>
+<p><img alt="" src="../assets/unit-test-report.png" /></p>
+</details>
+<details class="required" open="open">
+<summary>Code Quality</summary>
+<p><a href="https://eslint.org/">ESLint</a> statically analyzes your code to quickly find issues. You can use <a href="https://eslint.org/">ESLint</a> to create a series of assertions (called lint rules) that define how your code should look or behave. <a href="https://eslint.org/">ESLint</a> also has auto-fixer suggestions to help you improve your code. The pipeline will fail if any errors are found.</p>
+<p><img alt="" src="../assets/code-quality.png" /></p>
+<p>Additionally, <a href="https://github.com/cdklabs/cdk-nag">cdk-nag</a> is run to identify any security issues with the resources being created. The pipeline will fail if any are detected. The following code demonstrates how cdk-nag is called as a part of the build stage. The code also demonstrates how to suppress findings.</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="nx">process</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;process&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="nx">cdk</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;aws-cdk-lib&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Aspects</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;aws-cdk-lib&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">AwsSolutionsChecks</span><span class="p">,</span><span class="w"> </span><span class="nx">NagSuppressions</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;cdk-nag&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Config</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./config&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">PipelineStack</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./pipeline-stack&#39;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">cdk</span><span class="p">.</span><span class="nx">App</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Config</span><span class="p">.</span><span class="nx">load</span><span class="p">();</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">props</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">description</span><span class="o">:</span><span class="w"> </span><span class="sb">`</span><span class="si">${</span><span class="nx">config</span><span class="p">.</span><span class="nx">workloadName</span><span class="si">}</span><span class="sb"> pipeline (</span><span class="si">${</span><span class="nx">config</span><span class="p">.</span><span class="nx">solutionCode</span><span class="si">}</span><span class="sb">)`</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">env</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">account</span><span class="o">:</span><span class="w"> </span><span class="kt">process.env.CDK_DEPLOY_ACCOUNT</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">CDK_DEFAULT_ACCOUNT</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">region</span><span class="o">:</span><span class="w"> </span><span class="kt">process.env.CDK_DEPLOY_REGION</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">CDK_DEFAULT_REGION</span><span class="p">,</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">};</span>
+
+<span class="ow">new</span><span class="w"> </span><span class="nx">PipelineStack</span><span class="p">(</span><span class="nx">app</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;DynamicConfigurationPipeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">props</span><span class="p">);</span>
+
+<span class="nx">Aspects</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="nx">app</span><span class="p">).</span><span class="nx">add</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="nx">AwsSolutionsChecks</span><span class="p">());</span>
+
+<span class="nx">NagSuppressions</span><span class="p">.</span><span class="nx">addResourceSuppressions</span><span class="p">(</span>
+<span class="w">  </span><span class="nx">app</span><span class="p">,</span>
+<span class="w">  </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;AwsSolutions-KMS5&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">reason</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Default CodePipeline KMS key&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;AwsSolutions-S1&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">reason</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Default CodePipeline S3 bucket&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="kc">true</span><span class="p">,</span>
+<span class="p">);</span>
+</code></pre></div>
+</details>
+<details class="required" open="open">
+<summary>Secrets Detection</summary>
+<p><a href="https://github.com/gitleaks/gitleaks">Gitleaks</a> is used for secrets detection. The scanning is accomplished by a CDK CodeBuild job to run <code>Gitleaks</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">gitleaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">CodeBuildStep</span><span class="p">(</span><span class="s1">&#39;GitLeaks&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">input</span><span class="o">:</span><span class="w"> </span><span class="kt">source.codePipelineSource</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">buildEnvironment</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">buildImage</span><span class="o">:</span><span class="w"> </span><span class="kt">LinuxBuildImage.AMAZON_LINUX_2_2</span><span class="p">,</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nx">installCommands</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="sb">`VERSION=$(curl https://api.github.com/repositories/119190187/releases/latest | jq .tag_name -r | sed &#39;s/v//&#39;)`</span><span class="p">,</span>
+<span class="w">    </span><span class="sb">`if [ \${VERSION} == null ]; then VERSION=8.16.3; fi`</span><span class="p">,</span>
+<span class="w">    </span><span class="sb">`FILENAME=gitleaks_\${VERSION}_linux_x64.tar.gz`</span><span class="p">,</span>
+<span class="w">    </span><span class="sb">`wget https://github.com/gitleaks/gitleaks/releases/download/v$VERSION/$FILENAME`</span><span class="p">,</span>
+<span class="w">    </span><span class="sb">`tar -zxvf $FILENAME gitleaks`</span><span class="p">,</span>
+<span class="w">    </span><span class="sb">`chmod +x gitleaks`</span><span class="p">,</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nx">commands</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="sb">`./gitleaks detect --source . --no-git --redact -v -r gitleaks.log`</span><span class="p">,</span><span class="w"> </span><span class="c1">// # no-git because the remote branch won&#39;t have a .git folder.</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="p">});</span>
+</code></pre></div>
+</details>
+<details class="required" open="open">
+<summary>Static Application Security Testing (SAST)</summary>
+<p>The CodeBuild jobs for <a href="https://github.com/gitleaks/gitleaks">Gitleaks</a> and <a href="https://aquasecurity.github.io/trivy">Trivy</a> are also used for SAST.</p>
+</details>
+<details class="required" open="open">
+<summary>Software Composition Analysis (SCA)</summary>
+<p><a href="https://aquasecurity.github.io/trivy">Trivy</a> is used to scan the source for vulnerabilities in its dependencies. The configuration files are scanned for configuration issues or vulnerabilities in any dependencies. The scanning is accomplished by a CDK construct that creates a CodeBuild job to run <code>trivy</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">TrivyScan</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./code-analysis/trivy-scan&#39;</span><span class="p">;</span>
+
+<span class="err">⋯</span>
+
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">trivyScan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">TrivyScan</span><span class="p">(</span><span class="s1">&#39;TrivyScan&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">source</span><span class="o">:</span><span class="w"> </span><span class="kt">source.codePipelineSource</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">severity</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;CRITICAL&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;HIGH&#39;</span><span class="p">],</span>
+<span class="w">      </span><span class="nx">checks</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;vuln&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;config&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;secret&#39;</span><span class="p">],</span>
+<span class="w">    </span><span class="p">});</span>
+</code></pre></div>
+</details>
+<details class="required" open="open">
+<summary>Software Bill of Materials (SBOM)</summary>
+<p>Trivy generates an SBOM in the form of a <a href="https://cyclonedx.org/">CycloneDX</a> JSON report. The SBOM is saved as a CodePipeline asset.  Trivy supports additional SBOM formats such as <a href="https://spdx.dev/wp-content/uploads/sites/41/2020/08/SPDX-specification-2-2.pdf">SPDX</a>, and <a href="https://docs.oasis-open.org/sarif/sarif/v2.0/sarif-v2.0.html">SARIF</a>.</p>
+</details>
+<h2 id="deployments">Deployments<a class="headerlink" href="#deployments" title="Permanent link">&para;</a></h2>
+<p>This reference implementations contains multiple CloudFormation stack deployments.</p>
+<h3 id="core">Core<a class="headerlink" href="#core" title="Permanent link">&para;</a></h3>
+<p>Creates the <a href="https://docs.aws.amazon.com/appconfig/latest/userguide/what-is-appconfig.html">AppConfig</a> <a href="https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-application.html">application</a>, <a href="https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-deployment-strategy.html">deployment strategy</a>, <a href="https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-environment.html">environments</a>, <a href="https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-configuration-and-profile.html">feature flags and operational configurations</a> and stores their references in the System Manager <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html">Parameter Store</a> for all regions listed in <code>cdk.json</code> under <code>workloadEnvironments</code>. It also generates <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html#aws-managed-policies">IAM Policies</a> for access to those resources in preparation for the deployment stage.</p>
+<p><code>workloadEnvironments</code> is populated by the <a href="https://github.com/aws-samples/aws-deployment-pipeline-reference-architecture/tree/main/examples/dynamic-configuration-cdk-codepipeline/scripts/bootstrap.ts">bootstrap.ts</a> script and may also be edited manually.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="nt">&quot;workloadEnvironments&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;workloadOrganizationPath&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;o-orgid/r-rootid/ou-rootid-ouid/ou-abcd-aaaaaaa0&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;waves&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;regions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;us-west-2&quot;</span><span class="p">]</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;beta&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;workloadOrganizationPath&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;o-orgid/r-rootid/ou-rootid-ouid/ou-abcd-aaaaaaa0&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;waves&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;beta&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;regions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;us-west-2&quot;</span><span class="p">]</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;gamma&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;workloadOrganizationPath&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;o-orgid/r-rootid/ou-rootid-ouid/ou-abcd-bbbbbbb0&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;waves&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;gamma&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;regions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;eu-central-1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span><span class="p">]</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;prod&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;workloadOrganizationPath&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;o-orgid/r-rootid/ou-rootid-ouid/ou-abcd-ccccccc0&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;waves&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Prod-Americas&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;regions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;us-east-1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;us-west-2&quot;</span><span class="p">]</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Prod-Europe&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;regions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;eu-central-1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;eu-west-1&quot;</span><span class="p">]</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">],</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The <code>name</code> property represents the workload environment name to be used.</p>
+<p>The <code>workloadOrganizationPath</code> property is the <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous.html#create_ou">organizational unit path</a> used to <a href="https://aws.amazon.com/blogs/security/iam-share-aws-resources-groups-aws-accounts-aws-organizations/">share your AWS resources with groups of AWS accounts in AWS Organizations</a>.</p>
+<p>The <code>waves</code> array defines the number of wave deployments each environment will have. Each wave will have a <code>name</code> and list of <code>regions</code> where the deployment will happen. Deployments will be done in the order specified in <code>workloadEnvironments</code> in <code>cdk.json</code> file.</p>
+<p>See <a href="https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments/">Automating safe, hands-off deployments</a> for more details about wave deployments.</p>
+<h3 id="global">Global<a class="headerlink" href="#global" title="Permanent link">&para;</a></h3>
+<p>Generates one <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html">role</a> per <a href="https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-environment.html">environment</a>, and attaches the managed policies created by the <code>core</code> stage pertinent to that specific environment.</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Stack</span><span class="p">,</span><span class="w"> </span><span class="nx">StackProps</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;aws-cdk-lib&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">ManagedPolicy</span><span class="p">,</span><span class="w"> </span><span class="nx">Role</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;aws-cdk-lib/aws-iam&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Construct</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;constructs&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">OrgPathsPrincipal</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./org-paths-principal&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Config</span><span class="p">,</span><span class="w"> </span><span class="nx">WorkloadEnvironment</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../config&#39;</span><span class="p">;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">DynamicConfigurationGlobalStack</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Stack</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span>
+<span class="w">    </span><span class="nx">scope</span><span class="o">:</span><span class="w"> </span><span class="kt">Construct</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">workloadName</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">workloadEnvironments</span><span class="o">:</span><span class="w"> </span><span class="kt">WorkloadEnvironment</span><span class="p">[],</span>
+<span class="w">    </span><span class="nx">props?</span><span class="o">:</span><span class="w"> </span><span class="kt">StackProps</span><span class="p">,</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">super</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="nx">props</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">workloadEnvironments</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">workloadEnvironment</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kd">const</span><span class="w"> </span><span class="nx">role</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Role</span><span class="p">(</span>
+<span class="w">        </span><span class="k">this</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">Config</span><span class="p">.</span><span class="nx">generateName</span><span class="p">(</span><span class="nx">workloadName</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;DynamicConfigRole&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">workloadEnvironment</span><span class="p">.</span><span class="nx">name</span><span class="p">),</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nx">roleName</span><span class="o">:</span><span class="w"> </span><span class="kt">Config.generateName</span><span class="p">(</span>
+<span class="w">            </span><span class="nx">workloadName</span><span class="p">,</span>
+<span class="w">            </span><span class="s1">&#39;DynamicConfigRole&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">workloadEnvironment</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
+<span class="w">          </span><span class="p">),</span>
+<span class="w">          </span><span class="nx">assumedBy</span><span class="o">:</span><span class="w"> </span><span class="kt">new</span><span class="w"> </span><span class="nx">OrgPathsPrincipal</span><span class="p">([</span>
+<span class="w">            </span><span class="c1">// This is set to &#39;*&#39; all accounts in the workload organization path are expected to need access to the Dynamic Config</span>
+<span class="w">            </span><span class="p">[</span><span class="nx">workloadEnvironment</span><span class="p">.</span><span class="nx">workloadOrganizationPath</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;*&#39;</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">),</span>
+<span class="w">          </span><span class="p">]),</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">      </span><span class="p">);</span>
+
+<span class="w">      </span><span class="nx">workloadEnvironment</span><span class="p">.</span><span class="nx">getUniqueRegions</span><span class="p">().</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">region</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ManagedPolicy</span><span class="p">.</span><span class="nx">fromManagedPolicyName</span><span class="p">(</span>
+<span class="w">          </span><span class="k">this</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">Config</span><span class="p">.</span><span class="nx">generateName</span><span class="p">(</span>
+<span class="w">            </span><span class="s1">&#39;DynamicConfigPolicy&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">workloadName</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">workloadEnvironment</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">region</span><span class="p">,</span>
+<span class="w">          </span><span class="p">),</span>
+<span class="w">          </span><span class="nx">Config</span><span class="p">.</span><span class="nx">generateName</span><span class="p">(</span><span class="s1">&#39;DynamicConfigPolicy&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">workloadName</span><span class="p">,</span><span class="w"> </span><span class="nx">workloadEnvironment</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="nx">region</span><span class="p">),</span>
+<span class="w">        </span><span class="p">);</span>
+<span class="w">        </span><span class="nx">role</span><span class="p">.</span><span class="nx">addManagedPolicy</span><span class="p">(</span><span class="nx">policy</span><span class="p">);</span>
+<span class="w">      </span><span class="p">});</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="service-discovery">Service Discovery<a class="headerlink" href="#service-discovery" title="Permanent link">&para;</a></h3>
+<p>Adds the ARN of the roles created by the <code>Global</code> stage to the parameter store within the tools account, so they can be referenced by the application pipeline.</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Stack</span><span class="p">,</span><span class="w"> </span><span class="nx">StackProps</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;aws-cdk-lib&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">StringParameter</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;aws-cdk-lib/aws-ssm&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Construct</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;constructs&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Config</span><span class="p">,</span><span class="w"> </span><span class="nx">WorkloadEnvironment</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../config&#39;</span><span class="p">;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">ServiceDiscoveryStack</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Stack</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span>
+<span class="w">    </span><span class="nx">scope</span><span class="o">:</span><span class="w"> </span><span class="kt">Construct</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">workloadName</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">dynamicConfigAccountNumber</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">workloadEnvironments</span><span class="o">:</span><span class="w"> </span><span class="kt">WorkloadEnvironment</span><span class="p">[],</span>
+<span class="w">    </span><span class="nx">props?</span><span class="o">:</span><span class="w"> </span><span class="kt">StackProps</span><span class="p">,</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">super</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="nx">props</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">workloadEnvironments</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">workloadEnvironment</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kd">const</span><span class="w"> </span><span class="nx">roleArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Stack</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">formatArn</span><span class="p">({</span>
+<span class="w">        </span><span class="nx">region</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">service</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;iam&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">account</span><span class="o">:</span><span class="w"> </span><span class="kt">dynamicConfigAccountNumber</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">resource</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;role&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">resourceName</span><span class="o">:</span><span class="w"> </span><span class="kt">Config.generateName</span><span class="p">(</span>
+<span class="w">          </span><span class="nx">workloadName</span><span class="p">,</span>
+<span class="w">          </span><span class="s1">&#39;DynamicConfigRole&#39;</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">workloadEnvironment</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
+<span class="w">        </span><span class="p">),</span>
+<span class="w">      </span><span class="p">});</span>
+
+<span class="w">      </span><span class="ow">new</span><span class="w"> </span><span class="nx">StringParameter</span><span class="p">(</span>
+<span class="w">        </span><span class="k">this</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">Config</span><span class="p">.</span><span class="nx">generateName</span><span class="p">(</span><span class="nx">workloadName</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;DynamicConfigRoleParameter&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">workloadEnvironment</span><span class="p">.</span><span class="nx">name</span><span class="p">),</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nx">parameterName</span><span class="o">:</span><span class="w"> </span><span class="sb">`/</span><span class="si">${</span><span class="nx">workloadName</span><span class="si">}</span><span class="sb">/dynamic_config_role-</span><span class="si">${</span><span class="nx">workloadEnvironment</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">stringValue</span><span class="o">:</span><span class="w"> </span><span class="kt">roleArn</span><span class="p">,</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">      </span><span class="p">);</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="environment">Environment<a class="headerlink" href="#environment" title="Permanent link">&para;</a></h3>
+<p>Deploys the configuration (Feature Flags and Operational Configuration) to <a href="https://docs.aws.amazon.com/appconfig/">AWS AppConfig</a> for all regions listed in the <code>cdk.json</code> under <code>workloadEnvironments</code>.</p>
+<p>The <code>waves</code> array defines the number of Waves for  each environment. Each Wave has a <code>name</code> and list of <code>regions</code> where the deployment will happen. Deployments will be done in the order specified in <code>workloadEnvironments</code> in <code>cdk.json</code>.</p>
+<p>See <a href="https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments/">Automating safe, hands-off deployments</a> for more details about wave deployments.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <!--
+  Copyright (c) 2016-2022 Martin Donath <martin.donath@squidfunk.com>
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Copyright and theme information -->
+<div class="md-copyright">
+    
+      <div class="md-copyright__highlight">
+        Copyright © Amazon Web Services, Inc. and/or its affiliates. All rights reserved.
+      </div>
+    
+    
+      Made with
+      <a
+        href="https://squidfunk.github.io/mkdocs-material/"
+        target="_blank" rel="noopener"
+      >
+        Material for MkDocs
+      </a>
+    
+</div>
+
+<a
+  href="../../pdf/document.pdf"
+  title="Download PDF"
+  class="md-pdf"
+>
+  <div class="md-pdf__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M0 64C0 28.7 28.7 0 64 0h160v128c0 17.7 14.3 32 32 32h128v144H176c-35.3 0-64 28.7-64 64v144H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0l128 128zM176 352h32c30.9 0 56 25.1 56 56s-25.1 56-56 56h-16v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24h-16v48h16zm96-80h32c26.5 0 48 21.5 48 48v64c0 26.5-21.5 48-48 48h-32c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16v-64c0-8.8-7.2-16-16-16h-16v96h16zm80-112c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v32h32c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v48c0 8.8-7.2 16-16 16s-16-7.2-16-16V368z"/></svg>
+  </div>
+</a>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["toc.integrate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.471ce7a9.min.js"></script>
+      
+    
+  </body>
+</html>
