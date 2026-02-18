@@ -1,4 +1,4 @@
-mkdocs==1.5.3
+mkdocs>=1.6.0,<2.0
 mkdocs-material==9.5.32
 mkdocs-graphviz==1.5.3
 mkdocs-with-pdf==0.9.3
@@ -7,4 +7,4 @@ mkdocs-drawio-exporter==0.8.0
 pillow
 cairosvg
 pre-commit
-Markdown==3.6
+Markdown>=3.6,<4.0
