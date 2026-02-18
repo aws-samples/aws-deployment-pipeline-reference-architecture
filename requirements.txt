@@ -3,7 +3,7 @@ mkdocs-material==9.7.2
 mkdocs-graphviz==1.5.3
 mkdocs-with-pdf==0.9.3
 mkdocs-codeinclude-plugin==0.2.1
-mkdocs-drawio-exporter==0.8.0
+mkdocs-drawio-exporter==0.10.2
 pillow
 cairosvg
 pre-commit
