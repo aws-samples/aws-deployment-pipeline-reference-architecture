@@ -7,4 +7,4 @@ mkdocs-drawio-exporter==0.8.0
 pillow
 cairosvg
 pre-commit
-Markdown==3.6
+Markdown==3.10.2
